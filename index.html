@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>FTMON TESTNET</title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+	<style>
+		.boxWaddress {
+		  width: 550px;
+		  padding: 10px;
+		  border: 5px solid gray;
+		  margin: 0;
+		}
+		.displayMonstre {
+		  padding: 10px;
+		  border: 5px solid rgb(204, 204, 204);
+		  margin: 0;
+		}
+		</style>
+
+  </head>
+  <body>
+
+    <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h2>
+				FTMON TESTNET LAI LIAO
+			</h2>
+<p>This is just to test the contract. Definitely not the final product. Not even close!</p>
+			<p>
+				<button id="btn-connectwallet">Connect Wallet</button>
+				<div class="boxWaddress" id="walletaddr"> Connected Wallet: None</div>
+			</p>
+			<div class="row">
+				<div class="col-md-4">
+					Display Monstre:
+					<button id="btn-displayall">Show All</button><button id="btn-displayalive">Show Alive</button>
+					<button id="btn-displaychosen">Show Chosen</button>
+					<div class="displayMonstre" id="Monstredisplay"> <p></p>None, consider mint one?<p></p></div>
+					
+					
+				</div>
+				<div class="col-md-4">
+					<p>Choose Monstre ID:<input type="text" id="chosen1" value="0" size="3" ></p>
+					 <!--<a href="#" class="btn btn-info" type="button">Button1</a> -->
+					<p ><b >Feeding Monstre</b>
+					<p><button type="button" class="btn btn-success" id="btn-meat">Meat</button> 
+					<button type="button" class="btn btn-success" id="btn-giantmeat">Giant Meat</button> 
+					<button type="button" class="btn btn-success" id="btn-wagyumeat">Wagyu Meat</button></p> 
+					<p><button type="button" class="btn btn-success" id="btn-grass">Grass</button> 
+					<button type="button" class="btn btn-success" id="btn-vegetable">Vegetable</button> 
+					<button type="button" class="btn btn-success" id="btn-fantomroots">Fantom Roots</button> </p> 
+					
+					<p ><b >Monstre Action </b>(Stamina Required min:4hrs)<p></p>
+						<button type="button" class="btn btn-info" id="btn-battle">Battle</button> 
+					<p></p>
+					<button type="button" class="btn btn-info" id="btn-trainhp">Train HP</button> 
+					<button type="button" class="btn btn-info" id="btn-trainstr">Train STR</button>
+					<button type="button" class="btn btn-info" id="btn-trainagi">Train AGI</button>
+					<button type="button" class="btn btn-info" id="btn-trainint">Train INT</button>
+					</p> 
+						<p>  
+					<button type="button" class="btn btn-info" id="btn-trainhp+">Train HP+</button> 
+					<button type="button" class="btn btn-info" id="btn-trainstr+">Train STR+</button>
+					<button type="button" class="btn btn-info" id="btn-trainagi+">Train AGI+</button>
+					<button type="button" class="btn btn-info" id="btn-trainint+">Train INT+</button>
+						</p> 
+						
+						<p ><b >Owner Action</b></p>
+							<p><button type="button" class="btn btn-info" id="btn-battleSim">BattleSIM</button>OpponentID: 
+								<input type="text" id="battlesimopp" value="0" size="3">
+								<p></p>
+								<p><button type="button" class="btn btn-info" id="btn-play">Play</button> 
+							<button type="button" class="btn btn-info" id="btn-scold">Scold</button>  </p> 	
+					
+					<div><p></p>		
+						<p><b>Monstre Life</b></p>
+							<p><button type="button" class="btn btn-danger" id="btn-hatchegg">Hatch Egg</button>
+						<button type="button" class="btn btn-danger" id="btn-mint">Mint Egg</button></p>
+					</div>
+				</div>
+				<div class="col-md-4" >
+					<div id="Report" style="height:500px;overflow:auto;background-color:rgb(18, 26, 2);color:rgb(196, 135, 4);scrollbar-base-color:rgb(83, 72, 8);font-family:sans-serif;padding:10px;">
+						<b><u>Report:</u></b>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+    
+	 <!-- get the web3.js file and look at its documentation. quite easy eh https://web3js.readthedocs.io/en/v1.2.1/getting-started.html-->
+	<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+	<script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="js/fantommonstreabi.js"></script>
+    <script src="js/index.js"></script>
+
+
+
+
+  </body>
+</html>
