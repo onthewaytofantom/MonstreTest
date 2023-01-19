@@ -40,7 +40,7 @@ function displayMonstre(ids) {
         let chosen = document.getElementById("chosen1").value;
         let count = idd;    
 
-        ViewNFT(idd).then(function(Monstre) {
+        viewNFT(idd).then(function(Monstre) {
         console.log("here d");
         if (new Date().valueOf()/1000 > Monstre.time.deadtime || 
             new Date().valueOf()/1000 > Monstre.time.endurance ){
@@ -90,8 +90,8 @@ function displayMonstre(ids) {
   function Monstre(uint256_tokenid) {
     return FTMON.methods.Monstre(uint256_tokenid).call();
   }
-  function ViewNFT(uint256_tokenId) {
-    return FTMON.methods.ViewNFT(uint256_tokenId).call();
+  function viewNFT(uint256_tokenId) {
+    return FTMON.methods.viewNFT(uint256_tokenId).call();
   }
 
   document.getElementById('btn-displayall').addEventListener("click", function(event) {
