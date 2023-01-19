@@ -117,6 +117,193 @@ var ftmonabi = [
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id1",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_id2",
+				"type": "uint256"
+			}
+		],
+		"name": "BattleSimulation",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "burn",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_newName",
+				"type": "string"
+			}
+		],
+		"name": "ChangePlayerName",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"name": "CreateMonstre",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "DefrozeMonstre",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_trainer",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "deligateToTrainer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_foodtype",
+				"type": "uint8"
+			}
+		],
+		"name": "feedsMonstre",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "FrozeMonstre",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "HatchEgg",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_count",
+				"type": "uint256"
+			}
+		],
+		"name": "mint",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -262,7 +449,7 @@ var ftmonabi = [
 					},
 					{
 						"internalType": "uint16",
-						"name": "variant",
+						"name": "family",
 						"type": "uint16"
 					},
 					{
@@ -273,212 +460,163 @@ var ftmonabi = [
 				],
 				"indexed": false,
 				"internalType": "struct S.Monstres",
-				"name": "oppon",
+				"name": "selfOrBefore",
 				"type": "tuple"
+			},
+			{
+				"components": [
+					{
+						"internalType": "uint8",
+						"name": "species",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "gene",
+						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint8",
+								"name": "happiness",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint8",
+								"name": "discipline",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint16",
+								"name": "id",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint32",
+								"name": "weight",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint8",
+								"name": "stage",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct S.attributes",
+						"name": "attribute",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint32",
+								"name": "hitpoints",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint16",
+								"name": "strength",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "agility",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "intellegence",
+								"type": "uint16"
+							}
+						],
+						"internalType": "struct S.powers",
+						"name": "power",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint32",
+						"name": "exp",
+						"type": "uint32"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint64",
+								"name": "deadtime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "endurance",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "frozentime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "stamina",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "evolutiontime",
+								"type": "uint64"
+							}
+						],
+						"internalType": "struct S.timings",
+						"name": "time",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "trait",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "skill",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint32",
+						"name": "status",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint16",
+						"name": "family",
+						"type": "uint16"
+					},
+					{
+						"internalType": "bool",
+						"name": "shinning",
+						"type": "bool"
+					}
+				],
+				"indexed": false,
+				"internalType": "struct S.Monstres",
+				"name": "opponOrAfter",
+				"type": "tuple"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint64",
+				"name": "timeOrArray",
+				"type": "uint64"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "bit",
+				"type": "uint256"
 			}
 		],
-		"name": "BattleResult",
+		"name": "Result",
 		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_id1",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint8",
-				"name": "_id2",
-				"type": "uint8"
-			}
-		],
-		"name": "BattleSimulation",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "burn",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_newName",
-				"type": "string"
-			}
-		],
-		"name": "ChangePlayerName",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "id",
-				"type": "uint256"
-			}
-		],
-		"name": "CreateMonstre",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "defrozeMonstre",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_trainer",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "deligateToTrainer",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint8",
-				"name": "_foodtype",
-				"type": "uint8"
-			}
-		],
-		"name": "feedsMonstre",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "feedsMonstreSalmon",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "frozeMonstre",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "HatchEgg",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_count",
-				"type": "uint256"
-			}
-		],
-		"name": "mint",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipTransferred",
-		"type": "event"
-	},
-	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"inputs": [
@@ -576,6 +714,13 @@ var ftmonabi = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "setDefaultBattlingMonstre",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "string",
@@ -605,31 +750,146 @@ var ftmonabi = [
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "id",
-				"type": "uint256"
-			},
-			{
+				"components": [
+					{
+						"internalType": "uint8",
+						"name": "species",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "gene",
+						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint8",
+								"name": "happiness",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint8",
+								"name": "discipline",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint16",
+								"name": "id",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint32",
+								"name": "weight",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint8",
+								"name": "stage",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct S.attributes",
+						"name": "attribute",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint32",
+								"name": "hitpoints",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint16",
+								"name": "strength",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "agility",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "intellegence",
+								"type": "uint16"
+							}
+						],
+						"internalType": "struct S.powers",
+						"name": "power",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint32",
+						"name": "exp",
+						"type": "uint32"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint64",
+								"name": "deadtime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "endurance",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "frozentime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "stamina",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "evolutiontime",
+								"type": "uint64"
+							}
+						],
+						"internalType": "struct S.timings",
+						"name": "time",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "trait",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "skill",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint32",
+						"name": "status",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint16",
+						"name": "family",
+						"type": "uint16"
+					},
+					{
+						"internalType": "bool",
+						"name": "shinning",
+						"type": "bool"
+					}
+				],
 				"indexed": false,
-				"internalType": "bool",
-				"name": "won",
-				"type": "bool"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "hash",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint64",
-				"name": "blocktime",
-				"type": "uint64"
+				"internalType": "struct S.Monstres",
+				"name": "AfterMon",
+				"type": "tuple"
 			}
 		],
-		"name": "SimulationResult",
+		"name": "StatChangedResult",
 		"type": "event"
 	},
 	{
@@ -760,141 +1020,6 @@ var ftmonabi = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "BattlingMonstre",
-		"outputs": [
-			{
-				"internalType": "uint8",
-				"name": "species",
-				"type": "uint8"
-			},
-			{
-				"internalType": "uint256",
-				"name": "gene",
-				"type": "uint256"
-			},
-			{
-				"components": [
-					{
-						"internalType": "uint8",
-						"name": "happiness",
-						"type": "uint8"
-					},
-					{
-						"internalType": "uint8",
-						"name": "discipline",
-						"type": "uint8"
-					},
-					{
-						"internalType": "uint16",
-						"name": "id",
-						"type": "uint16"
-					},
-					{
-						"internalType": "uint32",
-						"name": "weight",
-						"type": "uint32"
-					},
-					{
-						"internalType": "uint8",
-						"name": "stage",
-						"type": "uint8"
-					}
-				],
-				"internalType": "struct S.attributes",
-				"name": "attribute",
-				"type": "tuple"
-			},
-			{
-				"components": [
-					{
-						"internalType": "uint32",
-						"name": "hitpoints",
-						"type": "uint32"
-					},
-					{
-						"internalType": "uint16",
-						"name": "strength",
-						"type": "uint16"
-					},
-					{
-						"internalType": "uint16",
-						"name": "agility",
-						"type": "uint16"
-					},
-					{
-						"internalType": "uint16",
-						"name": "intellegence",
-						"type": "uint16"
-					}
-				],
-				"internalType": "struct S.powers",
-				"name": "power",
-				"type": "tuple"
-			},
-			{
-				"internalType": "uint32",
-				"name": "exp",
-				"type": "uint32"
-			},
-			{
-				"components": [
-					{
-						"internalType": "uint64",
-						"name": "deadtime",
-						"type": "uint64"
-					},
-					{
-						"internalType": "uint64",
-						"name": "endurance",
-						"type": "uint64"
-					},
-					{
-						"internalType": "uint64",
-						"name": "frozentime",
-						"type": "uint64"
-					},
-					{
-						"internalType": "uint64",
-						"name": "stamina",
-						"type": "uint64"
-					},
-					{
-						"internalType": "uint64",
-						"name": "evolutiontime",
-						"type": "uint64"
-					}
-				],
-				"internalType": "struct S.timings",
-				"name": "time",
-				"type": "tuple"
-			},
-			{
-				"internalType": "uint32",
-				"name": "status",
-				"type": "uint32"
-			},
-			{
-				"internalType": "uint16",
-				"name": "variant",
-				"type": "uint16"
-			},
-			{
-				"internalType": "bool",
-				"name": "shinning",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
 				"name": "tokenId",
 				"type": "uint256"
 			}
@@ -905,6 +1030,152 @@ var ftmonabi = [
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getBattlingMonstresByBatch",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint8",
+						"name": "species",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "gene",
+						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint8",
+								"name": "happiness",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint8",
+								"name": "discipline",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint16",
+								"name": "id",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint32",
+								"name": "weight",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint8",
+								"name": "stage",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct S.attributes",
+						"name": "attribute",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint32",
+								"name": "hitpoints",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint16",
+								"name": "strength",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "agility",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "intellegence",
+								"type": "uint16"
+							}
+						],
+						"internalType": "struct S.powers",
+						"name": "power",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint32",
+						"name": "exp",
+						"type": "uint32"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint64",
+								"name": "deadtime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "endurance",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "frozentime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "stamina",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "evolutiontime",
+								"type": "uint64"
+							}
+						],
+						"internalType": "struct S.timings",
+						"name": "time",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "trait",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "skill",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint32",
+						"name": "status",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint16",
+						"name": "family",
+						"type": "uint16"
+					},
+					{
+						"internalType": "bool",
+						"name": "shinning",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct S.Monstres[]",
+				"name": "",
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -924,6 +1195,158 @@ var ftmonabi = [
 				"internalType": "uint256[]",
 				"name": "",
 				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_owner",
+				"type": "address"
+			}
+		],
+		"name": "getMonstresByOwnerByBatch",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint8",
+						"name": "species",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "gene",
+						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint8",
+								"name": "happiness",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint8",
+								"name": "discipline",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint16",
+								"name": "id",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint32",
+								"name": "weight",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint8",
+								"name": "stage",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct S.attributes",
+						"name": "attribute",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint32",
+								"name": "hitpoints",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint16",
+								"name": "strength",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "agility",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "intellegence",
+								"type": "uint16"
+							}
+						],
+						"internalType": "struct S.powers",
+						"name": "power",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint32",
+						"name": "exp",
+						"type": "uint32"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint64",
+								"name": "deadtime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "endurance",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "frozentime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "stamina",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "evolutiontime",
+								"type": "uint64"
+							}
+						],
+						"internalType": "struct S.timings",
+						"name": "time",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "trait",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "skill",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint32",
+						"name": "status",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint16",
+						"name": "family",
+						"type": "uint16"
+					},
+					{
+						"internalType": "bool",
+						"name": "shinning",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct S.Monstres[]",
+				"name": "",
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -1121,7 +1544,7 @@ var ftmonabi = [
 			},
 			{
 				"internalType": "uint16",
-				"name": "variant",
+				"name": "family",
 				"type": "uint16"
 			},
 			{
@@ -1261,25 +1684,6 @@ var ftmonabi = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "tokenJSON",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "address",
 				"name": "owner",
 				"type": "address"
@@ -1310,6 +1714,25 @@ var ftmonabi = [
 			}
 		],
 		"name": "tokenURI",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenURIclassic",
 		"outputs": [
 			{
 				"internalType": "string",
@@ -1360,7 +1783,7 @@ var ftmonabi = [
 				"type": "uint256"
 			}
 		],
-		"name": "ViewNFT",
+		"name": "viewNFT",
 		"outputs": [
 			{
 				"components": [
@@ -1487,7 +1910,7 @@ var ftmonabi = [
 					},
 					{
 						"internalType": "uint16",
-						"name": "variant",
+						"name": "family",
 						"type": "uint16"
 					},
 					{
