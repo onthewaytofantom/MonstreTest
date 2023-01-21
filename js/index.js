@@ -32,7 +32,41 @@ async function showWallet(){
     console.log(userAccount[0]);
 }
 showWallet();
-
+// ------------ GEneral FunCtion ----------
+function convertSeconds(seconds) {
+  let days = Math.floor(seconds / (3600*24));
+  seconds  -= days*3600*24;
+  let hrs   = Math.floor(seconds / 3600);
+  seconds  -= hrs*3600;
+  let mins = Math.floor(seconds / 60);
+  seconds  -= mins*60;
+  return {
+    d: days,
+    h: hrs,
+    m: mins,
+    s: seconds
+  };
+}
+function formatTime(seconds) {
+  let result = convertSeconds(seconds);
+  let output = "";
+  if (result.d > 0) {
+      output += result.d + "d ";
+  }
+  if (result.h > 0) {
+      output += result.h + "h ";
+  }
+  if (result.m > 0) {
+      output += result.m + "m ";
+  }
+ 
+  if (output === "") {
+      output = "-";
+  }
+  return output;
+}
+console.log(formatTime(-100000));
+// -----------------------------------------
 var checkalive = 0;
 function displayMonstre(ids) {
     $("#Monstredisplay").empty();
@@ -50,13 +84,13 @@ function displayMonstre(ids) {
         }
         
         if (checkalive == 1 && status == "ALIVE" || checkalive == 0 || checkalive ==2 && count == chosen) {
-        var deadtime = (Monstre.time.deadtime - new Date().valueOf()/1000)/3600;
-        var endurance = (Monstre.time.endurance - new Date().valueOf()/1000)/3600;
-        var stamina = (new Date().valueOf()/1000 -Monstre.time.stamina)/3600;
-        var evolutiontime = (Monstre.time.evolution - new Date().valueOf()/1000)/3600;
+        let deadtime = (Monstre.time.deadtime - new Date().valueOf()/1000);
+        var endurance = (Monstre.time.endurance - new Date().valueOf()/1000);
+        var stamina = (new Date().valueOf()/1000 -Monstre.time.stamina);
+        var evolutiontime = (Monstre.time.evolution - new Date().valueOf()/1000);
         if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
         if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
-        if (stamina <0) {stamina = 0;} else {if (stamina > 48){stamina = 48;} else {stamina = stamina.toFixed(1);}}
+        if (stamina <0) {stamina = 0;} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
 
           $("#Monstredisplay").append(`<div class="Monstredisplay">
             <ul>
@@ -67,8 +101,8 @@ function displayMonstre(ids) {
               <dt><b style="color:#102675;">Stage:</b> ${Monstre.attribute.stage} <b style="color:#102675;">  Weight (g): </b>${Monstre.attribute.weight}</dt>
               <dt><b style="color:#2F1AA9;">Strength: </b>${Monstre.power.strength} <b style="color:#2F1AA9;">  Agility: </b>${Monstre.power.agility}  <b style="color:#2F1AA9;">  Intellegence:</b> ${Monstre.power.intellegence}</dt>
               <dt><b style="color:#2F1AA9;">Hitpoints:</b> ${Monstre.power.hitpoints}  <b style="color:#102F9A;"> Skills:</b> ${Monstre.skill} <b style="color:#102F9A;">  Traits:</b> ${Monstre.trait}</dt>
-              <dt><b style="color:#7F0606;">Deadtime:</b> ${deadtime}hrs  <b style="color:#7F0606;"> Endurance:</b> ${endurance}hrs</dt>
-              <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${evolutiontime}  <b style="color:#029705;"> Stamina:</b> ${stamina}hrs</dt>
+              <dt><b style="color:#7F0606;">Deadtime:</b> ${formatTime(deadtime)}  <b style="color:#7F0606;"> Endurance:</b> ${formatTime(endurance)}</dt>
+              <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${formatTime(evolutiontime)}  <b style="color:#029705;"> Stamina:</b> ${formatTime(stamina)}</dt>
               <dt><b style="color:#4B5988;">Variant: </b>${Monstre.variant} <b style="color:#4B5988;">Frozentime:</b> ${Monstre.time.frozentime}</dt>
             </ul>
           </div>`);
@@ -137,7 +171,7 @@ function displayMonstre(ids) {
   function mint() {
     $("#Report").append("<li>Minting Egg...</li>");
     return FTMON.methods.mint(userAccount[0], 1)
-    .send({ from: userAccount[0] , value: 1000000000000000000})
+    .send({ from: userAccount[0] , value: 100000000000000000})
     .on("receipt", function(receipt) {$("#Report").append("<li>Successfully Minted an Egg</li>");})
     .on("error", function(error) {$("#Report").append(error).append("<li>Mint Failed</li>");});
   }
@@ -152,7 +186,7 @@ function displayMonstre(ids) {
 function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     $("#Report").append("<li>start feeding...</li>");
     let susstext = "";
-    return ViewNFT(uint256_tokenId).then(function(Monstre){
+    return viewNFT(uint256_tokenId).then(function(Monstre){
         let enduranceleft = (Monstre.time.endurance - new Date().valueOf()/1000)/3600;
     console.log(enduranceleft);
     switch(uint8_foodtype) {
@@ -235,7 +269,7 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
   async function trainMonstre(uint256_tokenId,uint8_traintype) {
     $("#Report").append("<li>start training...</li>");
     let susstext = "";
-    return ViewNFT(uint256_tokenId).then(function(Monstre){
+    return viewNFT(uint256_tokenId).then(function(Monstre){
         let staminaleft = (new Date().valueOf()/1000 -Monstre.time.stamina)/3600;
         let enduranceleft = (Monstre.time.endurance - new Date().valueOf()/1000)/3600;
     console.log(staminaleft);
