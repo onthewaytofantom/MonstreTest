@@ -25,7 +25,7 @@ return new Promise(async (resolve, reject) => {
     }
     })
 }
-     */
+     
     
 const getWeb3 = async () => {
   return new Promise(async (resolve, reject) => {
@@ -52,6 +52,39 @@ const getWeb3 = async () => {
     reject(error) //otherwise reject it with error.
     }
     })
+} */
+
+const getWeb3 = async () => {
+  return new Promise(async (resolve, reject) => {
+    //have an instance of web3.js.
+    const web3 = new Web3(Web3.givenProvider) //web3() is from web3.js
+    //i have included at header, the abi file. exported from SContract compiler.
+    var mycontractaddress = '0xa3F3BeE8382d1A801770492144A6494Ee5258A30';
+    FTMON = new web3.eth.Contract(ftmonabi, mycontractaddress);
+    //userAccount = web3.eth.accounts[0]; // declare an account
+    //prompt user to connect metamask
+    try {
+       await window.ethereum.enable();
+    } catch (error) {
+        // Check if the error is a "User denied account authorization" error
+        if (error.code === 4001) {
+            // Open the MetaMask wallet app using deep linking
+            window.location.href = 'ethereum:';
+        } else {
+            console.log(error);
+        }
+    }
+    userAccount = await web3.eth.getAccounts();
+    console.log(userAccount[0]);
+    $("#walletaddr").text("Connected Wallet: ").append(userAccount[0]);
+    //try to catch a block
+    try{
+    resolve(web3) //if all is well, resolve all the promise with web3.js instance
+    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    } catch (error) {
+    reject(error) //otherwise reject it with error.
+    }
+  });
 }
 
 getWeb3();
