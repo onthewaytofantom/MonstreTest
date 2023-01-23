@@ -54,6 +54,48 @@ const getWeb3 = async () => {
     })
 } */
 
+//https://github.com/Web3Modal/web3modal/releases
+
+/*
+Instead, the library is distributed as an npm package and you can install it in your project by running the following command in your project directory:
+
+Copy code
+npm install web3modal
+Then, you can import it in your javascript file
+
+Copy code
+import Web3Modal from 'web3modal';
+You can also find the library source code and documentation on the GitHub repository: 
+
+import Web3Modal from 'web3modal'; or
+<script src="path/to/web3modal.min.js"></script>
+
+const web3Modal = new Web3Modal({
+  network: 'mainnet', // The Ethereum network you want to connect to  'fantom', // or 'https://rpc.fantom.network' rpcUrl 
+  cacheProvider: true, // Caches the provider for faster connection
+  providerOptions: {
+    walletconnect: {
+      package: WalletConnectProvider, // WalletConnect provider
+    },
+    metamask: {
+      package: Web3Modal.Providers.MetaMask // MetaMask provider
+    },
+    trustwallet: {
+      package: Web3Modal.Providers.TrustWallet // Trust Wallet provider
+    },
+    coinbase: {
+      package: Web3Modal.Providers.Coinbase // Coinbase Wallet provider
+    }
+  }
+});
+
+await web3Modal.connect();
+
+const web3 = new Web3(web3Modal.provider);
+const accounts = await web3.eth.getAccounts();
+console.log(accounts[0]);
+
+*/
 const getWeb3 = async () => {
   return new Promise(async (resolve, reject) => {
     //have an instance of web3.js.
@@ -272,11 +314,33 @@ function displayMonstre(ids) {
   }, {once: false});
 
 
-  function mint() {
+  /*function mint() {
     $("#Report").append("<li>Minting Egg...</li>");
     return FTMON.methods.mint(userAccount[0], 1)
     .send({ from: userAccount[0] , value: 100000000000000000})
     .on("receipt", function(receipt) {$("#Report").append("<li>Successfully Minted an Egg</li>");})
+    .on("error", function(error) {$("#Report").append(error).append("<li>Mint Failed</li>");});
+  }*/
+
+  function mint() {
+    $("#Report").append("<li>Minting Egg...</li>");
+    return FTMON.methods.mint(userAccount[0], 1)
+    .send({ from: userAccount[0] , value: 100000000000000000})
+    .on("receipt", function(receipt) {
+      $("#Report").append("<li>Successfully Minted an Egg</li>");
+      // event listener for CreateMonstre
+      FTMON.events.CreateMonstre({}, function(error, event) {
+          if (!error) {
+              console.log(event);
+          } else {
+              console.error(error);
+          }
+      }).once('data', function(event) {
+      console.log(event);
+      }).catch(function(err) {
+      console.log(err);
+      });
+    })
     .on("error", function(error) {$("#Report").append(error).append("<li>Mint Failed</li>");});
   }
 
@@ -457,8 +521,13 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     console.log("train 4");
   }, {once: false});
 
-
-
+  document.getElementById('btn-battle').addEventListener("click", async function(event) {
+   // await BattleMonstre(document.getElementById("chosen1").value,document.getElementById("rank").value);
+   await BattleMonstre(2,2);
+    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    console.log("battle");
+  }, {once: false});
+  
 
 
 
@@ -469,17 +538,86 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     .on("receipt", function(receipt) {$("#Report").append("successfully TX");
     
         $('<tr>').append(
-            $('<td>').text(receipt.events.SimulationResult.returnValues[1].id),
-            $('<td>').text(receipt.events.SimulationResult.returnValues[2].won),
-            $('<td>').text(receipt.events.SimulationResult.returnValues[3].hash)
+            $('<td>').text(receipt.events.Result.returnValues[1].id),
+            $('<td>').text(receipt.events.Result.returnValues[2].won),
+            $('<td>').text(receipt.events.Result.returnValues[3].hash)
         ).appendTo('#Report');
-    $("#Report").append(receipt.events.SimulationResult.returnValues.toString());
-        console.log(receipt.events.SimulationResult.returnValues);})
+    $("#Report").append(receipt.events.Result.returnValues.toString());
+        console.log(receipt.events.Result.returnValues);})
     .on("error", function(error) {$("#Report").append(error).append("<li>Simulation Failed</li>");});
   }
+  function BattleMonstre(uint256_tokenId,rank) {
+    $("#Report").append("<li>start simulation...</li>");
+    return FTMON.methods.BattleMonstre(uint256_tokenId,rank)
+    .send({ from: userAccount[0] })
+    .on("receipt", function(receipt) {$("#Report").append("successfully TX");
+    
+        $('<tr>').append(
+            $('<td>').text(receipt.events.Result.returnValues[1].id),
+            $('<td>').text(receipt.events.Result.returnValues[2].won),
+            $('<td>').text(receipt.events.Result.returnValues[3].hash),
+            $('<td>').text(receipt.events.Result.returnValues[4].selfOrBefore),
+            $('<td>').text(receipt.events.Result.returnValues[5].opponOrAfter),
+            $('<td>').text(receipt.events.Result.returnValues[6].timeOrArray),
+            $('<td>').text(receipt.events.Result.returnValues[7].bit)
+        ).appendTo('#Report');
+    $("#Report").append(receipt.events.Result.returnValues.toString());
+        console.log(receipt.events.Result.returnValues);})
+    .on("error", function(error) {$("#Report").append(error).append("<li>Simulation Failed</li>");});
+  }
+  
+   /*
+  function BattleMonstre(id, rank) {
+    FTMON.events.Result({}, (error, event) => {
+      if (error) {
+          console.error(error);
+          return;
+      }
+      console.log(event);
+  }).on("data", (event) => {
+      console.log(event.returnValues);
+  });
+  
+    
+   
+    // Estimate the gas needed for the transaction
+    FTMON.methods.BattleMonstre(id, rank).estimateGas()
+    .then(gasEstimate => {
+      // Send the transaction to call the function
+      FTMON.methods.BattleMonstre(id, rank).send({
+        from: userAccount[0],
+        gas: gasEstimate * 2
+      })
+      .then(tx => {
+        // Log the transaction hash
+        console.log(`Transaction hash: ${tx.transactionHash}`);
+  
+        // Set up event listener for the Result event
+        FTMON.events.Result({}, (error, event) => {
+            if (error) {
+                console.error(error);
+                return;
+            }
+            console.log(event);
+        }).on("data", (event) => {
+            console.log(event.returnValues);
+        });
+  
+      })
+      .catch(error => console.error(error));
+    })
+    .catch(error => console.error(error));
+  } */
+  
+
+
+
+
+
+
 
   document.getElementById('btn-battleSim').addEventListener("click", async function(event) {
-    await BattleSimulation(document.getElementById("chosen1").value,document.getElementById("battlesimopp").value);
+    await BattleSimulation(document.getElementById("chosen1").value,document.getElementById("battle").value);
     getMonstresByOwner(userAccount[0]).then(displayMonstre);
     console.log("train 4");
   }, {once: false});
