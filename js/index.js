@@ -546,6 +546,8 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
         console.log(receipt.events.Result.returnValues);})
     .on("error", function(error) {$("#Report").append(error).append("<li>Simulation Failed</li>");});
   }
+
+  /*
   function BattleMonstre(uint256_tokenId,rank) {
     $("#Report").append("<li>start simulation...</li>");
     return FTMON.methods.BattleMonstre(uint256_tokenId,rank)
@@ -564,22 +566,10 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     $("#Report").append(receipt.events.Result.returnValues.toString());
         console.log(receipt.events.Result.returnValues);})
     .on("error", function(error) {$("#Report").append(error).append("<li>Simulation Failed</li>");});
-  }
+  }*/
   
-   /*
-  function BattleMonstre(id, rank) {
-    FTMON.events.Result({}, (error, event) => {
-      if (error) {
-          console.error(error);
-          return;
-      }
-      console.log(event);
-  }).on("data", (event) => {
-      console.log(event.returnValues);
-  });
-  
-    
    
+  function BattleMonstre(id, rank) {
     // Estimate the gas needed for the transaction
     FTMON.methods.BattleMonstre(id, rank).estimateGas()
     .then(gasEstimate => {
@@ -607,7 +597,7 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
       .catch(error => console.error(error));
     })
     .catch(error => console.error(error));
-  } */
+  } 
   
 
 
