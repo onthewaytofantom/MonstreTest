@@ -39,6 +39,9 @@
 			<h2>
 				Fantoman & Fantomonstre (FTM TESTNET)
 			</h2>
+			<p>This is mainly testing the backend (Smart Contracts), so bear with the graphics. Eventually will run wil Unity Gaming graphics.</p>
+			<div class="boxwarning" id="boxwarn" style="color:red;"> </div>
+			<!-- 
 <p>This is just to test the contract. Definitely not the final product. Not even close! The UI, animation, and interface will run with Unity Engine. The core and processing of the lives are fully running in the FTM contracts. <True-Web3>.</p>
 
 <p>Mission: To have a new (unmanipulated and very low-risk)self-sustained way for Fantom users to earn extra income via a relaxing strategy game with creatures on the chain. That will keep Fantom's ecosystem users engaged and educated especially in the BEAR Market.</p>
@@ -49,7 +52,8 @@
 
 <p>The project is aimed at self-sustaining. The treasury will receive $FTM from the advertisement, social spending in the game, and tickets for events and tournaments and 100% of it will fund the reward for the Fantoman that raises their Fantomonstre and compete or work for the Fantom World (operate like decentralized Google, Facebook/Meta model). The project can be bootstrapped by any sponsors sending funds to the project treasury for the reward. Besides, the game will include an interesting, growing story based on the historical events that happened in Fantom, attracting, guiding, and educating new users about DeFi, risk, safety measures, etc.</p>
 
-<p>I plan to have a fair launch minting and target the 'long tail' of Fantom users (small wallets, or new small investors who hold $FTM in their bags). No ERC20 token has been planned because it is easily been manipulated and is against my target audience. Only $FTM serves as the currency. In other words, it adds utility to $FTM too.</p>
+<p>I plan to have a fair launch minting and target the 'long tail' of Fantom users (small wallets, or new small investors who hold $FTM in their bags). No ERC20 token has been planned because it is easily been manipulated and is against my target audience. Only $FTM serves as the currency. In other words, it adds utility to $FTM too.</p> 
+-->
 			<p>
 				<button id="btn-connectwallet">Connect Wallet</button>
 				<div class="boxWaddress" id="walletaddr"> Connected Wallet: None</div>
@@ -57,14 +61,23 @@
 			<div class="row">
 				<div class="col-md-4">
 					Display Monstre:
-					<button id="btn-displayall">Show All</button><button id="btn-displayalive">Show Alive</button>
-					<button id="btn-displaychosen">Show Chosen</button>
-					<div class="displayMonstre" id="Monstredisplay"> <p></p>None, consider mint one?<p></p></div>
+					<!--<button id="btn-displayall">Show All</button><button id="btn-displayalive">Show Alive</button>
+					<button id="btn-displaychosen">Show Chosen</button> -->
+					
+					<select id="display-list">
+						<option value="displayall">All my Monstres</option>
+						<option value="displayalive">Only Alives</option>
+						<option value="displaychosen">Chosen only</option>
+					</select>
+					<button id="btn-refresh">Refresh</button>
+					<p>Choose Monstre No.:<input type="text" id="chosenno" value="0" size="3" ></p>
+					<div class="displayMonstre" id="Monstredisplay" 
+					style="height:630px;overflow:auto;background-color:rgb(206, 204, 204);color:rgb(31, 30, 27);scrollbar-base-color:rgb(83, 72, 8);font-family:sans-serif;padding:10px;"> <p></p>None, consider mint one?<p></p></div>
 					
 					
 				</div>
 				<div class="col-md-4">
-					<p>Choose Monstre ID:<input type="text" id="chosen1" value="0" size="3" ></p>
+					<p>My ActiveMonstre ID.:<input type="text" id="chosenid" value="0" size="3" ></p>
 					 <!--<a href="#" class="btn btn-info" type="button">Button1</a> -->
 					<p ><b >Feeding Monstre</b>
 					<p><button type="button" class="btn btn-success" id="btn-meat">Meat</button> 
@@ -88,6 +101,7 @@
 					<button type="button" class="btn btn-info" id="btn-trainstr+">Train STR+</button>
 					<button type="button" class="btn btn-info" id="btn-trainagi+">Train AGI+</button>
 					<button type="button" class="btn btn-info" id="btn-trainint+">Train INT+</button>
+					<button type="button" class="btn btn-success" id="btn-temp">TEMP</button>
 						</p> 
 						
 						<p ><b >Owner Action</b></p>
@@ -104,7 +118,7 @@
 					</div>
 				</div>
 				<div class="col-md-4" >
-					<div id="Report" style="height:500px;overflow:auto;background-color:rgb(18, 26, 2);color:rgb(196, 135, 4);scrollbar-base-color:rgb(83, 72, 8);font-family:sans-serif;padding:10px;">
+					<div id="Report" style="height:710px;overflow:auto;background-color:rgb(18, 26, 2);color:rgb(196, 135, 4);scrollbar-base-color:rgb(83, 72, 8);font-family:sans-serif;padding:10px;">
 						<b><u>Report:</u></b>
 					</div>
 				</div>
@@ -116,9 +130,11 @@
     
 	 <!-- get the web3.js file and look at its documentation. quite easy eh https://web3js.readthedocs.io/en/v1.2.1/getting-started.html-->
 	<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+	<script src="https://peterolson.github.io/BigInteger.js/BigInteger.min.js"></script>
 	<script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="js/fantommonstreabi.js"></script>
     <script src="js/index.js"></script>
+	
 
 
 
