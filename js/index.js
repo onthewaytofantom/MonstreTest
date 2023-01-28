@@ -4,59 +4,8 @@ var userAccount;
 document.getElementById("display-list").value = localStorage.getItem("selectedOption");
 document.getElementById("chosenno").value = localStorage.getItem("chosenNO");
 document.getElementById("chosenid").value = localStorage.getItem("chosenID");
+document.getElementById("oppoid").value = localStorage.getItem("oppoID");
 
-/*
-const getWeb3 = async () => {
-return new Promise(async (resolve, reject) => {
-    
-  //have an instance of web3.js.
-    const web3 = new Web3(Web3.givenProvider) //web3() is from web3.js
-    //i have included at header, the abi file. exported from SContract compiler.
-    var mycontractaddress = '0xa3F3BeE8382d1A801770492144A6494Ee5258A30';
-    FTMON = new web3.eth.Contract(ftmonabi, mycontractaddress);
-    //userAccount = web3.eth.accounts[0]; // declare an account
-    userAccount = await web3.eth.getAccounts();
-    console.log(userAccount[0]);
-    $("#walletaddr").text("Connected Wallet: ").append(userAccount[0]);
-    //try to catch a block
-    try{
-            //direct talk to metamask window.ethereum is metamask function
-    await window.ethereum.request({method: "eth_requestAccounts"})
-    resolve(web3) //if all is well, resolve all the promise with web3.js instance
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
-    } catch (error) {
-    reject(error) //otherwise reject it with error.
-    }
-    })
-}
-     
-    
-const getWeb3 = async () => {
-  return new Promise(async (resolve, reject) => {
-     //have an instance of web3.js.
-    const web3 = new Web3(Web3.givenProvider) //web3() is from web3.js
-    //i have included at header, the abi file. exported from SContract compiler.
-    var mycontractaddress = '0xa3F3BeE8382d1A801770492144A6494Ee5258A30';
-    FTMON = new web3.eth.Contract(ftmonabi, mycontractaddress);
-    //userAccount = web3.eth.accounts[0]; // declare an account
-    //prompt user to connect metamask
-    try {
-       await window.ethereum.enable();
-    } catch (error) {
-        console.log(error);
-    }
-    userAccount = await web3.eth.getAccounts();
-    console.log(userAccount[0]);
-    $("#walletaddr").text("Connected Wallet: ").append(userAccount[0]);
-    //try to catch a block
-    try{
-    resolve(web3) //if all is well, resolve all the promise with web3.js instance
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
-    } catch (error) {
-    reject(error) //otherwise reject it with error.
-    }
-    })
-} */
 
 //https://github.com/Web3Modal/web3modal/releases
 
@@ -124,11 +73,10 @@ const getWeb3 = async () => {
     }
     userAccount = await web3.eth.getAccounts();
     console.log(userAccount[0]);
-    $("#walletaddr").text("Connected Wallet: ").append(userAccount[0]);
+    $("#walletaddr").text("").append(userAccount[0]);
     //try to catch a block
     try{
     resolve(web3) //if all is well, resolve all the promise with web3.js instance
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
     displayMonstreAll(userAccount[0]);
     $("#Report").append("<li>Ready.</li>");
     } catch (error) {
@@ -154,7 +102,7 @@ const getWeb3 = async () => {
 //getWeb3();
 
 async function showWallet(){
-    $("#walletaddr").text("Wallet:"+userAccount[0]);
+    $("#walletaddr").text(userAccount[0]);
     console.log(userAccount[0]);
 }
 
@@ -285,7 +233,41 @@ const skillList = {
   61: "Psycodamage",
   62: "Sunraze Slash",
   63: "Giga Blast"
-};
+}
+const traitList = {
+  0: "none",
+  1: "Tough",
+  2: "Brawler",
+  3: "Nimble",
+  4: "Smart",
+  5: "Pride",
+  6: "Resilient",
+  7: "Hardworking",
+  8: "Serious",
+  9: "Creative",
+  10: "Ambitious",
+  11: "Multitasking",
+  12: "Lonely",
+  13: "Bashful",
+  14: "Adamant",
+  15: "Naughty",
+  16: "Brave",
+  17: "Timid",
+  18: "Hasty",
+  19: "Jolly",
+  20: "Naive",
+  21: "Quirky",
+  22: "Mild",
+  23: "Quiet",
+  24: "Rash",
+  25: "Modest",
+  26: "Docile",
+  27: "Relaxed",
+  28: "Bold",
+  29: "Impish",
+  30: "Lax",
+  31: "Careful"
+  }
 function SkillsState(mon, SkillNumber) {
   let HP = mon.power.hitpoints;
   let STR = mon.power.strength;
@@ -442,102 +424,6 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
 }
 
 // -----------------------------------------
-var checkalive = 0;
-/*
-function displayMonstre(ids) {
-    $("#Monstredisplay").empty();
-      for (idd of ids) {
-        let chosen = document.getElementById("chosenNo").value;
-        let count = idd;    
-
-        viewNFT(idd).then(function(Monstre) {
-        console.log("here d");
-        if (new Date().valueOf()/1000 > Monstre.time.deadtime || 
-            new Date().valueOf()/1000 > Monstre.time.endurance ){
-         var status = "DEAD - An Egg now - Hatch it";
-        } else {
-          status ="ALIVE";
-        }
-        
-        if (checkalive == 1 && status == "ALIVE" || checkalive == 0 || checkalive ==2 && count == chosen) {
-        let deadtime = (Monstre.time.deadtime - new Date().valueOf()/1000);
-        var endurance = (Monstre.time.endurance - new Date().valueOf()/1000);
-        var stamina = new Date().valueOf()/1000 -Monstre.time.stamina  ;
-        var evolutiontime = (Monstre.time.evolutiontime - new Date().valueOf()/1000);
-        if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
-        if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
-        if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
-
-          $("#Monstredisplay").append(`<div class="Monstredisplay">
-            <ul>
-              <n><b style="color:gray;">${status} </b></n>
-              <dt> <b style="color:#12256A;">  id: </b> ${Monstre.attribute.id}<b style="color:#12256A;">  Species:</b> ${speciesList[Monstre.species]}<b style="color:#12256A;">   Gene: </b>${Monstre.gene}</dt>
-              <dt><b style="color:#12256A;" style="color:blue;">Exp:</b> ${Monstre.exp}  <b style="color:#12256A;">  Status:</b> ${Monstre.status}</dt>
-              <dt><b style="color:#092793;">Discipline:</b> ${Monstre.attribute.discipline}  <b style="color:#092793;"> Happiness: </b>${Monstre.attribute.happiness}</dt>
-              <dt><b style="color:#102675;">Stage:</b> ${stageList[Monstre.attribute.stage]} <b style="color:#102675;">  Weight (g): </b>${Monstre.attribute.weight}</dt>
-              <dt><b style="color:#2F1AA9;">Strength: </b>${Monstre.power.strength} <b style="color:#2F1AA9;">  Agility: </b>${Monstre.power.agility}  <b style="color:#2F1AA9;">  Intellegence:</b> ${Monstre.power.intellegence}</dt>
-              <dt><b style="color:#2F1AA9;">Hitpoints:</b> ${Monstre.power.hitpoints}  <b style="color:#102F9A;"> Skills:</b> ${Monstre.skill+skillList[Monstre.skill[0]]+skillList[Monstre.skill[1]]+skillList[Monstre.skill[2]]} <b style="color:#102F9A;">  Traits:</b> ${Monstre.trait}</dt>
-              <dt><b style="color:#7F0606;">Deadtime:</b> ${formatTime(deadtime)}  <b style="color:#7F0606;"> Endurance:</b> ${formatTime(endurance)}</dt>
-              <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${formatTime(evolutiontime)}  <b style="color:#029705;"> Stamina:</b> ${(stamina/3600).toFixed(2)} h</dt>
-              <dt><b style="color:#4B5988;">Variant: </b>${familyList[Monstre.variant]} <b style="color:#4B5988;">Frozentime:</b> ${Monstre.time.frozentime}</dt>
-            </ul>
-          </div>`);
-        }
-        });
-    }
-  }
-  */
- /*
-  function displayMonstre(ids) {
-    $("#Monstredisplay").empty();
-    getMonstreVar();
-    console.log("222"+ allMonstres);
-     
-    for (idd of ids) {
-        let chosen = document.getElementById("chosenNo").value;
-        let count = idd;    
-
-        //viewNFT(idd).then(function(Monstre) {
-        console.log("here 2d");
-        if (new Date().valueOf()/1000 > allMonstres[idd].time.deadtime || 
-            new Date().valueOf()/1000 > allMonstres[idd].time.endurance ){
-         var status = "DEAD - An Egg now - Hatch it";
-        } else {
-          status ="ALIVE";
-        }
-        console.log(allMonstres[idd].time.deadtime);
-        console.log(idd);
-        if (checkalive == 1 && status == "ALIVE" || checkalive == 0 || checkalive ==2 && count == chosen) {
-        let deadtime = (allMonstres[idd].time.deadtime - new Date().valueOf()/1000);
-        var endurance = (allMonstres[idd].time.endurance - new Date().valueOf()/1000);
-        var stamina = new Date().valueOf()/1000 -allMonstres[idd].time.stamina  ;
-        var evolutiontime = (allMonstres[idd].time.evolutiontime - new Date().valueOf()/1000);
-        if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
-        if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
-        if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
-
-          $("#Monstredisplay").append(`<div class="Monstredisplay">
-            <ul>
-              <n><b style="color:gray;">${status} </b></n>
-              <dt> <b style="color:#12256A;">  id: </b> ${allMonstres[idd].attribute.id}<b style="color:#12256A;">  Species:</b> ${speciesList[allMonstres[idd].species]}<b style="color:#12256A;">   Gene: </b>${allMonstres[idd].gene}</dt>
-              <dt><b style="color:#12256A;" style="color:blue;">Exp:</b> ${allMonstres[idd].exp}  <b style="color:#12256A;">  Status:</b> ${allMonstres[idd].status}</dt>
-              <dt><b style="color:#092793;">Discipline:</b> ${allMonstres[idd].attribute.discipline}  <b style="color:#092793;"> Happiness: </b>${allMonstres[idd].attribute.happiness}</dt>
-              <dt><b style="color:#102675;">Stage:</b> ${stageList[allMonstres[idd].attribute.stage]} <b style="color:#102675;">  Weight (g): </b>${allMonstres[idd].attribute.weight}</dt>
-              <dt><b style="color:#2F1AA9;">Strength: </b>${allMonstres[idd].power.strength} <b style="color:#2F1AA9;">  Agility: </b>${allMonstres[idd].power.agility}  <b style="color:#2F1AA9;">  Intellegence:</b> ${allMonstres[idd].power.intellegence}</dt>
-              <dt><b style="color:#2F1AA9;">Hitpoints:</b> ${allMonstres[idd].power.hitpoints}  <b style="color:#102F9A;"> Skills:</b> ${allMonstres[idd].skill+skillList[allMonstres[idd].skill[0]]+skillList[allMonstres[idd].skill[1]]+skillList[allMonstres[idd].skill[2]]} <b style="color:#102F9A;">  Traits:</b> ${allMonstres[idd].trait}</dt>
-              <dt><b style="color:#7F0606;">Deadtime:</b> ${formatTime(deadtime)}  <b style="color:#7F0606;"> Endurance:</b> ${formatTime(endurance)}</dt>
-              <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${formatTime(evolutiontime)}  <b style="color:#029705;"> Stamina:</b> ${(stamina/3600).toFixed(2)} h</dt>
-              <dt><b style="color:#4B5988;">Variant: </b>${familyList[allMonstres[idd].variant]} <b style="color:#4B5988;">Frozentime:</b> ${allMonstres[idd].time.frozentime}</dt>
-            </ul>
-          </div>`);
-        }
-    }
-  }
-  */
-  
-  function displayMonstre(ids) {
-   console.log(ids + " Purpolse skip, trying other function")
-  }
 
   function displayMonstreAll(walletaddress) {
     $("#Monstredisplay").empty();
@@ -545,17 +431,22 @@ function displayMonstre(ids) {
     if (document.getElementById("display-list").value == "displayall") { checkdisplay = 0;}
     else if (document.getElementById("display-list").value == "displayalive") { checkdisplay = 1;}
     else if (document.getElementById("display-list").value == "displaychosen") { checkdisplay = 2;}
+    else if (document.getElementById("display-list").value == "displayrankyouth") { checkdisplay = 3;}
+    else if (document.getElementById("display-list").value == "displayrankrookie") { checkdisplay = 4;}
+    else if (document.getElementById("display-list").value == "displayrankmature") { checkdisplay = 5;}
+    else if (document.getElementById("display-list").value == "displayrankperfect") { checkdisplay = 6;}
     var chosen = document.getElementById("chosenno").value;
-    if (checkdisplay <=3) {
+    if (checkdisplay <3) {
       getMonstreVar(walletaddress).then(function(allMonstress) {
         for (let ii =0; ii<allMonstress.length; ii++) {
-          console.log("here 2d");
+          //console.log("here 2d");
           if (new Date().valueOf()/1000 > allMonstress[ii].time.deadtime || 
               new Date().valueOf()/1000 > allMonstress[ii].time.endurance ){
           var status = "DEAD - An Egg now - Hatch it";
           } else {
             status ="ALIVE";
           }
+          //console.log(allMonstress);
           if (checkdisplay == 1 && status == "ALIVE" || checkdisplay == 0 || checkdisplay ==2 && ii == chosen) {
           let deadtime = (allMonstress[ii].time.deadtime - new Date().valueOf()/1000);
           var endurance = (allMonstress[ii].time.endurance - new Date().valueOf()/1000);
@@ -564,62 +455,53 @@ function displayMonstre(ids) {
           if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
           if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
           if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
+          if (allMonstress[ii].status == 0) {var stat = "Normal";} else {var stat = "Frozen";}
 
             $("#Monstredisplay").append(`<div class="Monstredisplay">
-              <ul>
+              <ul style="background-color:#101010;">
                 <n><b style="color:gray;">${status} </b></n>
                 <dt> <b style="color:#12256A;">  No.: </b> ${ii} <b style="color:#12256A;">  id: </b> ${allMonstress[ii].attribute.id} <b style="color:#12256A;">  Species:</b> ${speciesList[allMonstress[ii].species]}</dt>
-                <dt><b style="color:#12256A;" style="color:blue;">Exp:</b> ${allMonstress[ii].exp}  <b style="color:#12256A;">  Status:</b> ${allMonstress[ii].status}</dt>
+                <dt><b style="color:#12256A;" style="color:blue;">Exp:</b> ${allMonstress[ii].exp}  <b style="color:#12256A;">  Status:</b> ${stat}</dt>
                 <dt><b style="color:#092793;">Discipline:</b> ${allMonstress[ii].attribute.discipline}  <b style="color:#092793;"> Happiness: </b>${allMonstress[ii].attribute.happiness}</dt>
                 <dt><b style="color:#102675;">Stage:</b> ${stageList[allMonstress[ii].attribute.stage]} <b style="color:#102675;">  Weight (g): </b>${allMonstress[ii].attribute.weight}</dt>
+                <dt><b style="color:#2F1AA9;">Hitpoints:</b> ${allMonstress[ii].power.hitpoints}   </dt>
                 <dt><b style="color:#2F1AA9;">Strength: </b>${allMonstress[ii].power.strength} <b style="color:#2F1AA9;">  Agility: </b>${allMonstress[ii].power.agility}  <b style="color:#2F1AA9;">  Intellegence:</b> ${allMonstress[ii].power.intellegence}</dt>
-                <dt><b style="color:#2F1AA9;">Hitpoints:</b> ${allMonstress[ii].power.hitpoints}  <b style="color:#102F9A;"> Skills:</b> ${allMonstress[ii].skill+skillList[allMonstress[ii].skill[0]]+skillList[allMonstress[ii].skill[1]]+skillList[allMonstress[ii].skill[2]]} <b style="color:#102F9A;">  Traits:</b> ${allMonstress[ii].trait}</dt>
+                <dt><b style="color:#2F1AA9;">Skills:</b> ${skillList[allMonstress[ii].skill[0]]+", "+skillList[allMonstress[ii].skill[1]]+", "+skillList[allMonstress[ii].skill[2]]} </dt>
+                <dt><b style="color:#102F9A;">Traits:</b> ${traitList[allMonstress[ii].trait[0]]+", "+traitList[allMonstress[ii].trait[1]]+", "+traitList[allMonstress[ii].trait[2]]}</dt>
                 <dt><b style="color:#7F0606;">Deadtime:</b> ${formatTime(deadtime)}  <b style="color:#7F0606;"> Endurance:</b> ${formatTime(endurance)}</dt>
                 <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${formatTime(evolutiontime)}  <b style="color:#029705;"> Stamina:</b> ${(stamina/3600).toFixed(2)} h</dt>
-                <dt><b style="color:#4B5988;">Variant: </b>${familyList[allMonstress[ii].variant]} <b style="color:#4B5988;">Frozentime:</b> ${allMonstress[ii].time.frozentime}</dt>
-                <dt><b style="color:#4B5988;font-size:11px">Gene: </b><i style="font-size:11px">${allMonstress[ii].gene}</i></dt>
+                <dt><b style="color:#4B5988;">Family: </b>${familyList[allMonstress[ii].family]} <b style="color:#4B5988;">Frozentime:</b> ${allMonstress[ii].time.frozentime}</dt>
+                <dt><b style="color:#4B5988;font-size:11px"><u>Gene: </b><i style="font-size:11px">${allMonstress[ii].gene}</i></u></dt>
               </ul>
             </div>`);
           }
         } 
       });
-    } /*else { // means = 2
-      viewNFT(document.getElementById("chosenNo").value).then(function(mon) {
-        
-          console.log("here reach viewNFT");
-          if (new Date().valueOf()/1000 > mon.time.deadtime || 
-              new Date().valueOf()/1000 > mon.time.endurance ){
-          var status = "DEAD - An Egg now - Hatch it";
-          } else {
-            status ="ALIVE";
-          }
-          if (checkdisplay == 1 && status == "ALIVE" || checkdisplay == 0 || checkdisplay ==2 && count == chosen) {
-          let deadtime = (mon.time.deadtime - new Date().valueOf()/1000);
-          var endurance = (mon.time.endurance - new Date().valueOf()/1000);
-          var stamina = new Date().valueOf()/1000 -mon.time.stamina  ;
-          var evolutiontime = (mon.time.evolutiontime - new Date().valueOf()/1000);
-          if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
-          if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
-          if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
-
+    } else { //means showing opponenets per rank
+      console.log("getting battling");
+      getBattlingMonstresByBatch().then(function(allMonstress) {
+        for (let ii =((checkdisplay-3)*10); ii< ((checkdisplay-3)*10+10); ii++) {
+          console.log("here 2d");
+     
             $("#Monstredisplay").append(`<div class="Monstredisplay">
               <ul>
-                <n><b style="color:gray;">${status} </b></n>
-                <dt> <b style="color:#12256A;">  id: </b> ${mon.attribute.id}<b style="color:#12256A;">  Species:</b> ${speciesList[mon.species]}<b style="color:#12256A;">   Gene: </b>${mon.gene}</dt>
-                <dt><b style="color:#12256A;" style="color:blue;">Exp:</b> ${mon.exp}  <b style="color:#12256A;">  Status:</b> ${mon.status}</dt>
-                <dt><b style="color:#092793;">Discipline:</b> ${mon.attribute.discipline}  <b style="color:#092793;"> Happiness: </b>${mon.attribute.happiness}</dt>
-                <dt><b style="color:#102675;">Stage:</b> ${stageList[mon.attribute.stage]} <b style="color:#102675;">  Weight (g): </b>${mon.attribute.weight}</dt>
-                <dt><b style="color:#2F1AA9;">Strength: </b>${mon.power.strength} <b style="color:#2F1AA9;">  Agility: </b>${mon.power.agility}  <b style="color:#2F1AA9;">  Intellegence:</b> ${mon.power.intellegence}</dt>
-                <dt><b style="color:#2F1AA9;">Hitpoints:</b> ${mon.power.hitpoints}  <b style="color:#102F9A;"> Skills:</b> ${mon.skill+skillList[mon.skill[0]]+skillList[mon.skill[1]]+skillList[mon.skill[2]]} <b style="color:#102F9A;">  Traits:</b> ${mon.trait}</dt>
-                <dt><b style="color:#7F0606;">Deadtime:</b> ${formatTime(deadtime)}  <b style="color:#7F0606;"> Endurance:</b> ${formatTime(endurance)}</dt>
-                <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${formatTime(evolutiontime)}  <b style="color:#029705;"> Stamina:</b> ${(stamina/3600).toFixed(2)} h</dt>
-                <dt><b style="color:#4B5988;">Variant: </b>${familyList[mon.variant]} <b style="color:#4B5988;">Frozentime:</b> ${mon.time.frozentime}</dt>
+                
+                <dt> id: </b> ${allMonstress[ii].attribute.id} <b style="color:#12256A;">  Species:</b> ${speciesList[allMonstress[ii].species]}</dt>
+                <dt><b style="color:#12256A;" style="color:blue;">Exp:</b> ${allMonstress[ii].exp}  <b style="color:#12256A;">  Status:</b> ${allMonstress[ii].status}</dt>
+                <dt><b style="color:#092793;">Discipline:</b> ${allMonstress[ii].attribute.discipline}  <b style="color:#092793;"> Happiness: </b>${allMonstress[ii].attribute.happiness}</dt>
+                <dt><b style="color:#102675;">Stage:</b> ${stageList[allMonstress[ii].attribute.stage]} <b style="color:#102675;">  Weight (g): </b>${allMonstress[ii].attribute.weight}</dt>
+                <dt><b style="color:#2F1AA9;">Strength: </b>${allMonstress[ii].power.strength} <b style="color:#2F1AA9;">  Agility: </b>${allMonstress[ii].power.agility}  <b style="color:#2F1AA9;">  Intellegence:</b> ${allMonstress[ii].power.intellegence}</dt>
+                <dt><b style="color:#2F1AA9;">Hitpoints:</b> ${allMonstress[ii].power.hitpoints}  <b style="color:#102F9A;"> Skills:</b> ${allMonstress[ii].skill+skillList[allMonstress[ii].skill[0]]+skillList[allMonstress[ii].skill[1]]+skillList[allMonstress[ii].skill[2]]} <b style="color:#102F9A;">  Traits:</b> ${allMonstress[ii].trait}</dt>
+                <dt><b style="color:#4B5988;">family: </b>${familyList[allMonstress[ii].family]} </dt>
+                
               </ul>
             </div>`);
           }
         
       });
-    }*/
+
+
+    }
   }
 
 
@@ -629,7 +511,6 @@ function displayMonstre(ids) {
     // Save selected option to local storage
     localStorage.setItem("selectedOption", selectedOption);
   });
-
   document.getElementById("chosenno").addEventListener("change", function() {
     var selectedOption = this.value;
     displayMonstreAll(userAccount[0]);
@@ -641,51 +522,14 @@ function displayMonstre(ids) {
     // Save selected option to local storage
     localStorage.setItem("chosenID", selectedOption);
   });
+  document.getElementById("oppoid").addEventListener("change", function() {
+    var selectedOption = this.value;
+    // Save selected option to local storage
+    localStorage.setItem("oppoID", selectedOption);
+  });
 
 
-    
-
-    /*
-      for (idd of ids) {
-        let chosen = document.getElementById("chosenid").value;
-        let count = idd;    
-
-        viewNFT(idd).then(function(Monstre) {
-        console.log("here d");
-        if (new Date().valueOf()/1000 > Monstre.time.deadtime || 
-            new Date().valueOf()/1000 > Monstre.time.endurance ){
-         var status = "DEAD - An Egg now - Hatch it";
-        } else {
-          status ="ALIVE";
-        }
-        
-        if (checkalive == 1 && status == "ALIVE" || checkalive == 0 || checkalive ==2 && count == chosen) {
-        let deadtime = (Monstre.time.deadtime - new Date().valueOf()/1000);
-        var endurance = (Monstre.time.endurance - new Date().valueOf()/1000);
-        var stamina = new Date().valueOf()/1000 -Monstre.time.stamina  ;
-        var evolutiontime = (Monstre.time.evolutiontime - new Date().valueOf()/1000);
-        if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
-        if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
-        if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
-
-          $("#Monstredisplay").append(`<div class="Monstredisplay">
-            <ul>
-              <n><b style="color:gray;">${status} </b></n>
-              <dt> <b style="color:#12256A;">  id: </b> ${Monstre.attribute.id}<b style="color:#12256A;">  Species:</b> ${speciesList[Monstre.species]}<b style="color:#12256A;">   Gene: </b>${Monstre.gene}</dt>
-              <dt><b style="color:#12256A;" style="color:blue;">Exp:</b> ${Monstre.exp}  <b style="color:#12256A;">  Status:</b> ${Monstre.status}</dt>
-              <dt><b style="color:#092793;">Discipline:</b> ${Monstre.attribute.discipline}  <b style="color:#092793;"> Happiness: </b>${Monstre.attribute.happiness}</dt>
-              <dt><b style="color:#102675;">Stage:</b> ${stageList[Monstre.attribute.stage]} <b style="color:#102675;">  Weight (g): </b>${Monstre.attribute.weight}</dt>
-              <dt><b style="color:#2F1AA9;">Strength: </b>${Monstre.power.strength} <b style="color:#2F1AA9;">  Agility: </b>${Monstre.power.agility}  <b style="color:#2F1AA9;">  Intellegence:</b> ${Monstre.power.intellegence}</dt>
-              <dt><b style="color:#2F1AA9;">Hitpoints:</b> ${Monstre.power.hitpoints}  <b style="color:#102F9A;"> Skills:</b> ${Monstre.skill+skillList[Monstre.skill[0]]+skillList[Monstre.skill[1]]+skillList[Monstre.skill[2]]} <b style="color:#102F9A;">  Traits:</b> ${Monstre.trait}</dt>
-              <dt><b style="color:#7F0606;">Deadtime:</b> ${formatTime(deadtime)}  <b style="color:#7F0606;"> Endurance:</b> ${formatTime(endurance)}</dt>
-              <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${formatTime(evolutiontime)}  <b style="color:#029705;"> Stamina:</b> ${(stamina/3600).toFixed(2)} h</dt>
-              <dt><b style="color:#4B5988;">Variant: </b>${familyList[Monstre.variant]} <b style="color:#4B5988;">Frozentime:</b> ${Monstre.time.frozentime}</dt>
-            </ul>
-          </div>`);
-        }
-        });
-    }*/
-  
+     
 
   async function getMonstresByOwner(address_owner) {
     let idarray= await FTMON.methods.getMonstresByOwner(address_owner).call();
@@ -706,6 +550,9 @@ function displayMonstre(ids) {
   function getMonstreVar(useraddress) {
     return FTMON.methods.getMonstresByOwnerByBatch(useraddress).call();
   }
+  function getBattlingMonstresByBatch() {
+    return FTMON.methods.getBattlingMonstresByBatch().call();
+  }
 
  /* document.getElementById('btn-displayall').addEventListener("click", function(event) {
     checkalive = 0;
@@ -725,11 +572,10 @@ function displayMonstre(ids) {
   
   //always run
   var intervalId = setInterval(function() {
-       getMonstresByOwner(userAccount[0]).then(displayMonstre);
+       displayMonstreAll(userAccount[0]);
         console.log("interval");
   }, 300000); //300s
-
-
+/// ---------------actions --------------------
   function HatchEgg(uint256_tokenId) {
     $("#Report").append("<li>Hatching Egg...</li>");
     return FTMON.methods.HatchEgg(uint256_tokenId)
@@ -737,16 +583,14 @@ function displayMonstre(ids) {
     .on("receipt", function(receipt) {$("#Report").append("<li>Successfully Hatched Egg</li>");})
     .on("error", function(error) {$("#Report").append(error).append("<li>Hatching Failed</li>");});
   }
-
   document.getElementById('btn-hatchegg').addEventListener("click",async function(event) {
     await HatchEgg(document.getElementById("chosenid").value);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("hatchingegg");
   }, {once: false});
-
-
+//--------------
   function mint() {
-    $("#Report").append("<li>Minting Egg...</li>");
+    $("#Report").append("<li>Minting 1 Egg...</li>");
     FTMON.methods.mint(userAccount[0], 1).estimateGas({ from: userAccount[0], value: 100000000000000000 }, function(error, estimateGas) {
       if (error) {
         console.log(error);
@@ -760,16 +604,33 @@ function displayMonstre(ids) {
       }
     });
   }
-  
-
-
-
-  document.getElementById('btn-mint').addEventListener("click", async function(event) {
+  document.getElementById('btn-mintegg1pc').addEventListener("click", async function(event) {
     await mint();
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("mintegg");
   }, {once: false});
-
+//-----------
+function mint5() {
+  $("#Report").append("<li>Minting 5 Egg...</li>");
+  FTMON.methods.mint(userAccount[0], 5).estimateGas({ from: userAccount[0], value: 500000000000000000 }, function(error, estimateGas) {
+    if (error) {
+      console.log(error);
+      $("#Report").append(error + "\n");
+    }
+    else {
+      FTMON.methods.mint(userAccount[0], 5)
+      .send({ from: userAccount[0], value: 500000000000000000, gas: Math.round(estimateGas*1.5)})
+      .on("receipt", function(receipt) {$("#Report").append("<li>Successfully Minted 5 Eggs</li>");})
+      .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>Mint Failed</li>"); console.log(error);});
+    }
+  });
+}
+document.getElementById('btn-mintegg5pc').addEventListener("click", async function(event) {
+  await mint5();
+  displayMonstreAll(userAccount[0]);
+  console.log("mint5egg");
+}, {once: false});
+//-------------------------
 
 function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     $("#Report").append("<li>start feeding...</li>");
@@ -811,53 +672,49 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     });
     
   }
-
-
   document.getElementById('btn-meat').addEventListener("click", async function(event) {
     await feedsMonstre(document.getElementById("chosenid").value,0);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("feed 0");
   }, {once: false});
   document.getElementById('btn-giantmeat').addEventListener("click", async function(event) {
     await feedsMonstre(document.getElementById("chosenid").value,1);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("feed 1");
   }, {once: false});
   document.getElementById('btn-wagyumeat').addEventListener("click", async function(event) {
     await feedsMonstre(document.getElementById("chosenid").value,2);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("feed 2");
   }, {once: false});
   document.getElementById('btn-grass').addEventListener("click", async function(event) {
     await feedsMonstre(document.getElementById("chosenid").value,3);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("feed 3");
   }, {once: false});
   document.getElementById('btn-vegetable').addEventListener("click", async function(event) {
     await feedsMonstre(document.getElementById("chosenid").value,4);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("feed 4");
   }, {once: false});
   document.getElementById('btn-fantomroots').addEventListener("click", async function(event) {
     await feedsMonstre(document.getElementById("chosenid").value,5);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("feed 5");
   }, {once: false});
-  document.getElementById('btn-temp').addEventListener("click", async function(event) {
+  document.getElementById('btn-salmon').addEventListener("click", async function(event) {
+    await feedsMonstre(document.getElementById("chosenid").value,6);
+    displayMonstreAll(userAccount[0]);
+    console.log("feed 6");
+  }, {once: false});
+  /*document.getElementById('btn-temp').addEventListener("click", async function(event) {
     await getMonstreVar();
     console.log("temp");
-  }, {once: false});
+  }, {once: false});*/
 
 
 
   
-
-
-
-
-
-
-
   async function trainMonstre(uint256_tokenId,uint8_traintype) {
     $("#Report").append("<li>start training...</li>");
     let susstext = "";
@@ -903,59 +760,80 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     .on("error", function(error) {$("#Report").append(error).append("<li>Training Failed</li>");});
     });
   }
-
+//-------------buttons
   document.getElementById('btn-trainint').addEventListener("click", async function(event) {
     await trainMonstre(document.getElementById("chosenid").value,3);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("train 3");
   }, {once: false});
   document.getElementById('btn-trainagi').addEventListener("click", async function(event) {
     await trainMonstre(document.getElementById("chosenid").value,2);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("train 2");
   }, {once: false});
   document.getElementById('btn-trainstr').addEventListener("click", async function(event) {
     await trainMonstre(document.getElementById("chosenid").value,1);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("train 1");
   }, {once: false});
   document.getElementById('btn-trainhp').addEventListener("click", async function(event) {
     await trainMonstre(document.getElementById("chosenid").value,0);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("train 0");
   }, {once: false});
   document.getElementById('btn-trainint+').addEventListener("click", async function(event) {
     await trainMonstre(document.getElementById("chosenid").value,7);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("train 7");
   }, {once: false});
   document.getElementById('btn-trainagi+').addEventListener("click", async function(event) {
     await trainMonstre(document.getElementById("chosenid").value,6);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("train 6");
   }, {once: false});
   document.getElementById('btn-trainstr+').addEventListener("click", async function(event) {
     await trainMonstre(document.getElementById("chosenid").value,5);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("train 5");
   }, {once: false});
   document.getElementById('btn-trainhp+').addEventListener("click", async function(event) {
     await trainMonstre(document.getElementById("chosenid").value,4);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
     console.log("train 4");
   }, {once: false});
 
-  document.getElementById('btn-battle').addEventListener("click", async function(event) {
-    await BattleMonstre(document.getElementById("chosenid").value,document.getElementById("rank").value);
+  document.getElementById('btn-battleyouth').addEventListener("click", async function(event) {
+    await BattleMonstre(document.getElementById("chosenid").value,0);
    //await BattleMonstre(document.getElementById("chosenid").value ,document.getElementById("rank").value);
    //await BattleMonstre(2 ,3);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+    displayMonstreAll(userAccount[0]);
+    console.log("battle");
+  }, {once: false});
+  document.getElementById('btn-battlerookie').addEventListener("click", async function(event) {
+    await BattleMonstre(document.getElementById("chosenid").value,1);
+   //await BattleMonstre(document.getElementById("chosenid").value ,document.getElementById("rank").value);
+   //await BattleMonstre(2 ,3);
+    displayMonstreAll(userAccount[0]);
+    console.log("battle");
+  }, {once: false});
+  document.getElementById('btn-battlemature').addEventListener("click", async function(event) {
+    await BattleMonstre(document.getElementById("chosenid").value,2);
+   //await BattleMonstre(document.getElementById("chosenid").value ,document.getElementById("rank").value);
+   //await BattleMonstre(2 ,3);
+    displayMonstreAll(userAccount[0]);
+    console.log("battle");
+  }, {once: false});
+  document.getElementById('btn-battleperfect').addEventListener("click", async function(event) {
+    await BattleMonstre(document.getElementById("chosenid").value,3);
+   //await BattleMonstre(document.getElementById("chosenid").value ,document.getElementById("rank").value);
+   //await BattleMonstre(2 ,3);
+    displayMonstreAll(userAccount[0]);
     console.log("battle");
   }, {once: false});
 
-  document.getElementById('btn-battleSim').addEventListener("click", async function(event) {
-    await BattleSimulation(document.getElementById("chosenid").value,document.getElementById("battlesimopp").value);
-    getMonstresByOwner(userAccount[0]).then(displayMonstre);
+  document.getElementById('btn-battlesimulation').addEventListener("click", async function(event) {
+    await BattleSimulation(document.getElementById("chosenid").value,document.getElementById("oppoid").value);
+    displayMonstreAll(userAccount[0]);
     console.log("Battlesim");
   }, {once: false});
 
