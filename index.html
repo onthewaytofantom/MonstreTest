@@ -14,7 +14,7 @@
     <link href="css/style.css" rel="stylesheet">
 	<style>
 		.boxWaddress {
-		  width: 550px;
+		  width: 400px;
 		  padding: 10px;
 		  border: 5px solid gray;
 		  margin: 0;
@@ -24,10 +24,52 @@
 		  border: 5px solid rgb(204, 204, 204);
 		  margin: 0;
 		}
+		.dropbtn {
+			background-color: #3498DB;
+			color: white;
+			padding: 8px;
+			font-size: 13px;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			}
+
+		.dropbtn:hover, .dropbtn:focus {
+			background-color: #2980B9;
+			}
+
+		.dropdown {
+			position: relative;
+			display: inline-block;
+		}
+
+		.dropdown-content {
+			display: none;
+			position: absolute;
+			background-color: #202020;
+			min-width: 350px;
+			overflow: auto;
+			box-shadow: 0px 8px 12px 0px rgba(0,0,0,0.2);
+			z-index: 1;
+		}
+
+		.dropdown-content a {
+			color: black;
+			padding: 10px 12px;
+			text-decoration: none;
+			display: block;
+		}
+
+		.dropdown a:hover {background-color: #ddd;}
+
+		.show {display: block;}
+
+		
+
 		</style>
 
   </head>
-  <body>
+  <body style="background-color:rgb(0, 0, 0);color:rgb(250, 175, 40);">
 
     <div class="container-fluid">
 	<div class="row">
@@ -56,7 +98,7 @@
 -->
 			<p>
 				<button id="btn-connectwallet">Connect Wallet</button>
-				<div class="boxWaddress" id="walletaddr"> Connected Wallet: None</div>
+				<b class="boxWaddress" id="walletaddr"> Connected Wallet: None</b>
 			</p>
 			<div class="row">
 				<div class="col-md-4">
@@ -68,58 +110,147 @@
 						<option value="displayall">All my Monstres</option>
 						<option value="displayalive">Only Alives</option>
 						<option value="displaychosen">Chosen only</option>
+						<div class="dropdown-divider"></div>
+						<option value="displayrankyouth" style="color:rgb(29, 88, 177)">Rank Youth Opponents</option>
+						<option value="displayrankrookie"style="color:rgb(29, 88, 177)">Rank Rookie Opponents</option>
+						<option value="displayrankmature"style="color:rgb(29, 88, 177)">Rank Mature Opponents</option>
+						<option value="displayrankperfect"style="color:rgb(29, 88, 177)">Rank Perfect Opponents</option>
 					</select>
 					<button id="btn-refresh">Refresh</button>
-					<p>Choose Monstre No.:<input type="text" id="chosenno" value="0" size="3" ></p>
+					<p>Choose Monstre No.:<input type="text" id="chosenno" value="0" size="2" ></p>
 					<div class="displayMonstre" id="Monstredisplay" 
-					style="height:630px;overflow:auto;background-color:rgb(206, 204, 204);color:rgb(31, 30, 27);scrollbar-base-color:rgb(83, 72, 8);font-family:sans-serif;padding:10px;"> <p></p>None, consider mint one?<p></p></div>
+					style="height:630px;overflow:auto;background-color:rgb(40, 40, 40);color:rgb(220, 220, 220);scrollbar-base-color:rgb(83, 72, 8);
+					font-size:13px;font-family:sans-serif;padding:10px;"> <p></p>None, consider mint one?<p></p></div>
 					
 					
 				</div>
 				<div class="col-md-4">
-					<p>My ActiveMonstre ID.:<input type="text" id="chosenid" value="0" size="3" ></p>
+					<p style="font-size: 12px;">My ActiveMonstre ID.: <input type="text" id="chosenid" value="0" size="2" >
+						OpponentMonstre ID.: <input type="text" id="oppoid" value="0" size="3" ></p>
 					 <!--<a href="#" class="btn btn-info" type="button">Button1</a> -->
-					<p ><b >Feeding Monstre</b>
-					<p><button type="button" class="btn btn-success" id="btn-meat">Meat</button> 
-					<button type="button" class="btn btn-success" id="btn-giantmeat">Giant Meat</button> 
-					<button type="button" class="btn btn-success" id="btn-wagyumeat">Wagyu Meat</button></p> 
-					<p><button type="button" class="btn btn-success" id="btn-grass">Grass</button> 
-					<button type="button" class="btn btn-success" id="btn-vegetable">Vegetable</button> 
-					<button type="button" class="btn btn-success" id="btn-fantomroots">Fantom Roots</button> </p> 
-					
-					<p ><b >Monstre Action </b>(Stamina Required min:4hrs)<p></p>
-						<button type="button" class="btn btn-info" id="btn-battle">Battle</button> 
-						<p>Rank (0=Youth,1=Rook,2=Mature,3=Perfect):<input type="text" id="rank" value="0" size="3" ></p>
-					<p></p>
-					<button type="button" class="btn btn-info" id="btn-trainhp">Train HP</button> 
-					<button type="button" class="btn btn-info" id="btn-trainstr">Train STR</button>
-					<button type="button" class="btn btn-info" id="btn-trainagi">Train AGI</button>
-					<button type="button" class="btn btn-info" id="btn-trainint">Train INT</button>
-					</p> 
-						<p>  
-					<button type="button" class="btn btn-info" id="btn-trainhp+">Train HP+</button> 
-					<button type="button" class="btn btn-info" id="btn-trainstr+">Train STR+</button>
-					<button type="button" class="btn btn-info" id="btn-trainagi+">Train AGI+</button>
-					<button type="button" class="btn btn-info" id="btn-trainint+">Train INT+</button>
-					<button type="button" class="btn btn-success" id="btn-temp">TEMP</button>
-						</p> 
+					 <div class="dropdown">
+						<button onclick="myFunction()" class="dropbtn" style="color:rgb(213, 248, 168)">Feed &#127830;</button>
+						<div id="myDropdown" class="dropdown-content">
+						  <a id="btn-meat">Meat &#127831;</a>
+						  <a id="btn-giantmeat">Giant Meat &#127830;</a>
+						  <a id="btn-wagyumeat">Wagyu Meat &#129363;</a>
+						  <div class="dropdown-divider"></div>
+						  <a id="btn-grass">Grass &#127807;</a>
+						  <a id="btn-vegetable">Vegetable &#127806;</a>
+						  <a id="btn-fantomroots">Fantom Roots &#127793;</a>
+						  <div class="dropdown-divider"></div>
+						  <a id="btn-salmon">Salmon &#129416; <b> (0.2FTM)</b></a>
+
+						</div>
+					  </div>
+					  <div class="dropdown">
+						<button onclick="myFunction1()" class="dropbtn" style="color:rgb(191, 235, 243)">Train &#9917;</button>
+						<div id="myDropdown1" class="dropdown-content">
+						  <a id="btn-trainhp">HP &#127754;</a>
+						  <a id="btn-trainstr">STR &#128165;</a>
+						  <a id="btn-trainagi">AGI &#128168;</a>
+						  <a id="btn-trainint">INT &#128212;</a>
+						  <div class="dropdown-divider"></div>
+						  <a id="btn-trainhp+">HP+ &#127946;</a>
+						  <a id="btn-trainstr+">STR+ &#127947;</a>
+						  <a id="btn-trainagi+">AGI+ &#127939;</a>
+						  <a id="btn-trainint+">INT+ &#128218;</a>
+						  <div class="dropdown-divider"></div>
+						  <a id="btn-praise">Praise &#128150;</a>
+						  <a id="btn-scold">Scold &#128073;</a>
+						</div>
+					  </div>
+					  <div class="dropdown">
+						<button onclick="myFunction2()" class="dropbtn" style="color:rgb(252, 196, 192)">Battle &#129338;</button>
+						<div id="myDropdown2" class="dropdown-content">
+						  <a id="btn-battleyouth">Battle Rank:Youth &#129353;</a>
+						  <a id="btn-battlerookie">Battle Rank:Rookie &#129352;</a>
+						  <a id="btn-battlemature">Battle Rank:Mature &#129351;</a>
+						  <a id="btn-battleperfect">Battle Rank:Perfect &#127942;</a>
+						  <div class="dropdown-divider"></div>
+						  <a id="btn-battlesimulation">BattleSimulation &#128187;<i><p> activeMonstreID vs. opponentMonstreID</p></i></a>
+						</div>
+					  </div>
+					  <div class="dropdown">
+						<button onclick="myFunction3()" class="dropbtn" style="color:rgb(252, 251, 192)">Life &#128123;</button>
+						<div id="myDropdown3" class="dropdown-content">
+						  <a id="btn-hatchegg">Hatch Egg &#128035;</a>
+						  <a id="btn-rebirth">Rebirth &#128124;</a>
+						  <a id="btn-frozenlife">Frozen Life &#8987;</a>
+						  <div class="dropdown-divider"></div>
+						  <a id="btn-mintegg1pc">Mint Egg 1pc &#129370;</a>
+						  <a id="btn-mintegg5pc">Mint Egg 5pc &#129370;&#129370;&#129370;&#129370;&#129370;</a>
+						</div>
+					  </div>
+					  <script>
+						/* When the user clicks on the button, 
+						toggle between hiding and showing the dropdown content */
+						function myFunction() {
+							var dropdowns = document.getElementsByClassName("dropdown-content");
+							var i;
+							for (i = 0; i < dropdowns.length; i++) {
+							  var openDropdown = dropdowns[i];
+							  if (openDropdown.classList.contains('show')) {
+								openDropdown.classList.remove('show');
+							  }
+							}
+						  document.getElementById("myDropdown").classList.toggle("show");
+						}
+						function myFunction1() {
+							var dropdowns = document.getElementsByClassName("dropdown-content");
+							var i;
+							for (i = 0; i < dropdowns.length; i++) {
+							  var openDropdown = dropdowns[i];
+							  if (openDropdown.classList.contains('show')) {
+								openDropdown.classList.remove('show');
+							  }
+							}
+						  document.getElementById("myDropdown1").classList.toggle("show");
+						}
 						
-						<p ><b >Owner Action</b></p>
-							<p><button type="button" class="btn btn-info" id="btn-battleSim">BattleSIM</button>OpponentID: 
-								<input type="text" id="battlesimopp" value="0" size="3">
-								<p></p>
-								<p><button type="button" class="btn btn-info" id="btn-play">Play</button> 
-							<button type="button" class="btn btn-info" id="btn-scold">Scold</button>  </p> 	
+						function myFunction2() {
+							var dropdowns = document.getElementsByClassName("dropdown-content");
+							var i;
+							for (i = 0; i < dropdowns.length; i++) {
+							  var openDropdown = dropdowns[i];
+							  if (openDropdown.classList.contains('show')) {
+								openDropdown.classList.remove('show');
+							  }
+							}
+						  document.getElementById("myDropdown2").classList.toggle("show");
+						}
+						function myFunction3() {
+							var dropdowns = document.getElementsByClassName("dropdown-content");
+							var i;
+							for (i = 0; i < dropdowns.length; i++) {
+							  var openDropdown = dropdowns[i];
+							  if (openDropdown.classList.contains('show')) {
+								openDropdown.classList.remove('show');
+							  }
+							}
+						  document.getElementById("myDropdown3").classList.toggle("show");
+						}
+						
+						
+						// Close the dropdown if the user clicks outside of it
+						window.onclick = function(event) {
+						  if (!event.target.matches('.dropbtn')) {
+							var dropdowns = document.getElementsByClassName("dropdown-content");
+							var i;
+							for (i = 0; i < dropdowns.length; i++) {
+							  var openDropdown = dropdowns[i];
+							  if (openDropdown.classList.contains('show')) {
+								openDropdown.classList.remove('show');
+							  }
+							}
+						  }
+						}
+						</script>
 					
-					<div><p></p>		
-						<p><b>Monstre Life</b></p>
-							<p><button type="button" class="btn btn-danger" id="btn-hatchegg">Hatch Egg</button>
-						<button type="button" class="btn btn-danger" id="btn-mint">Mint Egg</button></p>
-					</div>
 				</div>
 				<div class="col-md-4" >
-					<div id="Report" style="height:710px;overflow:auto;background-color:rgb(18, 26, 2);color:rgb(196, 135, 4);scrollbar-base-color:rgb(83, 72, 8);font-family:sans-serif;padding:10px;">
-						<b><u>Report:</u></b>
+					<div id="Report" style="height:710px;overflow:auto;background-color:rgb(20, 20, 20);color:rgb(223, 222, 222) ;scrollbar-base-color:rgb(83, 72, 8);font-family:sans-serif;padding:10px;">
+						<b><u style="color:rgb(250,175,40)">Report:</u></b>
 					</div>
 				</div>
 			</div>
