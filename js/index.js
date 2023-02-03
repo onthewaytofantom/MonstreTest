@@ -178,7 +178,7 @@ const familyList = {
   4: "Abyss"
 }
 const skillList = {
-  0: "Normal Attack",
+  0: "__",
   10: "Acid Bullet",
   11: "Force Palm",
   12: "Rock Throw",
@@ -235,7 +235,7 @@ const skillList = {
   63: "Giga Blast"
 }
 const traitList = {
-  0: "none",
+  0: "__",
   1: "Tough",
   2: "Brawler",
   3: "Nimble",
@@ -460,14 +460,14 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
             $("#Monstredisplay").append(`<div class="Monstredisplay">
               <ul style="background-color:#101010;">
                 <n><b style="color:gray;">${status} </b></n>
-                <dt> <b style="color:#12256A;">  No.: </b> ${ii} <b style="color:#12256A;">  id: </b> ${allMonstress[ii].attribute.id} <b style="color:#12256A;">  Species:</b> ${speciesList[allMonstress[ii].species]}</dt>
-                <dt><b style="color:#12256A;" style="color:blue;">Exp:</b> ${allMonstress[ii].exp}  <b style="color:#12256A;">  Status:</b> ${stat}</dt>
-                <dt><b style="color:#092793;">Discipline:</b> ${allMonstress[ii].attribute.discipline}  <b style="color:#092793;"> Happiness: </b>${allMonstress[ii].attribute.happiness}</dt>
-                <dt><b style="color:#102675;">Stage:</b> ${stageList[allMonstress[ii].attribute.stage]} <b style="color:#102675;">  Weight (g): </b>${allMonstress[ii].attribute.weight}</dt>
-                <dt><b style="color:#2F1AA9;">Hitpoints:</b> ${allMonstress[ii].power.hitpoints}   </dt>
-                <dt><b style="color:#2F1AA9;">Strength: </b>${allMonstress[ii].power.strength} <b style="color:#2F1AA9;">  Agility: </b>${allMonstress[ii].power.agility}  <b style="color:#2F1AA9;">  Intellegence:</b> ${allMonstress[ii].power.intellegence}</dt>
-                <dt><b style="color:#2F1AA9;">Skills:</b> ${skillList[allMonstress[ii].skill[0]]+", "+skillList[allMonstress[ii].skill[1]]+", "+skillList[allMonstress[ii].skill[2]]} </dt>
-                <dt><b style="color:#102F9A;">Traits:</b> ${traitList[allMonstress[ii].trait[0]]+", "+traitList[allMonstress[ii].trait[1]]+", "+traitList[allMonstress[ii].trait[2]]}</dt>
+                <dt> <b style="color:#AA9910;">  No.: </b> ${ii} <b style="color:#AA9910;">  id: </b> ${allMonstress[ii].attribute.id} <b style="color:#AA9910;">  Species:</b> ${speciesList[allMonstress[ii].species]}</dt>
+                <dt><b style="color:#F5AF32;" ">Exp:</b> ${allMonstress[ii].exp} <b style="color:#AA9910;">Stage:</b> ${stageList[allMonstress[ii].attribute.stage]} <b style="color:#AA9910;">  Status:</b> ${stat}</dt>
+                <dt><b style="color:#F5AF32;">  Weight (g): </b>${allMonstress[ii].attribute.weight}</dt>
+                <dt><b style="color:#2882D2;">Discipline:</b> ${allMonstress[ii].attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${allMonstress[ii].attribute.happiness}</dt>
+                <dt><b style="color:#B432FF;">Hitpoints:</b> ${allMonstress[ii].power.hitpoints}   </dt>
+                <dt><b style="color:#B432FF;">Strength: </b>${allMonstress[ii].power.strength} <b style="color:#B432FF;">  Agility: </b>${allMonstress[ii].power.agility}  <b style="color:#B432FF;">  Intellegence:</b> ${allMonstress[ii].power.intellegence}</dt>
+                <dt><b style="color:#811BCD;">Skills:</b> ${skillList[allMonstress[ii].skill[0]]+", "+skillList[allMonstress[ii].skill[1]]+", "+skillList[allMonstress[ii].skill[2]]} </dt>
+                <dt><b style="color:#711BA0;">Traits:</b> ${traitList[allMonstress[ii].trait[0]]+", "+traitList[allMonstress[ii].trait[1]]+", "+traitList[allMonstress[ii].trait[2]]}</dt>
                 <dt><b style="color:#7F0606;">Deadtime:</b> ${formatTime(deadtime)}  <b style="color:#7F0606;"> Endurance:</b> ${formatTime(endurance)}</dt>
                 <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${formatTime(evolutiontime)}  <b style="color:#029705;"> Stamina:</b> ${(stamina/3600).toFixed(2)} h</dt>
                 <dt><b style="color:#4B5988;">Family: </b>${familyList[allMonstress[ii].family]} <b style="color:#4B5988;">Frozentime:</b> ${allMonstress[ii].time.frozentime}</dt>
@@ -604,6 +604,27 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
       }
     });
   }
+  function feedSalmon(uint256_tokenId,uint8_foodtype) {
+    $("#Report").append("<li>Feeding Salmon, yummy</li>");
+    FTMON.methods.feedsMonstre(uint256_tokenId, uint8_foodtype).estimateGas({ from: userAccount[0], value: 100000000000000000 }, function(error, estimateGas) {
+      if (error) {
+        console.log(error);
+        $("#Report").append(error + "\n");
+      }
+      else {
+        var mon1;
+        viewNFT(uint256_tokenId).then((result)=>{
+          mon1 = result;
+          FTMON.methods.feedsMonstre(uint256_tokenId, uint8_foodtype)
+          .send({ from: userAccount[0], value: 100000000000000000, gas: Math.round(estimateGas*1.2)})
+          .on("receipt", function(receipt) {$("#Report").append("<li>Successfully fed a salmon</li>");
+          showDiffMon(mon1,receipt.events.StatChangedResult.returnValues.AfterMon);
+          })
+          .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>feed Failed</li>"); console.log(error);});
+        });
+      }
+    });
+  }
   document.getElementById('btn-mintegg1pc').addEventListener("click", async function(event) {
     await mint();
     displayMonstreAll(userAccount[0]);
@@ -648,7 +669,7 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
         case 2:
           susstext = "<br>Successfully fed.</br>Endurance +13hrs; Weight+2kg; Mood has changed.";
           break;
-        case 3:
+        case 3:getMonstreVar
           susstext = "<br>Successfully fed.</br>Endurance +3hrs; Weight+30g; Mood has changed.";
           break;
         case 4:
@@ -703,60 +724,141 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     console.log("feed 5");
   }, {once: false});
   document.getElementById('btn-salmon').addEventListener("click", async function(event) {
-    await feedsMonstre(document.getElementById("chosenid").value,6);
+    await feedSalmon(document.getElementById("chosenid").value,6);
     displayMonstreAll(userAccount[0]);
-    console.log("feed 6");
+    console.log("feed salmon 6");
   }, {once: false});
   /*document.getElementById('btn-temp').addEventListener("click", async function(event) {
     await getMonstreVar();
     console.log("temp");
   }, {once: false});*/
 
+  function showDiffMon(mon1,mon2){
+    
+    var STA = mon2.time.stamina - mon1.time.stamina;
+    var EXP = mon2.exp - mon1.exp;
+    var STG = mon2.attribute.stage - mon1.attribute.stage;
+    var WEI = mon2.attribute.weight - mon1.attribute.weight;
+    var DIS = mon2.attribute.discipline - mon1.attribute.discipline;
+    var HAP = mon2.attribute.happiness - mon1.attribute.happiness;
+    var HP = mon2.power.hitpoints - mon1.power.hitpoints;
+    var STR = mon2.power.strength - mon1.power.strength;
+    var AGI = mon2.power.agility - mon1.power.agility;
+    var INT = mon2.power.intellegence - mon1.power.intellegence;
+    var END = mon2.time.endurance - mon1.time.endurance;
+    var DEA = mon2.time.deadtime - mon1.time.deadtime;
+    var SHI = mon2.shinning - mon1.shinning;
+    let sus = "";
+    $("#Report").append("<ul>");
+    if (STA != 0) { 
+      if (STA > 0) {
+        sus = "+";
+      } 
+      $("#Report").append(`<dt>Stamina ${sus}${STA/3600}hr </dt> `);
+    }
+    if (STG != 0) { $("#Report").append(`<dt>Evolved!</dt> `);}
+    
+    if (EXP != 0) { 
+      if (EXP > 0) {
+        sus = "+";
+      } 
+      $("#Report").append(`<dt>EXP ${sus}${EXP} </dt> `);
+    }
+
+    sus = "";
+    if (WEI != 0) { 
+      if (WEI > 0) {
+        sus = "+";
+      } 
+      $("#Report").append(`<dt>Weight ${sus}${WEI}g </dt> `);
+    }
+
+    sus = "";
+    if (DIS != 0) { 
+      if (DIS > 0) {
+        sus = "+";
+      } 
+      $("#Report").append(`<dt>Discipline ${sus}${DIS} </dt> `);
+    }
+
+    sus = "";
+    if (HAP != 0) { 
+      if (HAP > 0) {
+        sus = "+";
+      } 
+      $("#Report").append(`<dt>Happiness ${sus}${HAP} </dt> `);
+    }
+
+    sus = "";
+    if (HP != 0) { 
+      if (HP > 0) {
+        sus = "+";
+      } 
+      $("#Report").append(`<dt>HP ${sus}${HP} </dt> `);
+    }
+
+    sus = "";
+    if (STR != 0) { 
+      if (STR > 0) {
+        sus = "+";
+      } 
+      $("#Report").append(`<dt>STR ${sus}${STR} </dt> `);
+    }
+
+    sus = "";
+    if (AGI != 0) { 
+      if (AGI > 0) {
+        sus = "+";
+      } 
+      $("#Report").append(`<dt>AGI ${sus}${AGI} </dt> `);
+    }
+
+    sus = "";
+    if (INT != 0) { 
+      if (INT > 0) {
+        sus = "+";
+      } 
+      $("#Report").append(`<dt>INT ${sus}${INT} </dt> `);
+    }
+
+    sus = "";
+    if (END != 0) { 
+      if (END > 0) {
+        sus = "+";
+      } 
+      $("#Report").append(`<dt>Endurance ${sus}${Math.round((END/3600)*100)/100}hr</dt> `);
+    }
+
+    sus = "";
+    if (DEA != 0) { 
+      if (DEA > 0) {
+        sus = "+";
+      } 
+      $("#Report").append(`<dt>Deadtime ${sus}${Math.round((DEA/3600)*100)/100}hr</dt> `);
+    }
+    if (SHI != 0) { $("#Report").append(`<dt>It Shine! </dt> `);}
+    $("#Report").append("</ul>");
+  }
 
 
-  
+
+
+
+
+
   async function trainMonstre(uint256_tokenId,uint8_traintype) {
     $("#Report").append("<li>start training...</li>");
-    let susstext = "";
+    
     return viewNFT(uint256_tokenId).then(function(Monstre){
-        let staminaleft = (new Date().valueOf()/1000 -Monstre.time.stamina)/3600;
-        let enduranceleft = (Monstre.time.endurance - new Date().valueOf()/1000)/3600;
-    console.log(staminaleft);
-    switch(uint8_traintype) {
-        case 0:
-          susstext = "<p>Successfully trained.</p>Stamina-4hrs, Weight-350, Happy-2, Discipline+5,<p>HP+800, STR+1, INT+1.</p>";
-          break;
-        case 1:
-          susstext = "<p>Successfully trained.</p>Stamina-4hrs, Weight-150, Happy-1, Discipline+5,<p>STR+8, AGI+1, INT+1.</p>";
-          break;
-        case 2:
-          susstext = "<p>Successfully trained.</p>Stamina-4hrs, Weight-400, Happy-1, Discipline+4,<p>STR+2, AGI+8.</p>";
-        case 3:
-          susstext = "<p>Successfully trained.</p>Stamina-4hrs, Weight-50, Happy-1, Discipline+7,<p>HP+250, INT+9.</p>";
-          break;
-        case 4:
-          susstext = "<p>Successfully trained.</p>Stamina-11hrs, Weight-1000, Happy-5, Discipline+15,<p>HP+2350, STR+3, INT+2.</p>";
-          break;
-        case 5:
-          susstext = "<p>Successfully trained.</p>Stamina-11hrs, Weight-400, Happy-1, Discipline+15,<p>STR+24, AGI+3, INT+3.</p>";
-        case 6:
-          susstext = "<p>Successfully trained.</p>Stamina-11hrs, Weight-1200, Happy-1, Discipline+10,<p>STR+4, AGI+23.</p>";
-          break;
-        case 7:
-          susstext = "<p>Successfully trained.</p>Stamina-11hrs, Weight-100, Happy-1, Discipline+20,<p>HP+700, INT+23.</p>";
-          break;      
-        default:
-          susstext = "Successfully trained.";
-      }
-      if (staminaleft <4) { susstext = "Your Monstre has not enough stamina!"
-      return;};
-      if (enduranceleft <= 0) { 
-        susstext = "Your Monstre is dead!"; 
+        let enduranceleft = (Monstre.time.endurance - new Date().valueOf()/1000);
+     if (enduranceleft <= 0) { 
+      $("#Report").append("The Monstre is dead.");
         return;};
-      console.log(susstext);
+      
     return FTMON.methods.trainsMonstre(uint256_tokenId,uint8_traintype)
     .send({ from: userAccount[0] })
-    .on("receipt", function(receipt) {$("#Report").append(susstext);})
+    .on("receipt", function(receipt) {$("#Report").append("Successfully Trained.");
+    showDiffMon(Monstre,receipt.events.StatChangedResult.returnValues.AfterMon);})
     .on("error", function(error) {$("#Report").append(error).append("<li>Training Failed</li>");});
     });
   }
@@ -800,6 +902,16 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     await trainMonstre(document.getElementById("chosenid").value,4);
     displayMonstreAll(userAccount[0]);
     console.log("train 4");
+  }, {once: false});
+  document.getElementById('btn-praise').addEventListener("click", async function(event) {
+    await trainMonstre(document.getElementById("chosenid").value,8);
+    displayMonstreAll(userAccount[0]);
+    console.log("train 8");
+  }, {once: false});
+  document.getElementById('btn-scold').addEventListener("click", async function(event) {
+    await trainMonstre(document.getElementById("chosenid").value,9);
+    displayMonstreAll(userAccount[0]);
+    console.log("train 9");
   }, {once: false});
 
   document.getElementById('btn-battleyouth').addEventListener("click", async function(event) {
@@ -894,38 +1006,38 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
   
   function BattleMonstre(uint256_tokenId,rank) {
     $("#Report").append("<li>start battle...</li>");
-    var actmon = FTMON.methods.viewNFT(uint256_tokenId).call();
-    console.log("actmontry");
-    console.log(actmon);
-    FTMON.methods.BattleMonstre(uint256_tokenId,rank).estimateGas({from: userAccount[0]}, function(error, estimateGas) {
-    if (error) {
-      console.log(error);
-      $("#Report").append(error + "\n");
-    }
-    else {
-      FTMON.methods.BattleMonstre(uint256_tokenId,rank)
-      .send({ from: userAccount[0], gas: Math.round(estimateGas*2)})
-      .on("receipt", function(receipt) {$("#Report").append("<li>successfully TX</li>");
-      /*
-        
-            $('<td>').text(";" + receipt.events.Result.returnValues.id),
-            $('<td>').text(";" + receipt.events.Result.returnValues.won),
-            $('<td>').text(";" + receipt.events.Result.returnValues.hash),
-            $('<td>').text(";" + receipt.events.Result.returnValues.selfOrBefore),
-            $('<td>').text(";" + receipt.events.Result.returnValues.opponOrAfter),
-            $('<td>').text(";" + receipt.events.Result.returnValues.timeOrArray),
-            $('<td>').text(";" + receipt.events.Result.returnValues.bit)
-        ).appendTo('#Report');
-    $("#Report").append(receipt.events.Result.returnValues.toString());*/
-        console.log(receipt.events.Result.returnValues);
-        //const bigInt = require("big-integer");
-        console.log("rythmbigint" + bigInt(receipt.events.Result.returnValues.hash));
-        decodeRythm(receipt.events.Result.returnValues.won, receipt.events.Result.returnValues.hash, receipt.events.Result.returnValues.bit, receipt.events.Result.returnValues.selfOrBefore, receipt.events.Result.returnValues.opponOrAfter);
-      })
-      .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>Simulation Failed</li>");});
-    
-    }
-  });
+    viewNFT(uint256_tokenId).then((Monstre)=>{
+      FTMON.methods.BattleMonstre(uint256_tokenId,rank).estimateGas({from: userAccount[0]}, function(error, estimateGas) {
+      if (error) {
+        console.log(error);
+        $("#Report").append(error + "\n");
+      }
+      else {
+        FTMON.methods.BattleMonstre(uint256_tokenId,rank)
+        .send({ from: userAccount[0], gas: Math.round(estimateGas*2)})
+        .on("receipt", function(receipt) {$("#Report").append("<li>successfully TX</li>");
+        /*
+          
+              $('<td>').text(";" + receipt.events.Result.returnValues.id),
+              $('<td>').text(";" + receipt.events.Result.returnValues.won),
+              $('<td>').text(";" + receipt.events.Result.returnValues.hash),
+              $('<td>').text(";" + receipt.events.Result.returnValues.selfOrBefore),
+              $('<td>').text(";" + receipt.events.Result.returnValues.opponOrAfter),
+              $('<td>').text(";" + receipt.events.Result.returnValues.timeOrArray),
+              $('<td>').text(";" + receipt.events.Result.returnValues.bit)
+          ).appendTo('#Report');
+      $("#Report").append(receipt.events.Result.returnValues.toString());*/
+          console.log(receipt.events.Result.returnValues);
+          //const bigInt = require("big-integer");
+          console.log("rythmbigint" + bigInt(receipt.events.Result.returnValues.hash));
+          decodeRythm(receipt.events.Result.returnValues.won, receipt.events.Result.returnValues.hash, receipt.events.Result.returnValues.bit, receipt.events.Result.returnValues.selfOrBefore, receipt.events.Result.returnValues.opponOrAfter);
+          showDiffMon(Monstre,receipt.events.StatChangedResult.returnValues.AfterMon);
+        })
+        .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>Simulation Failed</li>");});
+      
+      }
+    });
+  });  
 }
 
 
