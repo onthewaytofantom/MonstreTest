@@ -126,6 +126,13 @@ function convertSeconds(sss) {
     s: seconds
   };
 }
+function convertLevelTest(exp){
+  var level = Math.floor(Math.sqrt(exp)/258+1);
+  let EXPcurrent = ((level - 1)* 258)*((level - 1)* 258);
+  let EXPnext = ((level)* 258)*((level)* 258);
+  let percent = Math.floor(((exp-EXPcurrent)/(EXPnext-EXPcurrent))*10000)/100;
+  return {level, percent};
+}
 function formatTime(seconds) {
   let result = convertSeconds(seconds);
   let output = "";
@@ -178,7 +185,7 @@ const familyList = {
   4: "Abyss"
 }
 const skillList = {
-  0: "__",
+  0: "Normal Attack",
   10: "Acid Bullet",
   11: "Force Palm",
   12: "Rock Throw",
@@ -347,7 +354,12 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
   let mon2hpmax = mon2.power.hitpoints;
   console.log("Monstre1.HP:" + mon1hp + " Monstre2.HP:"+mon2hp);
   // Extract the bits for each set
-  $("#Report").append("<i>Battle Result</i>"); //---- start battle report
+  $("#Report").append(`<li><i>Battle Result</li></i> 
+                      <dt style="color:gray;">Opponent: ${speciesList[mon2.species]}</dt>
+                      <dt style="color:gray;">HP:${mon2.power.hitpoints}</dt>
+                      <dt style="color:gray;">STR:${mon2.power.strength} AGI:${mon2.power.agility} INT:${mon2.power.intellegence}</dt>
+                      <dt style="color:gray;">Skills:</b> ${skillList[mon2.skill[0]]+", "+skillList[mon2.skill[1]]+", "+skillList[mon2.skill[2]]}</dt>
+                    `); //---- start battle report 
   var battleresult = "";
    for (let i = 0; i < loop; i++) {
       let skill = "Normal Attack";
@@ -418,9 +430,8 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
       battleresult = battleresult+texttemp;
     }
     if (won ==1) {battleresult = battleresult+"<li>My "+speciesList[mon1.species]+" WIN!</li>";}
-    else {{battleresult = battleresult+"<li>Opponent's "+speciesList[mon2.species]+" WIN!</li>";}}
-    
-    $("#Report").append(battleresult);
+    else {{battleresult = battleresult+"<li>My "+speciesList[mon1.species]+" LOSE!</li>";}}
+    $("#Report").append(battleresult); 
 }
 
 // -----------------------------------------
@@ -456,12 +467,13 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
           if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
           if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
           if (allMonstress[ii].status == 0) {var stat = "Normal";} else {var stat = "Frozen";}
+          let expconverted = convertLevelTest(allMonstress[ii].exp);
 
             $("#Monstredisplay").append(`<div class="Monstredisplay">
               <ul style="background-color:#101010;">
                 <n><b style="color:gray;">${status} </b></n>
                 <dt> <b style="color:#AA9910;">  No.: </b> ${ii} <b style="color:#AA9910;">  id: </b> ${allMonstress[ii].attribute.id} <b style="color:#AA9910;">  Species:</b> ${speciesList[allMonstress[ii].species]}</dt>
-                <dt><b style="color:#F5AF32;" ">Exp:</b> ${allMonstress[ii].exp} <b style="color:#AA9910;">Stage:</b> ${stageList[allMonstress[ii].attribute.stage]} <b style="color:#AA9910;">  Status:</b> ${stat}</dt>
+                <dt><b style="color:#F5AF32;" ">Level:</b> ${expconverted.level} <sub>(${expconverted.percent}%)</sub> <b style="color:#AA9910;">Stage:</b> ${stageList[allMonstress[ii].attribute.stage]} <b style="color:#AA9910;">  Status:</b> ${stat}</dt>
                 <dt><b style="color:#F5AF32;">  Weight (g): </b>${allMonstress[ii].attribute.weight}</dt>
                 <dt><b style="color:#2882D2;">Discipline:</b> ${allMonstress[ii].attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${allMonstress[ii].attribute.happiness}</dt>
                 <dt><b style="color:#B432FF;">Hitpoints:</b> ${allMonstress[ii].power.hitpoints}   </dt>
@@ -1016,25 +1028,15 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
         FTMON.methods.BattleMonstre(uint256_tokenId,rank)
         .send({ from: userAccount[0], gas: Math.round(estimateGas*2)})
         .on("receipt", function(receipt) {$("#Report").append("<li>successfully TX</li>");
-        /*
-          
-              $('<td>').text(";" + receipt.events.Result.returnValues.id),
-              $('<td>').text(";" + receipt.events.Result.returnValues.won),
-              $('<td>').text(";" + receipt.events.Result.returnValues.hash),
-              $('<td>').text(";" + receipt.events.Result.returnValues.selfOrBefore),
-              $('<td>').text(";" + receipt.events.Result.returnValues.opponOrAfter),
-              $('<td>').text(";" + receipt.events.Result.returnValues.timeOrArray),
-              $('<td>').text(";" + receipt.events.Result.returnValues.bit)
-          ).appendTo('#Report');
-      $("#Report").append(receipt.events.Result.returnValues.toString());*/
           console.log(receipt.events.Result.returnValues);
           //const bigInt = require("big-integer");
           console.log("rythmbigint" + bigInt(receipt.events.Result.returnValues.hash));
           decodeRythm(receipt.events.Result.returnValues.won, receipt.events.Result.returnValues.hash, receipt.events.Result.returnValues.bit, receipt.events.Result.returnValues.selfOrBefore, receipt.events.Result.returnValues.opponOrAfter);
-          showDiffMon(Monstre,receipt.events.StatChangedResult.returnValues.AfterMon);
+          console.log(receipt.events.Result.returnValues.opponOrAfter);
+          showDiffMon(Monstre,receipt.events.Result.returnValues.selfOrBefore);
+          console.log(receipt.events.Result.returnValues.opponOrAfter);
         })
         .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>Simulation Failed</li>");});
-      
       }
     });
   });  
