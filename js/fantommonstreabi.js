@@ -120,35 +120,6 @@ var ftmonabi = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "_id1",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_id2",
-				"type": "uint256"
-			}
-		],
-		"name": "BattleSimulation",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
 				"name": "tokenId",
 				"type": "uint256"
 			}
@@ -169,6 +140,58 @@ var ftmonabi = [
 		"name": "ChangePlayerName",
 		"outputs": [],
 		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "cheatGOHUNGRY",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "cheatKILL",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "cheatREVIVE",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "cheatSTATS",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1013,6 +1036,316 @@ var ftmonabi = [
 		"inputs": [
 			{
 				"internalType": "uint256",
+				"name": "_id1",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_id2",
+				"type": "uint256"
+			}
+		],
+		"name": "BattleSimulationR",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"components": [
+					{
+						"internalType": "uint8",
+						"name": "species",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "gene",
+						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint8",
+								"name": "happiness",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint8",
+								"name": "discipline",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint16",
+								"name": "id",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint32",
+								"name": "weight",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint8",
+								"name": "stage",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct S.attributes",
+						"name": "attribute",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint32",
+								"name": "hitpoints",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint16",
+								"name": "strength",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "agility",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "intellegence",
+								"type": "uint16"
+							}
+						],
+						"internalType": "struct S.powers",
+						"name": "power",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint32",
+						"name": "exp",
+						"type": "uint32"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint64",
+								"name": "deadtime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "endurance",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "frozentime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "stamina",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "evolutiontime",
+								"type": "uint64"
+							}
+						],
+						"internalType": "struct S.timings",
+						"name": "time",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "trait",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "skill",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint32",
+						"name": "status",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint16",
+						"name": "family",
+						"type": "uint16"
+					},
+					{
+						"internalType": "bool",
+						"name": "shinning",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct S.Monstres",
+				"name": "",
+				"type": "tuple"
+			},
+			{
+				"components": [
+					{
+						"internalType": "uint8",
+						"name": "species",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "gene",
+						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint8",
+								"name": "happiness",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint8",
+								"name": "discipline",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint16",
+								"name": "id",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint32",
+								"name": "weight",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint8",
+								"name": "stage",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct S.attributes",
+						"name": "attribute",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint32",
+								"name": "hitpoints",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint16",
+								"name": "strength",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "agility",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "intellegence",
+								"type": "uint16"
+							}
+						],
+						"internalType": "struct S.powers",
+						"name": "power",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint32",
+						"name": "exp",
+						"type": "uint32"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint64",
+								"name": "deadtime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "endurance",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "frozentime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "stamina",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "evolutiontime",
+								"type": "uint64"
+							}
+						],
+						"internalType": "struct S.timings",
+						"name": "time",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "trait",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "skill",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint32",
+						"name": "status",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint16",
+						"name": "family",
+						"type": "uint16"
+					},
+					{
+						"internalType": "bool",
+						"name": "shinning",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct S.Monstres",
+				"name": "",
+				"type": "tuple"
+			},
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
 				"name": "tokenId",
 				"type": "uint256"
 			}
@@ -1561,25 +1894,6 @@ var ftmonabi = [
 			}
 		],
 		"name": "tokenURI",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "tokenURIclassic",
 		"outputs": [
 			{
 				"internalType": "string",
