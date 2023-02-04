@@ -744,6 +744,89 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     await getMonstreVar();
     console.log("temp");
   }, {once: false});*/
+  //--------CHEAT-------BETA TEST ---------
+  function cheatstats(Monid) {
+    $("#Report").append("<li>cheatstats...</li>");
+    FTMON.methods.cheatSTATS(Monid).estimateGas({ from: userAccount[0]}, function(error, estimateGas) {
+      if (error) {
+        console.log(error);
+        $("#Report").append(error + "\n");
+      }
+      else {
+        FTMON.methods.cheatSTATS(Monid)
+        .send({ from: userAccount[0], gas: Math.round(estimateGas*1.5)})
+        .on("receipt", function(receipt) {$("#Report").append("<li>Successfully cheatstats</li>");})
+        .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>cheatstats Failed</li>"); console.log(error);});
+      }
+    });
+  }
+  function cheatkill(Monid) {
+    $("#Report").append("<li>cheatkill...</li>");
+    FTMON.methods.cheatKILL(Monid).estimateGas({ from: userAccount[0]}, function(error, estimateGas) {
+      if (error) {
+        console.log(error);
+        $("#Report").append(error + "\n");
+      }
+      else {
+        FTMON.methods.cheatKILL(Monid)
+        .send({ from: userAccount[0], gas: Math.round(estimateGas*1.5)})
+        .on("receipt", function(receipt) {$("#Report").append("<li>Successfully cheatkill</li>");})
+        .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>cheatkill Failed</li>"); console.log(error);});
+      }
+    });
+  }
+  function cheatgohungry(Monid) {
+    $("#Report").append("<li>cheatgohungry...</li>");
+    FTMON.methods.cheatGOHUNGRY(Monid).estimateGas({ from: userAccount[0]}, function(error, estimateGas) {
+      if (error) {
+        console.log(error);
+        $("#Report").append(error + "\n");
+      }
+      else {
+        FTMON.methods.cheatGOHUNGRY(Monid)
+        .send({ from: userAccount[0], gas: Math.round(estimateGas*1.5)})
+        .on("receipt", function(receipt) {$("#Report").append("<li>Successfully cheatgohungry</li>");})
+        .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>cheatgohungry Failed</li>"); console.log(error);});
+      }
+    });
+  }
+  function cheatrevive(Monid) {
+    $("#Report").append("<li>cheatrevive...</li>");
+    FTMON.methods.cheatREVIVE(Monid).estimateGas({ from: userAccount[0]}, function(error, estimateGas) {
+      if (error) {
+        console.log(error);
+        $("#Report").append(error + "\n");
+      }
+      else {
+        FTMON.methods.cheatREVIVE(Monid)
+        .send({ from: userAccount[0], gas: Math.round(estimateGas*1.5)})
+        .on("receipt", function(receipt) {$("#Report").append("<li>Successfully cheatrevive</li>");})
+        .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>cheatrevive Failed</li>"); console.log(error);});
+      }
+    });
+  }
+  //------click
+  document.getElementById('btn-cheatstats').addEventListener("click", async function(event) {
+    await cheatstats(document.getElementById("chosenid").value);
+    displayMonstreAll(userAccount[0]);
+    console.log("cheatstats");
+  }, {once: false});
+  document.getElementById('btn-cheatkill').addEventListener("click", async function(event) {
+    await cheatkill(document.getElementById("chosenid").value);
+    displayMonstreAll(userAccount[0]);
+    console.log("cheatkill");
+  }, {once: false});
+  document.getElementById('btn-cheatgohungry').addEventListener("click", async function(event) {
+    await cheatgohungry(document.getElementById("chosenid").value);
+    displayMonstreAll(userAccount[0]);
+    console.log("cheatgohungry");
+  }, {once: false});
+  document.getElementById('btn-cheatrevive').addEventListener("click", async function(event) {
+    await cheatrevive(document.getElementById("chosenid").value);
+    displayMonstreAll(userAccount[0]);
+    console.log("cheatrevive");
+  }, {once: false});
+  //------------------------------------
 
   function showDiffMon(mon1,mon2){
     
