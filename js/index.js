@@ -56,7 +56,7 @@ const getWeb3 = async () => {
     //have an instance of web3.js.
     const web3 = new Web3(Web3.givenProvider) //web3() is from web3.js
     //i have included at header, the abi file. exported from SContract compiler.
-    var mycontractaddress = '0x7B5FbD826a9a8910E137aB4502315f016AfEc90F';
+    var mycontractaddress = '0x6A917c9937B1eF61B8DdF8ae9118B4673Bff0d5a';
     FTMON = new web3.eth.Contract(ftmonabi, mycontractaddress);
     //userAccount = web3.eth.accounts[0]; // declare an account
     //prompt user to connect metamask
