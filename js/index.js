@@ -185,7 +185,7 @@ const familyList = {
   4: "Abyss"
 }
 const skillList = {
-  0: "Normal Attack",
+  0: "__",
   10: "Acid Bullet",
   11: "Force Palm",
   12: "Rock Throw",
@@ -368,7 +368,7 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
   // Extract the bits for each set
   $("#Report").append(`<li><i>Battle Result</li></i> 
                       <dt style="color:gray;">Opponent: ${speciesList[mon2.species]}</dt>
-                      <dt style="color:gray;">Combat Power: ${getCombatPower(mon2)}   </dt>
+                      <dt style="color:gray;">Combat Power: ${getCombatPower(mon2)}   <di style="color:gray;">Family: ${familyList[mon2.family]}</di></dt> 
                       <dt style="color:gray;">HP:${mon2.power.hitpoints}</dt>
                       <dt style="color:gray;">STR:${mon2.power.strength} AGI:${mon2.power.agility} INT:${mon2.power.intellegence}</dt>
                       <dt style="color:gray;">Skills:</b> ${skillList[mon2.skill[0]]+", "+skillList[mon2.skill[1]]+", "+skillList[mon2.skill[2]]}</dt>
@@ -413,6 +413,7 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
           damage = SkillsState(mon1, 0);
         } else {
           skill = skillList[mon1.skill[skillId]];
+          if (skill =="__") {skill = "Normal Attack";}
   //        console.log(mon1.power + "xxx" + mon1.skill[skillId]);
           damage = SkillsState(mon1, mon1.skill[skillId]);
         }
@@ -431,6 +432,7 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
           damage = SkillsState(mon2, 0);
         } else {
           skill = skillList[mon2.skill[skillId]];
+          if (skill =="__") {skill = "Normal Attack";}
          damage = SkillsState(mon2, mon2.skill[skillId]);
         }
         if (weakness == 1){damage = Math.floor(damage*1.25); weakpoint = "(weakness)" ;}
@@ -447,8 +449,8 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
  //     console.log("asasdasdsd");
     }
  //   console.log("asasdasdsd");
-    if (won ==1) {battleresult = battleresult+"<li>My "+speciesList[mon1.species]+" WIN!</li>";}
-    else {{battleresult = battleresult+"<li>My "+speciesList[mon1.species]+" LOSE!</li>";}}
+    if (won ==1) {battleresult = battleresult+"<li><b style=\"color:green\">My "+speciesList[mon1.species]+" WIN!</b></li>";}
+    else {{battleresult = battleresult+"<li><b style=\"color:red\">My "+speciesList[mon1.species]+" LOSE!</b></li>";}}
   //  console.log("asasdasdsd");
     $("#Report").append(battleresult); 
 }
@@ -470,22 +472,26 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
       getMonstreVar(walletaddress).then(function(allMonstress) {
         for (let ii =0; ii<allMonstress.length; ii++) {
           //console.log("here 2d");
-          if (new Date().valueOf()/1000 > allMonstress[ii].time.deadtime || 
-              new Date().valueOf()/1000 > allMonstress[ii].time.endurance ){
+          var diffTIME = 0;
+          if (allMonstress[ii].status == 0) {var stat = "Normal";} else {var stat = "Frozen"; diffTIME = new Date().valueOf()/1000-allMonstress[ii].time.frozentime;}
+          let deadtime = (allMonstress[ii].time.deadtime - new Date().valueOf()/1000)+diffTIME;
+          var endurance = (allMonstress[ii].time.endurance - new Date().valueOf()/1000)+diffTIME;
+          var stamina = new Date().valueOf()/1000 -allMonstress[ii].time.stamina -diffTIME ;
+          var evolutiontime = (allMonstress[ii].time.evolutiontime - new Date().valueOf()/1000)+diffTIME;
+          
+          if (deadtime<0 ||  endurance <0 ){
           var status = "DEAD - An Egg now - Hatch it";
           } else {
             status ="ALIVE";
           }
           //console.log(allMonstress);
           if (checkdisplay == 1 && status == "ALIVE" || checkdisplay == 0 || checkdisplay ==2 && ii == chosen) {
-          let deadtime = (allMonstress[ii].time.deadtime - new Date().valueOf()/1000);
-          var endurance = (allMonstress[ii].time.endurance - new Date().valueOf()/1000);
-          var stamina = new Date().valueOf()/1000 -allMonstress[ii].time.stamina  ;
-          var evolutiontime = (allMonstress[ii].time.evolutiontime - new Date().valueOf()/1000);
+            
+          
           if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
           if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
           if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
-          if (allMonstress[ii].status == 0) {var stat = "Normal";} else {var stat = "Frozen";}
+          
           let expconverted = convertLevelTest(allMonstress[ii].exp);
           
           //CombatPower = CombatPower(allMonstress[ii]);
@@ -503,12 +509,96 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
                 <dt><b style="color:#711BA0;">Traits:</b> ${traitList[allMonstress[ii].trait[0]]+", "+traitList[allMonstress[ii].trait[1]]+", "+traitList[allMonstress[ii].trait[2]]}</dt>
                 <dt><b style="color:#7F0606;">Deadtime:</b> ${formatTime(deadtime)}  <b style="color:#7F0606;"> Endurance:</b> ${formatTime(endurance)}</dt>
                 <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${formatTime(evolutiontime)}  <b style="color:#029705;"> Stamina:</b> ${(stamina/3600).toFixed(2)} h</dt>
-                <dt><b style="color:#4B5988;">Family: </b>${familyList[allMonstress[ii].family]} <b style="color:#4B5988;">Frozentime:</b> ${allMonstress[ii].time.frozentime}</dt>
+                <dt><b style="color:#4B5988;">Family: </b>${familyList[allMonstress[ii].family]}  </dt>
                 <dt><b style="color:#4B5988;font-size:11px"><u>Gene: </b><i style="font-size:11px">${allMonstress[ii].gene}</i></u></dt>
               </ul>
-            </div>`);
+            </div>`); //<b style="color:#4B5988;">Frozentime:</b> ${allMonstress[ii].time.frozentime}
           }
         } 
+        //------my active and opponent---------------------------------------------------------**********************
+        viewNFT(document.getElementById("chosenid").value).then((MonDis)=>{
+          var diffTIME = 0;
+          if (MonDis.status == 0) {var stat = "Normal";} else {var stat = "Frozen"; diffTIME = new Date().valueOf()/1000-MonDis.time.frozentime;}
+          let deadtime = (MonDis.time.deadtime - new Date().valueOf()/1000)+diffTIME;
+          var endurance = (MonDis.time.endurance - new Date().valueOf()/1000)+diffTIME;
+          var stamina = new Date().valueOf()/1000 -MonDis.time.stamina -diffTIME ;
+          var evolutiontime = (MonDis.time.evolutiontime - new Date().valueOf()/1000)+diffTIME;
+          
+          if (deadtime<0 ||  endurance <0 ){
+          var status = "DEAD - An Egg now - Hatch it";
+          } else {
+            status ="ALIVE";
+          }
+          //console.log(allMonstress);
+          
+          
+          
+          if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
+          if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
+          if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
+          
+          let expconverted = convertLevelTest(MonDis.exp);
+          $("#activeMonstreDisplay").empty();
+          $("#activeMonstreDisplay").append(`<div class="Monstredisplay">
+              <ul style="background-color:#101010;">
+                <n><b style="color:gray;">${status} </b></n>
+                <dt>  <b style="color:#AA9910;">  id: </b> ${MonDis.attribute.id} <b style="color:#AA9910;">  Species:</b> ${speciesList[MonDis.species]}</dt>
+                <dt><b style="color:#F5AF32;" ">Level:</b> ${expconverted.level} <sub>(${expconverted.percent}%)</sub> <b style="color:#AA9910;">Stage:</b> ${stageList[MonDis.attribute.stage]} <b style="color:#AA9910;">  Status:</b> ${stat}</dt>
+                <dt><b style="color:#F5AF32;">  Weight (g): </b>${MonDis.attribute.weight}</dt>
+                <dt><b style="color:#2882D2;">Discipline:</b> ${MonDis.attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${MonDis.attribute.happiness}</dt>
+                <dt><b style="color:#AA22BB;">Combat Power:</b> ${getCombatPower(MonDis)}   </dt>
+                <dt><b style="color:#B432FF;">Hitpoints:</b> ${MonDis.power.hitpoints}   </dt>
+                <dt><b style="color:#B432FF;">Strength: </b>${MonDis.power.strength} <b style="color:#B432FF;">  Agility: </b>${MonDis.power.agility}  <b style="color:#B432FF;">  Intellegence:</b> ${MonDis.power.intellegence}</dt>
+                <dt><b style="color:#811BCD;">Skills:</b> ${skillList[MonDis.skill[0]]+", "+skillList[MonDis.skill[1]]+", "+skillList[MonDis.skill[2]]} </dt>
+                <dt><b style="color:#711BA0;">Traits:</b> ${traitList[MonDis.trait[0]]+", "+traitList[MonDis.trait[1]]+", "+traitList[MonDis.trait[2]]}</dt>
+                <dt><b style="color:#7F0606;">Deadtime:</b> ${formatTime(deadtime)}  <b style="color:#7F0606;"> Endurance:</b> ${formatTime(endurance)}</dt>
+                <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${formatTime(evolutiontime)}  <b style="color:#029705;"> Stamina:</b> ${(stamina/3600).toFixed(2)} h</dt>
+                <dt><b style="color:#4B5988;">Family: </b>${familyList[MonDis.family]}  </dt>
+                <dt><b style="color:#4B5988;font-size:11px"><u>Gene: </b><i style="font-size:11px">${MonDis.gene}</i></u></dt>
+              </ul>
+            </div>`);
+        });
+        //----opponent
+        viewNFT(document.getElementById("oppoid").value).then((OpMonDis)=>{
+          var diffTIME = 0;
+          if (OpMonDis.status == 0) {var stat = "Normal";} else {var stat = "Frozen"; diffTIME = new Date().valueOf()/1000-OpMonDis.time.frozentime;}
+          let deadtime = (OpMonDis.time.deadtime - new Date().valueOf()/1000)+diffTIME;
+          var endurance = (OpMonDis.time.endurance - new Date().valueOf()/1000)+diffTIME;
+          var stamina = new Date().valueOf()/1000 -OpMonDis.time.stamina -diffTIME ;
+          var evolutiontime = (OpMonDis.time.evolutiontime - new Date().valueOf()/1000)+diffTIME;
+          
+          if (deadtime<0 ||  endurance <0 ){
+          var status = "DEAD - An Egg now - Hatch it";
+          } else {
+            status ="ALIVE";
+          }
+          
+          if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
+          if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
+          if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
+          
+          let expconverted = convertLevelTest(OpMonDis.exp);
+          $("#opponentMonstreDisplay").empty();
+          $("#opponentMonstreDisplay").append(`<div class="Monstredisplay">
+              <ul style="background-color:#101010;">
+                <n><b style="color:gray;">${status} </b></n>
+                <dt>  <b style="color:#AA9910;">  id: </b> ${OpMonDis.attribute.id} <b style="color:#AA9910;">  Species:</b> ${speciesList[OpMonDis.species]}</dt>
+                <dt><b style="color:#F5AF32;" ">Level:</b> ${expconverted.level} <sub>(${expconverted.percent}%)</sub> <b style="color:#AA9910;">Stage:</b> ${stageList[OpMonDis.attribute.stage]} <b style="color:#AA9910;">  Status:</b> ${stat}</dt>
+                <dt><b style="color:#F5AF32;">  Weight (g): </b>${OpMonDis.attribute.weight}</dt>
+                <dt><b style="color:#2882D2;">Discipline:</b> ${OpMonDis.attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${OpMonDis.attribute.happiness}</dt>
+                <dt><b style="color:#AA22BB;">Combat Power:</b> ${getCombatPower(OpMonDis)}   </dt>
+                <dt><b style="color:#B432FF;">Hitpoints:</b> ${OpMonDis.power.hitpoints}   </dt>
+                <dt><b style="color:#B432FF;">Strength: </b>${OpMonDis.power.strength} <b style="color:#B432FF;">  Agility: </b>${OpMonDis.power.agility}  <b style="color:#B432FF;">  Intellegence:</b> ${OpMonDis.power.intellegence}</dt>
+                <dt><b style="color:#811BCD;">Skills:</b> ${skillList[OpMonDis.skill[0]]+", "+skillList[OpMonDis.skill[1]]+", "+skillList[OpMonDis.skill[2]]} </dt>
+                <dt><b style="color:#711BA0;">Traits:</b> ${traitList[OpMonDis.trait[0]]+", "+traitList[OpMonDis.trait[1]]+", "+traitList[OpMonDis.trait[2]]}</dt>
+                <dt><b style="color:#7F0606;">Deadtime:</b> ${formatTime(deadtime)}  <b style="color:#7F0606;"> Endurance:</b> ${formatTime(endurance)}</dt>
+                <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${formatTime(evolutiontime)}  <b style="color:#029705;"> Stamina:</b> ${(stamina/3600).toFixed(2)} h</dt>
+                <dt><b style="color:#4B5988;">Family: </b>${familyList[OpMonDis.family]}  </dt>
+                <dt><b style="color:#4B5988;font-size:11px"><u>Gene: </b><i style="font-size:11px">${OpMonDis.gene}</i></u></dt>
+              </ul>
+            </div>`);
+        });
+        //----
       });
     } else { //means showing opponenets per rank
       console.log("getting battling");
@@ -552,11 +642,13 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
   });
   document.getElementById("chosenid").addEventListener("change", function() {
     var selectedOption = this.value;
+    displayMonstreAll(userAccount[0]);
     // Save selected option to local storage
     localStorage.setItem("chosenID", selectedOption);
   });
   document.getElementById("oppoid").addEventListener("change", function() {
     var selectedOption = this.value;
+    displayMonstreAll(userAccount[0]);
     // Save selected option to local storage
     localStorage.setItem("oppoID", selectedOption);
   });
@@ -765,6 +857,45 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     await getMonstreVar();
     console.log("temp");
   }, {once: false});*/
+  function Frozen(Monid) {
+    $("#Report").append("<li>Frozing Monstre...</li>");
+    FTMON.methods.FrozeMonstre(Monid).estimateGas({ from: userAccount[0]}, function(error, estimateGas) {
+      if (error) {
+        console.log(error);
+        $("#Report").append(error + "\n");
+      }
+      else {
+        FTMON.methods.FrozeMonstre(Monid)
+        .send({ from: userAccount[0], gas: Math.round(estimateGas*1.5)})
+        .on("receipt", function(receipt) {$("#Report").append("<li>Successfully being Frozed</li>");})
+        .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>Frozing Failed</li>"); console.log(error);});
+      }
+    });
+  }
+
+  function Defroze(uint256_tokenId) {
+    $("#Report").append("<li>Defrozing...</li>");
+    FTMON.methods.DefrozeMonstre(uint256_tokenId).estimateGas({ from: userAccount[0], value: 100000000000000000 }, function(error, estimateGas) {
+      if (error) {
+        console.log(error);
+        $("#Report").append(error + "\n");
+      }
+      else {
+//        var mon1;
+        viewNFT(uint256_tokenId).then((result)=>{
+ //         mon1 = result;
+          FTMON.methods.DefrozeMonstre(uint256_tokenId)
+          .send({ from: userAccount[0], value: 100000000000000000, gas: Math.round(estimateGas*1.2)})
+          .on("receipt", function(receipt) {$("#Report").append("<li>Successfully Defrozed</li>");
+ //         showDiffMon(mon1,receipt.events.StatChangedResult.returnValues.AfterMon);
+          })
+          .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>Defrozing Failed</li>"); console.log(error);});
+        });
+      }
+    });
+  }
+
+
   //--------CHEAT-------BETA TEST ---------
   function cheatstats(Monid) {
     $("#Report").append("<li>cheatstats...</li>");
@@ -848,6 +979,18 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     console.log("cheatrevive");
   }, {once: false});
   //------------------------------------
+  //Frozen
+  document.getElementById('btn-frozen').addEventListener("click", async function(event) {
+    await Frozen(document.getElementById("chosenid").value);
+    displayMonstreAll(userAccount[0]);
+    console.log("Frozen");
+  }, {once: false});
+  document.getElementById('btn-defroze').addEventListener("click", async function(event) {
+    await Defroze(document.getElementById("chosenid").value);
+    displayMonstreAll(userAccount[0]);
+    console.log("Defroze");
+  }, {once: false});
+  //-----------------
 
   function showDiffMon(mon1,mon2){
     
@@ -1064,7 +1207,18 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     displayMonstreAll(userAccount[0]);
     console.log("Battlesim");
   }, {once: false});
-
+  document.getElementById('btn-togglebattlemode').addEventListener("click", async function(event) {
+    var x = document.getElementById("column1");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+      document.getElementById('column3').className  = 'col-md-4';
+    } else {
+      x.style.display = "none";
+      document.getElementById('column3').className  = 'col-md-8';
+    }
+    console.log("toggle battlelayout");
+  }, {once: false});
+  
 
 
   /*function BattleSimulation(uint256_tokenId,opponentID) {
