@@ -24,6 +24,11 @@
 		  border: 5px solid rgb(204, 204, 204);
 		  margin: 0;
 		}
+		.display1Monstre {
+		  padding: 5px;
+		  border: 2px solid rgb(56, 53, 53);
+		  margin: 0;
+		}
 		.dropbtn {
 			background-color: #3498DB;
 			color: white;
@@ -99,9 +104,9 @@
 			<p>
 				<button id="btn-connectwallet">Connect Wallet</button>
 				<b class="boxWaddress" id="walletaddr"> Connected Wallet: None</b>
-			</p>
+			</p><button id="btn-togglebattlemode">toggle Battle Display</button>
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-4" id="column1">
 					Display Monstre:
 					<!--<button id="btn-displayall">Show All</button><button id="btn-displayalive">Show Alive</button>
 					<button id="btn-displaychosen">Show Chosen</button> -->
@@ -111,10 +116,10 @@
 						<option value="displayalive">Only Alives</option>
 						<option value="displaychosen">Chosen only</option>
 						<div class="dropdown-divider"></div>
-						<option value="displayrankyouth" style="color:rgb(29, 88, 177)">Rank Youth Opponents</option>
+				<!--		<option value="displayrankyouth" style="color:rgb(29, 88, 177)">Rank Youth Opponents</option>
 						<option value="displayrankrookie"style="color:rgb(29, 88, 177)">Rank Rookie Opponents</option>
 						<option value="displayrankmature"style="color:rgb(29, 88, 177)">Rank Mature Opponents</option>
-						<option value="displayrankperfect"style="color:rgb(29, 88, 177)">Rank Perfect Opponents</option>
+						<option value="displayrankperfect"style="color:rgb(29, 88, 177)">Rank Perfect Opponents</option>-->
 					</select>
 					<button id="btn-refresh">Refresh</button>
 					<p>Choose Monstre No.:<input type="text" id="chosenno" value="0" size="2" ></p>
@@ -125,8 +130,7 @@
 					
 				</div>
 				<div class="col-md-4">
-					<p style="font-size: 12px;">My ActiveMonstre ID.: <input type="text" id="chosenid" value="0" size="2" >
-						OpponentMonstre ID.: <input type="text" id="oppoid" value="0" size="3" ></p>
+					
 					 <!--<a href="#" class="btn btn-info" type="button">Button1</a> -->
 					 <div class="dropdown">
 						<button onclick="myFunction()" class="dropbtn" style="color:rgb(213, 248, 168)">Feed &#127830;</button>
@@ -176,7 +180,8 @@
 						<div id="myDropdown3" class="dropdown-content">
 						  <a id="btn-hatchegg">Hatch Egg &#128035;</a>
 						  <a id="btn-rebirth">Rebirth &#128124;</a>
-						  <a id="btn-frozenlife">Frozen Life &#8987;</a>
+						  <a id="btn-frozen">Frozen &#9924; (Stop Endurance/times)</a>
+						  <a id="btn-defroze">Defroze &#128347; (Continue the time)</a>
 						  <div class="dropdown-divider"></div>
 						  <a id="btn-mintegg1pc">Mint Egg 1pc &#129370;</a>
 						  <a id="btn-mintegg5pc">Mint Egg 5pc &#129370;&#129370;&#129370;&#129370;&#129370;</a>
@@ -187,6 +192,30 @@
 						  <a id="btn-cheatrevive">CHEAT REVIVE</a>
 						</div>
 					  </div>
+					  <div class="dropdown">
+						<button onclick="myFunction4()" class="dropbtn" style="color:rgb(22, 22, 20)">Functions &#9881;</button>
+						<div id="myDropdown4" class="dropdown-content">
+						  <a id="btn-1">Change Player Name &#9881;</a>
+						  <a id="btn-1">transferOwnership &#9881;</a>
+						  <a id="btn-1">withdraw &#9881;</a>
+						  <a id="btn-1">Paintswap Marketplace &#9881;</a>
+						  <div class="dropdown-divider"></div>
+						  <a id="btn-1">setApprovalForAll &#9881;</a>
+						  <a id="btn-1">safeTransferFrom &#9881;</a>
+						  <div class="dropdown-divider"></div>
+						  <a id="btn-1">SetImageURL &#9881;</a>
+						  
+						</div>
+					  </div>
+					  <div style="font-size: 12px;">My ActiveMonstre ID.: <input type="text" id="chosenid" value="0" size="2" ></div>
+						
+					  <div class="display1Monstre" id="activeMonstreDisplay" 
+					style="height:315px;overflow:auto;background-color:rgb(22, 22, 22);color:rgb(220, 220, 220);scrollbar-base-color:rgb(83, 72, 8);
+					font-size:13px;font-family:sans-serif;padding:10px;"> <p></p>My Active Monstre<p></p></div>
+					<div style="font-size: 12px;">OpponentMonstre ID.: <input type="text" id="oppoid" value="0" size="3" ></div>
+					<div class="display1Monstre" id="opponentMonstreDisplay" 
+					style="height:315px;overflow:auto;background-color:rgb(22, 22, 22);color:rgb(220, 220, 220);scrollbar-base-color:rgb(83, 72, 8);
+					font-size:13px;font-family:sans-serif;padding:10px;"> <p></p>Opponent Monstre<p></p></div>
 					  <script>
 						/* When the user clicks on the button, 
 						toggle between hiding and showing the dropdown content */
@@ -235,6 +264,17 @@
 							}
 						  document.getElementById("myDropdown3").classList.toggle("show");
 						}
+						function myFunction4() {
+							var dropdowns = document.getElementsByClassName("dropdown-content");
+							var i;
+							for (i = 0; i < dropdowns.length; i++) {
+							  var openDropdown = dropdowns[i];
+							  if (openDropdown.classList.contains('show')) {
+								openDropdown.classList.remove('show');
+							  }
+							}
+						  document.getElementById("myDropdown4").classList.toggle("show");
+						}
 						
 						
 						// Close the dropdown if the user clicks outside of it
@@ -253,7 +293,7 @@
 						</script>
 					
 				</div>
-				<div class="col-md-4" >
+				<div id="column3" class="col-md-4"  >
 					<div id="Report" style="height:710px;overflow:auto;background-color:rgb(20, 20, 20);color:rgb(223, 222, 222) ;scrollbar-base-color:rgb(83, 72, 8);font-family:sans-serif;padding:10px;">
 						<b><u style="color:rgb(250,175,40)">Report:</u></b>
 					</div>
