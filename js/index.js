@@ -300,7 +300,7 @@ function SkillsState(mon, SkillNumber) {
   else if (SkillNumber == 23) {damage = 75 * STR + 125 * AGI;} //Force Blow |M|
   else if (SkillNumber == 24) {damage = 135 * STR + 75 * AGI;} //Wicked Slash |M|
   else if (SkillNumber == 25) {damage = 200 * AGI;} //Discharge |R|AOE
-  else if (SkillNumber == 26) {damage = uint32((14 * HP) / 100) + 125 * STR;} //Frost Blast |R|
+  else if (SkillNumber == 26) {damage = Math.floor(((14 * HP) / 100) + 125 * STR);} //Frost Blast |R|
   else if (SkillNumber == 27) {damage = 90 * STR + 90 * AGI + 90 * INT;} //Buble Wrap |R|
   else if (SkillNumber == 28) {damage = 225 * STR;} //Spinning Slash |M|
   else if (SkillNumber == 29) {damage = 50 * STR + 125 * AGI;} //Echo scream |R|AOE
@@ -311,7 +311,7 @@ function SkillsState(mon, SkillNumber) {
   else if (SkillNumber == 34) {damage = 55 * STR + 140 * INT;} //Pressure Smash |M|
   else if (SkillNumber == 35) {damage = 250 * STR;} //Take Down |M|
   else if (SkillNumber == 36) {damage = 210 * STR;} //Sparkly Swirl |R|
-  else if (SkillNumber == 37) {damage= uint32((15*HP)/100) + 125*STR;} //Energy Missle |R|
+  else if (SkillNumber == 37) {damage= Math.floor(((15*HP)/100) + 125*STR);} //Energy Missle |R|
   else if (SkillNumber == 38) {damage= 125*STR + 40*AGI + 40*INT;} //Sing a Song |R|AOE
   else if (SkillNumber == 39) {damage= 185*STR + 50*AGI;} //Spirit Slash |M|
   else if (SkillNumber == 40) {damage= 158*STR + 50*AGI + 25*INT;} //Aimshot |R|
@@ -319,7 +319,7 @@ function SkillsState(mon, SkillNumber) {
   else if (SkillNumber == 42) {damage= 160*STR +50*INT + 175*DISCIPLINE;} //Dark Swipes |M|
   else if (SkillNumber == 43) {damage= 185*STR + 100*AGI;} //ump Up |M|
   else if (SkillNumber == 44) {damage= 170*STR + 170*INT;} //Solar Beam |R|
-  else if (SkillNumber == 45) {damage= uint32((25*HP)/100) + 100*STR;} //Toxic Bite |M|
+  else if (SkillNumber == 45) {damage= Math.floor(((25*HP)/100) + 100*STR);} //Toxic Bite |M|
   else if (SkillNumber == 46) {damage= 150*STR + 150*INT;} //Sonicboom |R|
   else if (SkillNumber == 47) {damage= 325*STR;} //Ancient Power |R|AOE
   else if (SkillNumber == 48) {damage= 150*STR + 125*AGI + 50*INT;} //Bee Missle |R|
@@ -338,7 +338,19 @@ function SkillsState(mon, SkillNumber) {
   else if (SkillNumber == 61) {damage= 160*STR + 160*INT ; } //Psycodamage |R|AOE
   else if (SkillNumber == 62) {damage= 125*STR + 200*INT ; } //Sunraze Slash |M|
   else if (SkillNumber == 63) {damage= 125*STR + 125*AGI + 125*INT ; } //Giga Blast |R|position1/2 2/3
+  
   return damage;
+}
+function getCombatPower(mon) {
+  let HP = parseInt(mon.power.hitpoints);
+  let STR = parseInt(mon.power.strength);
+  let AGI = parseInt(mon.power.agility);
+  let INT = parseInt(mon.power.intellegence);
+  
+  let CP = 0;
+  CP = Math.floor((HP/1000+STR+AGI+INT)+(HP/125000*STR/125*AGI/125*INT/125));
+  
+  return CP;
 }
 //--------------------------------------------
 
@@ -356,16 +368,19 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
   // Extract the bits for each set
   $("#Report").append(`<li><i>Battle Result</li></i> 
                       <dt style="color:gray;">Opponent: ${speciesList[mon2.species]}</dt>
+                      <dt style="color:gray;">Combat Power: ${getCombatPower(mon2)}   </dt>
                       <dt style="color:gray;">HP:${mon2.power.hitpoints}</dt>
                       <dt style="color:gray;">STR:${mon2.power.strength} AGI:${mon2.power.agility} INT:${mon2.power.intellegence}</dt>
                       <dt style="color:gray;">Skills:</b> ${skillList[mon2.skill[0]]+", "+skillList[mon2.skill[1]]+", "+skillList[mon2.skill[2]]}</dt>
                     `); //---- start battle report 
+  
   var battleresult = "";
    for (let i = 0; i < loop; i++) {
       let skill = "Normal Attack";
       //let setBits  = Rythm >> (i * numBits) & ((1 << numBits) - 1);
       let setBits  = bigInt(Rythm).shiftRight(i * numBits).and((1 << numBits) - 1).toJSNumber();
-  //    console.log(setBits);
+      
+       console.log(i);
       let monstreId = setBits & 1; // LSB 1 bit
       //console.log(monstreId);
       let skillId = setBits >> 1; // next 2 bits
@@ -398,13 +413,13 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
           damage = SkillsState(mon1, 0);
         } else {
           skill = skillList[mon1.skill[skillId]];
-          //console.log(mon1.power + "xxx" + mon1.skill[skillId]);
+  //        console.log(mon1.power + "xxx" + mon1.skill[skillId]);
           damage = SkillsState(mon1, mon1.skill[skillId]);
         }
-        if (weakness == 2){damage = damage*1.2; weakpoint = "(weakness)" ;}
+        if (weakness == 2){damage = Math.floor(damage*1.25); weakpoint = "(weakness)" ;}
         mon2hp = mon2hp - damage;
-        let mon1hppercent = Math.round((mon1hp/mon1hpmax)*1000)/10;
-        let mon2hppercent = Math.round((mon2hp/mon2hpmax)*1000)/10;
+        let mon1hppercent = Math.floor((mon1hp/mon1hpmax)*1000)/10;
+        let mon2hppercent = Math.floor((mon2hp/mon2hpmax)*1000)/10;
         console.log(mons +".HP:"+mon1hp + " uses " + skill + " and deal "+damage+weakpoint+" damage on Monstre2.HP:"+mon2hp );
         var texttemp = "<p style=\"font-size:13px;\"><b style=\"color:rgb\(45,210,210\);\">"+speciesList[mon1.species] +"</b><sup>HP:"+mon1hp + "\("+mon1hppercent+"%\)</sup> uses <i>" + skill + "</i> and deal "+damage+
         "<sub>"+weakpoint+"</sub> damage on <b style=\"color:rgb\(240,100,100\);\">"+ speciesList[mon2.species]+"</b><sup>HP:"+mon2hp+ "\("+mon2hppercent+"%\)</sup></p>";
@@ -418,19 +433,23 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
           skill = skillList[mon2.skill[skillId]];
          damage = SkillsState(mon2, mon2.skill[skillId]);
         }
-        if (weakness == 1){damage = damage*1.2; weakpoint = "(weakness)" ;}
+        if (weakness == 1){damage = Math.floor(damage*1.25); weakpoint = "(weakness)" ;}
         mon1hp = mon1hp - damage;
-        let mon1hppercent = Math.round((mon1hp/mon1hpmax)*1000)/10;
-        let mon2hppercent = Math.round((mon2hp/mon2hpmax)*1000)/10;
+        let mon1hppercent = Math.floor((mon1hp/mon1hpmax)*1000)/10;
+        let mon2hppercent = Math.floor((mon2hp/mon2hpmax)*1000)/10;
         console.log(mons +".HP:"+mon2hp + " uses " + skill + " and deal "+damage+weakpoint+" damage on Monstre1.HP:"+mon1hp );
         var texttemp = "<n style=\"font-size:13px;\"><b style=\"color:rgb\(240,100,100\);\">"+speciesList[mon2.species] +"</b><sup>HP:"+mon2hp + "\("+mon2hppercent+"%\)</sup> uses <i>" + skill + "</i> and deal "+damage+
         "<sub>"+weakpoint+"</sub> damage on <b style=\"color:rgb\(45,210,210\);\">"+ speciesList[mon1.species]+"</b><sup>HP:"+mon1hp+ "\("+mon1hppercent+"%\)</sup></p>";
         //$("#Report").append(texttemp);
       }
+ //     console.log("asasdasdsd");
       battleresult = battleresult+texttemp;
+ //     console.log("asasdasdsd");
     }
+ //   console.log("asasdasdsd");
     if (won ==1) {battleresult = battleresult+"<li>My "+speciesList[mon1.species]+" WIN!</li>";}
     else {{battleresult = battleresult+"<li>My "+speciesList[mon1.species]+" LOSE!</li>";}}
+  //  console.log("asasdasdsd");
     $("#Report").append(battleresult); 
 }
 
@@ -468,7 +487,8 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
           if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
           if (allMonstress[ii].status == 0) {var stat = "Normal";} else {var stat = "Frozen";}
           let expconverted = convertLevelTest(allMonstress[ii].exp);
-
+          
+          //CombatPower = CombatPower(allMonstress[ii]);
             $("#Monstredisplay").append(`<div class="Monstredisplay">
               <ul style="background-color:#101010;">
                 <n><b style="color:gray;">${status} </b></n>
@@ -476,6 +496,7 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
                 <dt><b style="color:#F5AF32;" ">Level:</b> ${expconverted.level} <sub>(${expconverted.percent}%)</sub> <b style="color:#AA9910;">Stage:</b> ${stageList[allMonstress[ii].attribute.stage]} <b style="color:#AA9910;">  Status:</b> ${stat}</dt>
                 <dt><b style="color:#F5AF32;">  Weight (g): </b>${allMonstress[ii].attribute.weight}</dt>
                 <dt><b style="color:#2882D2;">Discipline:</b> ${allMonstress[ii].attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${allMonstress[ii].attribute.happiness}</dt>
+                <dt><b style="color:#AA22BB;">Combat Power:</b> ${getCombatPower(allMonstress[ii])}   </dt>
                 <dt><b style="color:#B432FF;">Hitpoints:</b> ${allMonstress[ii].power.hitpoints}   </dt>
                 <dt><b style="color:#B432FF;">Strength: </b>${allMonstress[ii].power.strength} <b style="color:#B432FF;">  Agility: </b>${allMonstress[ii].power.agility}  <b style="color:#B432FF;">  Intellegence:</b> ${allMonstress[ii].power.intellegence}</dt>
                 <dt><b style="color:#811BCD;">Skills:</b> ${skillList[allMonstress[ii].skill[0]]+", "+skillList[allMonstress[ii].skill[1]]+", "+skillList[allMonstress[ii].skill[2]]} </dt>
@@ -1114,7 +1135,7 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
           console.log(receipt.events.Result.returnValues);
           //const bigInt = require("big-integer");
           console.log("rythmbigint" + bigInt(receipt.events.Result.returnValues.hash));
-          decodeRythm(receipt.events.Result.returnValues.won, receipt.events.Result.returnValues.hash, receipt.events.Result.returnValues.bit, receipt.events.Result.returnValues.selfOrBefore, receipt.events.Result.returnValues.opponOrAfter);
+          decodeRythm(receipt.events.Result.returnValues.won, receipt.events.Result.returnValues.hash, receipt.events.Result.returnValues.bit,Monstre, receipt.events.Result.returnValues.opponOrAfter);
           console.log(receipt.events.Result.returnValues.opponOrAfter);
           showDiffMon(Monstre,receipt.events.Result.returnValues.selfOrBefore);
           console.log(receipt.events.Result.returnValues.opponOrAfter);
