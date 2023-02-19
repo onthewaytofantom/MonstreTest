@@ -132,19 +132,6 @@ var ftmonabi = [
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "_newName",
-				"type": "string"
-			}
-		],
-		"name": "ChangePlayerName",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "uint256",
 				"name": "_id",
 				"type": "uint256"
@@ -176,7 +163,7 @@ var ftmonabi = [
 				"type": "uint256"
 			}
 		],
-		"name": "cheatREVIVE",
+		"name": "cheatRevive",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -193,19 +180,6 @@ var ftmonabi = [
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "id",
-				"type": "uint256"
-			}
-		],
-		"name": "CreateMonstre",
-		"type": "event"
 	},
 	{
 		"inputs": [
@@ -628,7 +602,7 @@ var ftmonabi = [
 			{
 				"indexed": false,
 				"internalType": "uint64",
-				"name": "timeOrArray",
+				"name": "damage",
 				"type": "uint64"
 			},
 			{
@@ -1049,12 +1023,12 @@ var ftmonabi = [
 		"outputs": [
 			{
 				"internalType": "bool",
-				"name": "",
+				"name": "Mon1Win",
 				"type": "bool"
 			},
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "BattleRhythm",
 				"type": "uint256"
 			},
 			{
@@ -1192,7 +1166,7 @@ var ftmonabi = [
 					}
 				],
 				"internalType": "struct S.Monstres",
-				"name": "",
+				"name": "Mon1",
 				"type": "tuple"
 			},
 			{
@@ -1330,12 +1304,17 @@ var ftmonabi = [
 					}
 				],
 				"internalType": "struct S.Monstres",
-				"name": "",
+				"name": "Mon2",
 				"type": "tuple"
 			},
 			{
+				"internalType": "uint64",
+				"name": "damage",
+				"type": "uint64"
+			},
+			{
 				"internalType": "uint8",
-				"name": "",
+				"name": "bit",
 				"type": "uint8"
 			}
 		],
@@ -1527,25 +1506,6 @@ var ftmonabi = [
 				"internalType": "struct S.Monstres[]",
 				"name": "",
 				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_player",
-				"type": "address"
-			}
-		],
-		"name": "getPlayerName",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
 			}
 		],
 		"stateMutability": "view",
