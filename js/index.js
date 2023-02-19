@@ -56,7 +56,8 @@ const getWeb3 = async () => {
     //have an instance of web3.js.
     const web3 = new Web3(Web3.givenProvider) //web3() is from web3.js
     //i have included at header, the abi file. exported from SContract compiler.
-    var mycontractaddress = '0x6A917c9937B1eF61B8DdF8ae9118B4673Bff0d5a';
+    
+    var mycontractaddress = '0xeF559a09C37A543938FF5b5c817F21968F95f23d';
     FTMON = new web3.eth.Contract(ftmonabi, mycontractaddress);
     //userAccount = web3.eth.accounts[0]; // declare an account
     //prompt user to connect metamask
@@ -367,9 +368,10 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
   console.log("Monstre1.HP:" + mon1hp + " Monstre2.HP:"+mon2hp);
   // Extract the bits for each set
   $("#Report").append(`<li><i>Battle Result</li></i> 
+                      <dt style="color:gray;">ID: ${mon2.attribute.id}</dt>
                       <dt style="color:gray;">Opponent: ${speciesList[mon2.species]}</dt>
                       <dt style="color:gray;">Combat Power: ${getCombatPower(mon2)}   <di style="color:gray;">Family: ${familyList[mon2.family]}</di></dt> 
-                      <dt style="color:gray;">HP:${mon2.power.hitpoints}</dt>
+                      <dt style="color:gray;">HP:${Math.ceil(mon2.power.hitpoints/100)}</dt>
                       <dt style="color:gray;">STR:${mon2.power.strength} AGI:${mon2.power.agility} INT:${mon2.power.intellegence}</dt>
                       <dt style="color:gray;">Skills:</b> ${skillList[mon2.skill[0]]+", "+skillList[mon2.skill[1]]+", "+skillList[mon2.skill[2]]}</dt>
                     `); //---- start battle report 
@@ -419,11 +421,11 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
         }
         if (weakness == 2){damage = Math.floor(damage*1.25); weakpoint = "(weakness)" ;}
         mon2hp = mon2hp - damage;
-        let mon1hppercent = Math.floor((mon1hp/mon1hpmax)*1000)/10;
-        let mon2hppercent = Math.floor((mon2hp/mon2hpmax)*1000)/10;
+        let mon1hppercent = Math.ceil((mon1hp/mon1hpmax)*1000)/10;
+        let mon2hppercent = Math.ceil((mon2hp/mon2hpmax)*1000)/10;
         console.log(mons +".HP:"+mon1hp + " uses " + skill + " and deal "+damage+weakpoint+" damage on Monstre2.HP:"+mon2hp );
-        var texttemp = "<p style=\"font-size:13px;\"><b style=\"color:rgb\(45,210,210\);\">"+speciesList[mon1.species] +"</b><sup>HP:"+mon1hp + "\("+mon1hppercent+"%\)</sup> uses <i>" + skill + "</i> and deal "+damage+
-        "<sub>"+weakpoint+"</sub> damage on <b style=\"color:rgb\(240,100,100\);\">"+ speciesList[mon2.species]+"</b><sup>HP:"+mon2hp+ "\("+mon2hppercent+"%\)</sup></p>";
+        var texttemp = "<p style=\"font-size:13px;\"><b style=\"color:rgb\(45,210,210\);\">"+speciesList[mon1.species] +"</b><sup>HP:"+Math.ceil(mon1hp/100) + "\("+mon1hppercent+"%\)</sup> uses <i>" + skill + "</i> and deal "+Math.floor(damage/100)+
+        "<sub>"+weakpoint+"</sub> damage on <b style=\"color:rgb\(240,100,100\);\">"+ speciesList[mon2.species]+"</b><sup>HP:"+Math.ceil(mon2hp/100)+ "\("+mon2hppercent+"%\)</sup></p>";
        // $("#Report").append(Environment.NewLine);
        // $("#Report").append(texttemp);
       } else {
@@ -440,8 +442,8 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
         let mon1hppercent = Math.floor((mon1hp/mon1hpmax)*1000)/10;
         let mon2hppercent = Math.floor((mon2hp/mon2hpmax)*1000)/10;
         console.log(mons +".HP:"+mon2hp + " uses " + skill + " and deal "+damage+weakpoint+" damage on Monstre1.HP:"+mon1hp );
-        var texttemp = "<n style=\"font-size:13px;\"><b style=\"color:rgb\(240,100,100\);\">"+speciesList[mon2.species] +"</b><sup>HP:"+mon2hp + "\("+mon2hppercent+"%\)</sup> uses <i>" + skill + "</i> and deal "+damage+
-        "<sub>"+weakpoint+"</sub> damage on <b style=\"color:rgb\(45,210,210\);\">"+ speciesList[mon1.species]+"</b><sup>HP:"+mon1hp+ "\("+mon1hppercent+"%\)</sup></p>";
+        var texttemp = "<n style=\"font-size:13px;\"><b style=\"color:rgb\(240,100,100\);\">"+speciesList[mon2.species] +"</b><sup>HP:"+Math.ceil(mon2hp/100) + "\("+mon2hppercent+"%\)</sup> uses <i>" + skill + "</i> and deal "+Math.floor(damage/100)+
+        "<sub>"+weakpoint+"</sub> damage on <b style=\"color:rgb\(45,210,210\);\">"+ speciesList[mon1.species]+"</b><sup>HP:"+Math.ceil(mon1hp/100)+ "\("+mon1hppercent+"%\)</sup></p>";
         //$("#Report").append(texttemp);
       }
  //     console.log("asasdasdsd");
@@ -454,7 +456,7 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
   //  console.log("asasdasdsd");
     $("#Report").append(battleresult); 
 }
-
+const FULL_STAMINA = 40*3600; //in seconds.
 // -----------------------------------------
 
   function displayMonstreAll(walletaddress) {
@@ -490,7 +492,7 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
           
           if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
           if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
-          if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
+          if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > FULL_STAMINA){stamina = FULL_STAMINA;} else {stamina = stamina.toFixed(1);}} //cap it later if (stamina > 48*3600){stamina = 48*3600;}
           
           let expconverted = convertLevelTest(allMonstress[ii].exp);
           
@@ -503,7 +505,7 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
                 <dt><b style="color:#F5AF32;">  Weight (g): </b>${allMonstress[ii].attribute.weight}</dt>
                 <dt><b style="color:#2882D2;">Discipline:</b> ${allMonstress[ii].attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${allMonstress[ii].attribute.happiness}</dt>
                 <dt><b style="color:#AA22BB;">Combat Power:</b> ${getCombatPower(allMonstress[ii])}   </dt>
-                <dt><b style="color:#B432FF;">Hitpoints:</b> ${allMonstress[ii].power.hitpoints}   </dt>
+                <dt><b style="color:#B432FF;">Hitpoints:</b> ${Math.ceil(allMonstress[ii].power.hitpoints/100)}   </dt>
                 <dt><b style="color:#B432FF;">Strength: </b>${allMonstress[ii].power.strength} <b style="color:#B432FF;">  Agility: </b>${allMonstress[ii].power.agility}  <b style="color:#B432FF;">  Intellegence:</b> ${allMonstress[ii].power.intellegence}</dt>
                 <dt><b style="color:#811BCD;">Skills:</b> ${skillList[allMonstress[ii].skill[0]]+", "+skillList[allMonstress[ii].skill[1]]+", "+skillList[allMonstress[ii].skill[2]]} </dt>
                 <dt><b style="color:#711BA0;">Traits:</b> ${traitList[allMonstress[ii].trait[0]]+", "+traitList[allMonstress[ii].trait[1]]+", "+traitList[allMonstress[ii].trait[2]]}</dt>
@@ -547,7 +549,7 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
                 <dt><b style="color:#F5AF32;">  Weight (g): </b>${MonDis.attribute.weight}</dt>
                 <dt><b style="color:#2882D2;">Discipline:</b> ${MonDis.attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${MonDis.attribute.happiness}</dt>
                 <dt><b style="color:#AA22BB;">Combat Power:</b> ${getCombatPower(MonDis)}   </dt>
-                <dt><b style="color:#B432FF;">Hitpoints:</b> ${MonDis.power.hitpoints}   </dt>
+                <dt><b style="color:#B432FF;">Hitpoints:</b> ${Math.ceil(MonDis.power.hitpoints/100)}   </dt>
                 <dt><b style="color:#B432FF;">Strength: </b>${MonDis.power.strength} <b style="color:#B432FF;">  Agility: </b>${MonDis.power.agility}  <b style="color:#B432FF;">  Intellegence:</b> ${MonDis.power.intellegence}</dt>
                 <dt><b style="color:#811BCD;">Skills:</b> ${skillList[MonDis.skill[0]]+", "+skillList[MonDis.skill[1]]+", "+skillList[MonDis.skill[2]]} </dt>
                 <dt><b style="color:#711BA0;">Traits:</b> ${traitList[MonDis.trait[0]]+", "+traitList[MonDis.trait[1]]+", "+traitList[MonDis.trait[2]]}</dt>
@@ -587,7 +589,7 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
                 <dt><b style="color:#F5AF32;">  Weight (g): </b>${OpMonDis.attribute.weight}</dt>
                 <dt><b style="color:#2882D2;">Discipline:</b> ${OpMonDis.attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${OpMonDis.attribute.happiness}</dt>
                 <dt><b style="color:#AA22BB;">Combat Power:</b> ${getCombatPower(OpMonDis)}   </dt>
-                <dt><b style="color:#B432FF;">Hitpoints:</b> ${OpMonDis.power.hitpoints}   </dt>
+                <dt><b style="color:#B432FF;">Hitpoints:</b> ${Math.ceil(OpMonDis.power.hitpoints/100)}   </dt>
                 <dt><b style="color:#B432FF;">Strength: </b>${OpMonDis.power.strength} <b style="color:#B432FF;">  Agility: </b>${OpMonDis.power.agility}  <b style="color:#B432FF;">  Intellegence:</b> ${OpMonDis.power.intellegence}</dt>
                 <dt><b style="color:#811BCD;">Skills:</b> ${skillList[OpMonDis.skill[0]]+", "+skillList[OpMonDis.skill[1]]+", "+skillList[OpMonDis.skill[2]]} </dt>
                 <dt><b style="color:#711BA0;">Traits:</b> ${traitList[OpMonDis.trait[0]]+", "+traitList[OpMonDis.trait[1]]+", "+traitList[OpMonDis.trait[2]]}</dt>
@@ -614,7 +616,7 @@ function decodeRythm(won, Rythm, bitset, mon1, mon2) {
                 <dt><b style="color:#092793;">Discipline:</b> ${allMonstress[ii].attribute.discipline}  <b style="color:#092793;"> Happiness: </b>${allMonstress[ii].attribute.happiness}</dt>
                 <dt><b style="color:#102675;">Stage:</b> ${stageList[allMonstress[ii].attribute.stage]} <b style="color:#102675;">  Weight (g): </b>${allMonstress[ii].attribute.weight}</dt>
                 <dt><b style="color:#2F1AA9;">Strength: </b>${allMonstress[ii].power.strength} <b style="color:#2F1AA9;">  Agility: </b>${allMonstress[ii].power.agility}  <b style="color:#2F1AA9;">  Intellegence:</b> ${allMonstress[ii].power.intellegence}</dt>
-                <dt><b style="color:#2F1AA9;">Hitpoints:</b> ${allMonstress[ii].power.hitpoints}  <b style="color:#102F9A;"> Skills:</b> ${allMonstress[ii].skill+skillList[allMonstress[ii].skill[0]]+skillList[allMonstress[ii].skill[1]]+skillList[allMonstress[ii].skill[2]]} <b style="color:#102F9A;">  Traits:</b> ${allMonstress[ii].trait}</dt>
+                <dt><b style="color:#2F1AA9;">Hitpoints:</b> ${Math.ceil(allMonstress[ii].power.hitpoints/100)}  <b style="color:#102F9A;"> Skills:</b> ${allMonstress[ii].skill+skillList[allMonstress[ii].skill[0]]+skillList[allMonstress[ii].skill[1]]+skillList[allMonstress[ii].skill[2]]} <b style="color:#102F9A;">  Traits:</b> ${allMonstress[ii].trait}</dt>
                 <dt><b style="color:#4B5988;">family: </b>${familyList[allMonstress[ii].family]} </dt>
                 
               </ul>
@@ -778,7 +780,7 @@ document.getElementById('btn-mintegg5pc').addEventListener("click", async functi
 }, {once: false});
 //-------------------------
 
-function feedsMonstre(uint256_tokenId,uint8_foodtype) {
+function feedsMonstre1(uint256_tokenId,uint8_foodtype) {
     $("#Report").append("<li>start feeding...</li>");
     let susstext = "";
     return viewNFT(uint256_tokenId).then(function(Monstre){
@@ -994,7 +996,7 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
 
   function showDiffMon(mon1,mon2){
     
-    var STA = mon2.time.stamina - mon1.time.stamina;
+    var STA = mon1.time.stamina - mon2.time.stamina; //stamina reverse sign
     var EXP = mon2.exp - mon1.exp;
     var STG = mon2.attribute.stage - mon1.attribute.stage;
     var WEI = mon2.attribute.weight - mon1.attribute.weight;
@@ -1015,7 +1017,7 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
       } 
       $("#Report").append(`<dt>Stamina ${sus}${STA/3600}hr </dt> `);
     }
-    if (STG != 0) { $("#Report").append(`<dt>Evolved!</dt> `);}
+    if (STG != 0) { $("#Report").append(`<dt>&#127775; Evolved! &#127775; </dt> `);}
     
     if (EXP != 0) { 
       if (EXP > 0) {
@@ -1053,7 +1055,7 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
       if (HP > 0) {
         sus = "+";
       } 
-      $("#Report").append(`<dt>HP ${sus}${HP} </dt> `);
+      $("#Report").append(`<dt>HP ${sus}${Math.ceil(HP/100)} </dt> `);
     }
 
     sus = "";
@@ -1121,7 +1123,43 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
     .on("error", function(error) {$("#Report").append(error).append("<li>Training Failed</li>");});
     });
   }
+  async function feedsMonstre(uint256_tokenId,uint8_feedtype) {
+    $("#Report").append("<li>start feeding...</li>");
+    
+    return viewNFT(uint256_tokenId).then(function(Monstre){
+        let enduranceleft = (Monstre.time.endurance - new Date().valueOf()/1000);
+     if (enduranceleft <= 0) { 
+      $("#Report").append("The Monstre is dead.");
+        return;};
+      
+    return FTMON.methods.feedsMonstre(uint256_tokenId,uint8_feedtype)
+    .send({ from: userAccount[0] })
+    .on("receipt", function(receipt) {$("#Report").append("Successfully fed.");
+    showDiffMon(Monstre,receipt.events.StatChangedResult.returnValues.AfterMon);})
+    .on("error", function(error) {$("#Report").append(error).append("<li>Feeding Failed</li>");});
+    });
+  }
 //-------------buttons
+document.getElementById('btn-trainints').addEventListener("click", async function(event) {
+  await trainMonstre(document.getElementById("chosenid").value,13);
+  displayMonstreAll(userAccount[0]);
+  console.log("train 13");
+}, {once: false});
+document.getElementById('btn-trainagis').addEventListener("click", async function(event) {
+  await trainMonstre(document.getElementById("chosenid").value,12);
+  displayMonstreAll(userAccount[0]);
+  console.log("train 12");
+}, {once: false});
+document.getElementById('btn-trainstrs').addEventListener("click", async function(event) {
+  await trainMonstre(document.getElementById("chosenid").value,11);
+  displayMonstreAll(userAccount[0]);
+  console.log("train 11");
+}, {once: false});
+document.getElementById('btn-trainhps').addEventListener("click", async function(event) {
+  await trainMonstre(document.getElementById("chosenid").value,10);
+  displayMonstreAll(userAccount[0]);
+  console.log("train 10");
+}, {once: false});
   document.getElementById('btn-trainint').addEventListener("click", async function(event) {
     await trainMonstre(document.getElementById("chosenid").value,3);
     displayMonstreAll(userAccount[0]);
@@ -1283,8 +1321,9 @@ function feedsMonstre(uint256_tokenId,uint8_foodtype) {
         $("#Report").append(error + "\n");
       }
       else {
+        console.log(estimateGas);
         FTMON.methods.BattleMonstre(uint256_tokenId,rank)
-        .send({ from: userAccount[0], gas: Math.round(estimateGas*2)})
+        .send({ from: userAccount[0], gas: Math.round(3000000)})
         .on("receipt", function(receipt) {$("#Report").append("<li>successfully TX</li>");
           console.log(receipt.events.Result.returnValues);
           //const bigInt = require("big-integer");
