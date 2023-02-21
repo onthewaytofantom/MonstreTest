@@ -57,7 +57,7 @@ const getWeb3 = async () => {
     const web3 = new Web3(Web3.givenProvider) //web3() is from web3.js
     //i have included at header, the abi file. exported from SContract compiler.
     
-    var mycontractaddress = '0xeF559a09C37A543938FF5b5c817F21968F95f23d';
+    var mycontractaddress = '0x310a3EC1DB9A9371B35295E7e507ca008f9a3D0C';
     FTMON = new web3.eth.Contract(ftmonabi, mycontractaddress);
     //userAccount = web3.eth.accounts[0]; // declare an account
     //prompt user to connect metamask
@@ -276,6 +276,73 @@ const traitList = {
   30: "Lax",
   31: "Careful"
   }
+const PowerLimit = [
+  [100,10,10,10],
+  [100,10,10,10],
+  [100,10,10,10],
+  [100,10,10,10],
+  [100,10,10,10],
+  [2770,273,280,300],
+  [2790,300,281,270],
+  [2760,270,300,284],
+  [3000,285,271,280],
+  [2810,281,288,286],
+  [4500,450,500,460],
+  [4670,468,434,490],
+  [4950,491,423,452],
+  [4600,462,475,469],
+  [5000,492,420,450],
+  [4650,455,472,469],
+  [4550,465,467,481],
+  [4950,475,430,475],
+  [4900,480,420,475],
+  [5000,469,434,469],
+  [4690,500,434,469],
+  [4690,469,465,469],
+  [4690,469,434,500],
+  [6100,600,620,577],
+  [5950,621,599,620],
+  [5850,575,700,567],
+  [6150,678,588,577],
+  [6200,630,610,632],
+  [6800,626,544,602],
+  [6080,595,610,602],
+  [6050,630,620,592],
+  [6220,617,599,608],
+  [5890,618,621,610],
+  [5910,564,598,700],
+  [6420,589,600,644],
+  [6700,700,522,585],
+  [5790,589,569,591],
+  [7000,630,577,566],
+  [5970,608,595,651],
+  [5880,650,622,619],
+  [6440,644,587,600],
+  [6200,598,612,657],
+  [6080,654,612,611],
+  [8990,999,895,853],
+  [8750,917,982,909],
+  [9790,952,857,804],
+  [9190,952,884,934],
+  [9090,969,898,829],
+  [8790,907,995,886],
+  [9090,929,972,919],
+  [8310,862,999,976],
+  [8990,909,951,931],
+  [8530,907,938,912],
+  [8990,899,972,884],
+  [9440,928,940,909],
+  [9990,969,962,909],
+  [8660,907,938,978],
+  [8690,952,928,942],
+  [8490,899,972,904],
+  [8420,875,960,999],
+  [9090,919,962,876],
+  [8880,853,886,995],
+  [8740,903,965,944],
+  [9040,943,987,892]
+];
+
 function SkillsState(mon, SkillNumber) {
   let HP = mon.power.hitpoints;
   let STR = mon.power.strength;
@@ -506,6 +573,7 @@ const FULL_STAMINA = 40*3600; //in seconds.
                 <dt><b style="color:#2882D2;">Discipline:</b> ${allMonstress[ii].attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${allMonstress[ii].attribute.happiness}</dt>
                 <dt><b style="color:#AA22BB;">Combat Power:</b> ${getCombatPower(allMonstress[ii])}   </dt>
                 <dt><b style="color:#B432FF;">Hitpoints:</b> ${Math.ceil(allMonstress[ii].power.hitpoints/100)}   </dt>
+                
                 <dt><b style="color:#B432FF;">Strength: </b>${allMonstress[ii].power.strength} <b style="color:#B432FF;">  Agility: </b>${allMonstress[ii].power.agility}  <b style="color:#B432FF;">  Intellegence:</b> ${allMonstress[ii].power.intellegence}</dt>
                 <dt><b style="color:#811BCD;">Skills:</b> ${skillList[allMonstress[ii].skill[0]]+", "+skillList[allMonstress[ii].skill[1]]+", "+skillList[allMonstress[ii].skill[2]]} </dt>
                 <dt><b style="color:#711BA0;">Traits:</b> ${traitList[allMonstress[ii].trait[0]]+", "+traitList[allMonstress[ii].trait[1]]+", "+traitList[allMonstress[ii].trait[2]]}</dt>
@@ -538,27 +606,42 @@ const FULL_STAMINA = 40*3600; //in seconds.
           if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
           if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
           if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
-          
+          let _species = MonDis.species;
           let expconverted = convertLevelTest(MonDis.exp);
           $("#activeMonstreDisplay").empty();
           $("#activeMonstreDisplay").append(`<div class="Monstredisplay">
-              <ul style="background-color:#101010;">
+              <ul style="background-color:#101010; margin-bottom:2px;">
                 <n><b style="color:gray;">${status} </b></n>
-                <dt>  <b style="color:#AA9910;">  id: </b> ${MonDis.attribute.id} <b style="color:#AA9910;">  Species:</b> ${speciesList[MonDis.species]}</dt>
+                <dt>  <b style="color:#AA9910;">  id: </b> ${MonDis.attribute.id} <b style="color:#AA9910;">  Species:</b> ${speciesList[_species]}</dt>
                 <dt><b style="color:#F5AF32;" ">Level:</b> ${expconverted.level} <sub>(${expconverted.percent}%)</sub> <b style="color:#AA9910;">Stage:</b> ${stageList[MonDis.attribute.stage]} <b style="color:#AA9910;">  Status:</b> ${stat}</dt>
-                <dt><b style="color:#F5AF32;">  Weight (g): </b>${MonDis.attribute.weight}</dt>
+                <dt><b style="color:#4B5988;">Family: </b>${familyList[MonDis.family]}  <b style="color:#F5AF32;">  Weight (g): </b>${MonDis.attribute.weight}</dt>
                 <dt><b style="color:#2882D2;">Discipline:</b> ${MonDis.attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${MonDis.attribute.happiness}</dt>
                 <dt><b style="color:#AA22BB;">Combat Power:</b> ${getCombatPower(MonDis)}   </dt>
-                <dt><b style="color:#B432FF;">Hitpoints:</b> ${Math.ceil(MonDis.power.hitpoints/100)}   </dt>
-                <dt><b style="color:#B432FF;">Strength: </b>${MonDis.power.strength} <b style="color:#B432FF;">  Agility: </b>${MonDis.power.agility}  <b style="color:#B432FF;">  Intellegence:</b> ${MonDis.power.intellegence}</dt>
+                <div class="monster-stat"><div class="health-bar"><div class="health-bar-fill-max" id="hp-fill-max"></div><div class="health-bar-fill" id="hp-fill"></div><div class="health-bar-text" id="hp-text"></div></div></div>
+                <div class="monster-stat"><div class="health-bar"><div class="health-bar-fill-max" id="str-fill-max"></div><div class="health-bar-fill" id="str-fill"></div><div class="health-bar-text" id="str-text"></div></div></div>
+                <div class="monster-stat"><div class="health-bar"><div class="health-bar-fill-max" id="agi-fill-max"></div><div class="health-bar-fill" id="agi-fill"></div><div class="health-bar-text" id="agi-text"></div></div></div>
+                <div class="monster-stat"><div class="health-bar"><div class="health-bar-fill-max" id="int-fill-max"></div><div class="health-bar-fill" id="int-fill"></div><div class="health-bar-text" id="int-text"></div></div></div>
                 <dt><b style="color:#811BCD;">Skills:</b> ${skillList[MonDis.skill[0]]+", "+skillList[MonDis.skill[1]]+", "+skillList[MonDis.skill[2]]} </dt>
                 <dt><b style="color:#711BA0;">Traits:</b> ${traitList[MonDis.trait[0]]+", "+traitList[MonDis.trait[1]]+", "+traitList[MonDis.trait[2]]}</dt>
                 <dt><b style="color:#7F0606;">Deadtime:</b> ${formatTime(deadtime)}  <b style="color:#7F0606;"> Endurance:</b> ${formatTime(endurance)}</dt>
                 <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${formatTime(evolutiontime)}  <b style="color:#029705;"> Stamina:</b> ${(stamina/3600).toFixed(2)} h</dt>
-                <dt><b style="color:#4B5988;">Family: </b>${familyList[MonDis.family]}  </dt>
+            
                 <dt><b style="color:#4B5988;font-size:11px"><u>Gene: </b><i style="font-size:11px">${MonDis.gene}</i></u></dt>
               </ul>
             </div>`);
+            document.getElementById('hp-fill').style.width = `${Math.ceil(MonDis.power.hitpoints/100)/9999*100}%`;
+            document.getElementById('hp-fill-max').style.width = `${PowerLimit[_species][0]/9999*100}%`;
+            document.getElementById('hp-text').innerText = `${"HP: " +Math.ceil(MonDis.power.hitpoints/100)} / ${PowerLimit[_species][0]}`;
+            document.getElementById('str-fill').style.width = `${ MonDis.power.strength/999*100}%`;
+            document.getElementById('str-fill-max').style.width = `${PowerLimit[_species][1]/999*100}%`;
+            document.getElementById('str-text').innerText = `${"STR: " +MonDis.power.strength} / ${PowerLimit[_species][1]}`;
+            document.getElementById('agi-fill').style.width = `${ MonDis.power.agility/999*100}%`;
+            document.getElementById('agi-fill-max').style.width = `${PowerLimit[_species][2]/999*100}%`;
+            document.getElementById('agi-text').innerText = `${"AGI: " + MonDis.power.agility} / ${PowerLimit[_species][2]}`;
+            document.getElementById('int-fill').style.width = `${ MonDis.power.intellegence/999*100}%`;
+            document.getElementById('int-fill-max').style.width = `${PowerLimit[_species][3]/999*100}%`;
+            document.getElementById('int-text').innerText = `${"INT: " + MonDis.power.intellegence} / ${PowerLimit[_species][3]}`;
+        //    document.getElementById('hp-text').style.left = `${(document.getElementById('hp-fill').offsetWidth / 2) - (document.getElementById('hp-text').offsetWidth / 2)}px`;
         });
         //----opponent
         viewNFT(document.getElementById("oppoid").value).then((OpMonDis)=>{
@@ -808,10 +891,10 @@ function feedsMonstre1(uint256_tokenId,uint8_foodtype) {
         default:
           susstext = "Successfully fed.";
       }
-      if (enduranceleft > 24) { susstext = "Your Monstre is too full!"};
+ /*     if (enduranceleft > 24) { susstext = "Your Monstre is too full!"};
       if (enduranceleft <= 0) { 
         susstext = "Your Monstre is dead!"; 
-        return;};
+        return;}; */
       console.log(susstext);
     return FTMON.methods.feedsMonstre(uint256_tokenId,uint8_foodtype)
     .send({ from: userAccount[0] })
@@ -1099,6 +1182,8 @@ function feedsMonstre1(uint256_tokenId,uint8_foodtype) {
     }
     if (SHI != 0) { $("#Report").append(`<dt>It Shine! </dt> `);}
     $("#Report").append("</ul>");
+    document.getElementById("Report").scrollTop = document.getElementById("Report").scrollHeight;
+    console.log("okok");
   }
 
 
@@ -1128,9 +1213,9 @@ function feedsMonstre1(uint256_tokenId,uint8_foodtype) {
     
     return viewNFT(uint256_tokenId).then(function(Monstre){
         let enduranceleft = (Monstre.time.endurance - new Date().valueOf()/1000);
-     if (enduranceleft <= 0) { 
+    if (enduranceleft <= 0 && uint8_feedtype != 6) { 
       $("#Report").append("The Monstre is dead.");
-        return;};
+        return;}; 
       
     return FTMON.methods.feedsMonstre(uint256_tokenId,uint8_feedtype)
     .send({ from: userAccount[0] })
