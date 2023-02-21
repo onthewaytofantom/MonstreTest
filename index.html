@@ -68,8 +68,50 @@
 		.dropdown a:hover {background-color: #ddd;}
 
 		.show {display: block;}
-
-		
+		/* Styling for the Powers bar */
+		.health-bar {
+			width: 200px;
+			height: 14px;
+			border: 1px solid rgb(56, 55, 55);
+			position: relative;
+			margin-bottom: 2px;
+		}
+		.health-bar-fill {
+			height: 100%;
+			background-color: rgb(15, 141, 150);
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		.health-bar-fill-max {
+			height: 100%;
+			background-color: rgb(224, 16, 189);
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		.health-bar-text {
+			position: absolute;
+			font-size: 13px;
+			top: 0;
+			left: 0;
+			height: 101%;
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: rgb(233, 228, 228);
+			font-weight: bold;
+		}
+		/* Styling for the div containing HP text and health bar */
+		.monster-stat {
+			display: flex;
+			align-items: center;
+			margin-bottom: 1px;
+		}
+		.monster-stat label {
+			margin-right: 1px;
+		}
 
 		</style>
 
