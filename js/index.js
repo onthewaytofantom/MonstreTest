@@ -58,7 +58,13 @@ const getWeb3 = async () => {
     //i have included at header, the abi file. exported from SContract compiler.
     
     var mycontractaddress = '0x4F1Ae8b19846533125019f8373452C3E681cB8a2';
+    var treassuryadscontractaddress = '0x4a95C7125F5f8FD5FB5F48a19Efe42dcbaAf5142';
+    //var pvppvecontractaddress = '0x51D6565e2Af79C5e4cFFbA7b6558Ea168D87a619'; 0xF738B9d9DD64dEd266C0e2F1143dB9C2901378bF
+    var pvppvecontractaddress = '0xd1C5b10542f755Ba2cd1155481FEaBF55BD27Ea1';
     FTMON = new web3.eth.Contract(ftmonabi, mycontractaddress);
+    ADS = new web3.eth.Contract(adsabi, treassuryadscontractaddress);
+    PVPPVE = new web3.eth.Contract(pvppveabi, pvppvecontractaddress);
+    
     //userAccount = web3.eth.accounts[0]; // declare an account
     //prompt user to connect metamask
     try {
@@ -99,7 +105,62 @@ const getWeb3 = async () => {
   });
 }
 
+function updateBalance() {
+  ADS.methods.viewFTM().call((error, result) => {
+    if (error) {
+      console.log('Error:', error);
+    } else {
+      const ethBalance = result/1000000000000000000;
+      document.getElementById('contract-balance').innerHTML = `The contract balance is ${ethBalance} ETH`;
+    }
+  });
+}
+function updateAds() {
+  ADS.methods.getLatestAds(0,1).call((error, result) => {
+    if (error) {
+      console.log('Error:', error);
+    } else {
+      const description = result[0].description;
+      document.getElementById('banner-ads').innerHTML = `asASDASDASDd: ${description} asd`;
+      console.log(description);
+    }
+  });
+}
 
+function updateLatestWinnerPVP(){
+  PVPPVE.methods.viewLastestPVPT1Records().call((error, RESULT)=>{
+    if (error) {
+      console.log('Error:', error);
+    } else {
+      var diffTIME = 0;
+      var OpMonDis = RESULT.monstredata;
+      if (OpMonDis.status == 0) {var stat = "Normal";} else {var stat = "Frozen"; diffTIME = new Date().valueOf()/1000-OpMonDis.time.frozentime;}
+      
+      let expconverted = convertLevelTest(OpMonDis.exp);
+      $("#winningMonstreDisplay").empty();
+      $("#winningMonstreDisplay").append(`<div class="Monstredisplay">
+          <ul style="background-color:#101010;">
+            <n><b style="color:gray;">Latest Winning PVP Monstre </b></n>
+            <dt>  <b style="color:#AA9910;">  Winner</b> ${RESULT.winner} </dt>
+            <dt>  <b style="color:#AA9910;">  id: </b> ${OpMonDis.attribute.id} <b style="color:#AA9910;">  Species:</b> ${speciesList[OpMonDis.species]}</dt>
+            <dt><b style="color:#F5AF32;" ">Level:</b> ${expconverted.level} <sub>(${expconverted.percent}%)</sub> <b style="color:#AA9910;">Stage:</b> ${stageList[OpMonDis.attribute.stage]} <b style="color:#AA9910;">  Status:</b> ${stat}</dt>
+            <dt><b style="color:#2882D2;">Discipline:</b> ${OpMonDis.attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${OpMonDis.attribute.happiness}</dt>
+            <dt><b style="color:#AA22BB;">Combat Power:</b> ${getCombatPower(OpMonDis)}   </dt>
+            <dt><b style="color:#B432FF;">Hitpoints:</b> ${Math.ceil(OpMonDis.power.hitpoints/100)}   </dt>
+            <dt><b style="color:#B432FF;">Strength: </b>${OpMonDis.power.strength} <b style="color:#B432FF;">  Agility: </b>${OpMonDis.power.agility}  <b style="color:#B432FF;">  Intellegence:</b> ${OpMonDis.power.intellegence}</dt>
+            <dt><b style="color:#811BCD;">Skills:</b> ${skillList[OpMonDis.skill[0]]+", "+skillList[OpMonDis.skill[1]]+", "+skillList[OpMonDis.skill[2]]} </dt>
+            <dt><b style="color:#711BA0;">Traits:</b> ${traitList[OpMonDis.trait[0]]+", "+traitList[OpMonDis.trait[1]]+", "+traitList[OpMonDis.trait[2]]}</dt>
+            <dt><b style="color:#4B5988;">Family: </b>${familyList[OpMonDis.family]}  </dt>
+            <dt><b style="color:#4B5988;font-size:11px"><u>Gene: </b><i style="font-size:11px">${OpMonDis.gene}</i></u></dt>
+          </ul>
+        </div>`);
+    }});
+  
+}
+// call the updateBalance function every 4 seconds
+setInterval(updateBalance, 4000);
+setInterval(updateAds, 5000);
+setInterval(updateLatestWinnerPVP, 2530);
 //getWeb3();
 
 async function showWallet(){
@@ -352,7 +413,7 @@ function SkillsState(mon, SkillNumber) {
   let DISCIPLINE = mon.attribute.discipline;
   let damage = 0;
   if (SkillNumber == 0) {damage = STR * 50;} //normal attack
-  else if (SkillNumber == 10) {damage = 50 * STR + 35 * AGI;} //Acid Bullet |R|
+  else if (SkillNumber == 10) {damage = 50 * STR + 35 * AGI;} //Acid Bullet |R| 
   else if (SkillNumber == 11) {damage = 85 * STR + 15 * INT;} //Force Palm |M|
   else if (SkillNumber == 12) {damage = 115 * STR;} //Rock Throw |R|
   else if (SkillNumber == 13) {damage = 30 * STR + 30 * AGI + 30 * INT;} //Fur Sting |R|
@@ -601,47 +662,50 @@ const FULL_STAMINA = 40*3600; //in seconds.
           }
           //console.log(allMonstress);
           
-          
-          
-          if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
-          if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
-          if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
-          let _species = MonDis.species;
-          let expconverted = convertLevelTest(MonDis.exp);
-          $("#activeMonstreDisplay").empty();
-          $("#activeMonstreDisplay").append(`<div class="Monstredisplay">
-              <ul style="background-color:#101010; margin-bottom:2px;">
-                <n><b style="color:gray;">${status} </b></n>
-                <dt>  <b style="color:#AA9910;">  id: </b> ${MonDis.attribute.id} <b style="color:#AA9910;">  Species:</b> ${speciesList[_species]}</dt>
-                <dt><b style="color:#F5AF32;" ">Level:</b> ${expconverted.level} <sub>(${expconverted.percent}%)</sub> <b style="color:#AA9910;">Stage:</b> ${stageList[MonDis.attribute.stage]} <b style="color:#AA9910;">  Status:</b> ${stat}</dt>
-                <dt><b style="color:#4B5988;">Family: </b>${familyList[MonDis.family]}  <b style="color:#F5AF32;">  Weight (g): </b>${MonDis.attribute.weight}</dt>
-                <dt><b style="color:#2882D2;">Discipline:</b> ${MonDis.attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${MonDis.attribute.happiness}</dt>
-                <dt><b style="color:#AA22BB;">Combat Power:</b> ${getCombatPower(MonDis)}   </dt>
-                <div class="monster-stat"><div class="health-bar"><div class="health-bar-fill-max" id="hp-fill-max"></div><div class="health-bar-fill" id="hp-fill"></div><div class="health-bar-text" id="hp-text"></div></div></div>
-                <div class="monster-stat"><div class="health-bar"><div class="health-bar-fill-max" id="str-fill-max"></div><div class="health-bar-fill" id="str-fill"></div><div class="health-bar-text" id="str-text"></div></div></div>
-                <div class="monster-stat"><div class="health-bar"><div class="health-bar-fill-max" id="agi-fill-max"></div><div class="health-bar-fill" id="agi-fill"></div><div class="health-bar-text" id="agi-text"></div></div></div>
-                <div class="monster-stat"><div class="health-bar"><div class="health-bar-fill-max" id="int-fill-max"></div><div class="health-bar-fill" id="int-fill"></div><div class="health-bar-text" id="int-text"></div></div></div>
-                <dt><b style="color:#811BCD;">Skills:</b> ${skillList[MonDis.skill[0]]+", "+skillList[MonDis.skill[1]]+", "+skillList[MonDis.skill[2]]} </dt>
-                <dt><b style="color:#711BA0;">Traits:</b> ${traitList[MonDis.trait[0]]+", "+traitList[MonDis.trait[1]]+", "+traitList[MonDis.trait[2]]}</dt>
-                <dt><b style="color:#7F0606;">Deadtime:</b> ${formatTime(deadtime)}  <b style="color:#7F0606;"> Endurance:</b> ${formatTime(endurance)}</dt>
-                <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${formatTime(evolutiontime)}  <b style="color:#029705;"> Stamina:</b> ${(stamina/3600).toFixed(2)} h</dt>
-            
-                <dt><b style="color:#4B5988;font-size:11px"><u>Gene: </b><i style="font-size:11px">${MonDis.gene}</i></u></dt>
-              </ul>
-            </div>`);
-            document.getElementById('hp-fill').style.width = `${Math.ceil(MonDis.power.hitpoints/100)/9999*100}%`;
-            document.getElementById('hp-fill-max').style.width = `${PowerLimit[_species][0]/9999*100}%`;
-            document.getElementById('hp-text').innerText = `${"HP: " +Math.ceil(MonDis.power.hitpoints/100)} / ${PowerLimit[_species][0]}`;
-            document.getElementById('str-fill').style.width = `${ MonDis.power.strength/999*100}%`;
-            document.getElementById('str-fill-max').style.width = `${PowerLimit[_species][1]/999*100}%`;
-            document.getElementById('str-text').innerText = `${"STR: " +MonDis.power.strength} / ${PowerLimit[_species][1]}`;
-            document.getElementById('agi-fill').style.width = `${ MonDis.power.agility/999*100}%`;
-            document.getElementById('agi-fill-max').style.width = `${PowerLimit[_species][2]/999*100}%`;
-            document.getElementById('agi-text').innerText = `${"AGI: " + MonDis.power.agility} / ${PowerLimit[_species][2]}`;
-            document.getElementById('int-fill').style.width = `${ MonDis.power.intellegence/999*100}%`;
-            document.getElementById('int-fill-max').style.width = `${PowerLimit[_species][3]/999*100}%`;
-            document.getElementById('int-text').innerText = `${"INT: " + MonDis.power.intellegence} / ${PowerLimit[_species][3]}`;
-        //    document.getElementById('hp-text').style.left = `${(document.getElementById('hp-fill').offsetWidth / 2) - (document.getElementById('hp-text').offsetWidth / 2)}px`;
+          FTMON.methods.Trainer(document.getElementById("chosenid").value).call((error, RESULT)=>{
+            console.log(RESULT);
+            $("#activetrainer").empty();
+            $("#activetrainer").append(`${RESULT}`)
+            if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
+            if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
+            if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
+            let _species = MonDis.species;
+            let expconverted = convertLevelTest(MonDis.exp);
+            $("#activeMonstreDisplay").empty();
+            $("#activeMonstreDisplay").append(`<div class="Monstredisplay">
+                <ul style="background-color:#101010; margin-bottom:2px;">
+                  <n><b style="color:gray;">${status} </b></n>
+                  <dt>  <b style="color:#AA9910;">  id: </b> ${MonDis.attribute.id} <b style="color:#AA9910;">  Species:</b> ${speciesList[_species]}</dt>
+                  <dt><b style="color:#F5AF32;" ">Level:</b> ${expconverted.level} <sub>(${expconverted.percent}%)</sub> <b style="color:#AA9910;">Stage:</b> ${stageList[MonDis.attribute.stage]} <b style="color:#AA9910;">  Status:</b> ${stat}</dt>
+                  <dt><b style="color:#4B5988;">Family: </b>${familyList[MonDis.family]}  <b style="color:#F5AF32;">  Weight (g): </b>${MonDis.attribute.weight}</dt>
+                  <dt><b style="color:#2882D2;">Discipline:</b> ${MonDis.attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${MonDis.attribute.happiness}</dt>
+                  <dt><b style="color:#AA22BB;">Combat Power:</b> ${getCombatPower(MonDis)}   </dt>
+                  <div class="monster-stat"><div class="health-bar"><div class="health-bar-fill-max" id="hp-fill-max"></div><div class="health-bar-fill" id="hp-fill"></div><div class="health-bar-text" id="hp-text"></div></div></div>
+                  <div class="monster-stat"><div class="health-bar"><div class="health-bar-fill-max" id="str-fill-max"></div><div class="health-bar-fill" id="str-fill"></div><div class="health-bar-text" id="str-text"></div></div></div>
+                  <div class="monster-stat"><div class="health-bar"><div class="health-bar-fill-max" id="agi-fill-max"></div><div class="health-bar-fill" id="agi-fill"></div><div class="health-bar-text" id="agi-text"></div></div></div>
+                  <div class="monster-stat"><div class="health-bar"><div class="health-bar-fill-max" id="int-fill-max"></div><div class="health-bar-fill" id="int-fill"></div><div class="health-bar-text" id="int-text"></div></div></div>
+                  <dt><b style="color:#811BCD;">Skills:</b> ${skillList[MonDis.skill[0]]+", "+skillList[MonDis.skill[1]]+", "+skillList[MonDis.skill[2]]} </dt>
+                  <dt><b style="color:#711BA0;">Traits:</b> ${traitList[MonDis.trait[0]]+", "+traitList[MonDis.trait[1]]+", "+traitList[MonDis.trait[2]]}</dt>
+                  <dt><b style="color:#7F0606;">Deadtime:</b> ${formatTime(deadtime)}  <b style="color:#7F0606;"> Endurance:</b> ${formatTime(endurance)}</dt>
+                  <dt><b style="color:#0D890F;">EvolutiontimeIn:</b> ${formatTime(evolutiontime)}  <b style="color:#029705;"> Stamina:</b> ${(stamina/3600).toFixed(2)} h</dt>
+              
+                  <dt><b style="color:#4B5988;font-size:11px"><u>Gene: </b><i style="font-size:11px">${MonDis.gene}</i></u></dt>
+                </ul>
+              </div>`);
+              document.getElementById('hp-fill').style.width = `${Math.ceil(MonDis.power.hitpoints/100)/9999*100}%`;
+              document.getElementById('hp-fill-max').style.width = `${PowerLimit[_species][0]/9999*100}%`;
+              document.getElementById('hp-text').innerText = `${"HP: " +Math.ceil(MonDis.power.hitpoints/100)} / ${PowerLimit[_species][0]}`;
+              document.getElementById('str-fill').style.width = `${ MonDis.power.strength/999*100}%`;
+              document.getElementById('str-fill-max').style.width = `${PowerLimit[_species][1]/999*100}%`;
+              document.getElementById('str-text').innerText = `${"STR: " +MonDis.power.strength} / ${PowerLimit[_species][1]}`;
+              document.getElementById('agi-fill').style.width = `${ MonDis.power.agility/999*100}%`;
+              document.getElementById('agi-fill-max').style.width = `${PowerLimit[_species][2]/999*100}%`;
+              document.getElementById('agi-text').innerText = `${"AGI: " + MonDis.power.agility} / ${PowerLimit[_species][2]}`;
+              document.getElementById('int-fill').style.width = `${ MonDis.power.intellegence/999*100}%`;
+              document.getElementById('int-fill-max').style.width = `${PowerLimit[_species][3]/999*100}%`;
+              document.getElementById('int-text').innerText = `${"INT: " + MonDis.power.intellegence} / ${PowerLimit[_species][3]}`;
+          //    document.getElementById('hp-text').style.left = `${(document.getElementById('hp-fill').offsetWidth / 2) - (document.getElementById('hp-text').offsetWidth / 2)}px`;
+          });
         });
         //----opponent
         viewNFT(document.getElementById("oppoid").value).then((OpMonDis)=>{
@@ -1334,16 +1398,25 @@ document.getElementById('btn-trainhps').addEventListener("click", async function
     var x = document.getElementById("column1");
     if (x.style.display === "none") {
       x.style.display = "block";
+      document.getElementById("column4").style.display = "none";
       document.getElementById('column3').className  = 'col-md-4';
     } else {
       x.style.display = "none";
-      document.getElementById('column3').className  = 'col-md-8';
+      document.getElementById("column4").style.display = "block";
+      document.getElementById('column3').className  = 'col-md-4';
     }
-    console.log("toggle battlelayout");
+    
+  }, {once: false});
+
+  document.getElementById('btn-challengePVP').addEventListener("click", async function(event) {
+    await challengePVP(document.getElementById("chosenid").value);
+   //await BattleMonstre(document.getElementById("chosenid").value ,document.getElementById("rank").value);
+   //await BattleMonstre(2 ,3);
+    displayMonstreAll(userAccount[0]);
+    console.log("challengepvp");
   }, {once: false});
   
-
-
+  
   /*function BattleSimulation(uint256_tokenId,opponentID) {
     $("#Report").append("<li>start simulation...</li>");
     return FTMON.methods.BattleSimulation(uint256_tokenId,opponentID)
@@ -1422,6 +1495,42 @@ document.getElementById('btn-trainhps').addEventListener("click", async function
       }
     });
   });  
+}
+function challengePVP(uint256_tokenId) {
+  $("#Report").append("<li>Start Challenge PVP...</li>");
+  PVPPVE.methods.viewLastestPVPT1Records().call((error, RESULT)=>{
+    if (error) {
+      console.log('Error:', error);
+    } else {
+      var OpMonDis = RESULT.monstredata;
+      $("#Report").append(`<li>Expected Opponent...</li>
+            <dt>  <b style="color:#AA9910;">  id: </b> ${OpMonDis.attribute.id} <b style="color:#AA9910;">  Species:</b> ${speciesList[OpMonDis.species]}</dt>
+            <dt><b style="color:#AA22BB;">Combat Power:</b> ${getCombatPower(OpMonDis)}   </dt> 
+            <dt>Battling Animation</dt>`);
+    }}); 
+  viewNFT(uint256_tokenId).then((Monstre)=>{
+    PVPPVE.methods.startBattlePVPT1(uint256_tokenId).estimateGas({from: userAccount[0]}, function(error, estimateGas) {
+    if (error) {
+      console.log(error);
+      $("#Report").append(error + "\n");
+    }
+    else {
+      console.log(estimateGas);
+      PVPPVE.methods.startBattlePVPT1(uint256_tokenId)
+      .send({ from: userAccount[0], gas: Math.round(3000000)})
+      .on("receipt", function(receipt) {$("#Report").append("<li>successfully TX</li>");
+        console.log(receipt.events.Result.returnValues);
+        //const bigInt = require("big-integer");
+        console.log("rythmbigint" + bigInt(receipt.events.Result.returnValues.hash));
+        decodeRythm(receipt.events.Result.returnValues.won, receipt.events.Result.returnValues.hash, receipt.events.Result.returnValues.bit,Monstre, receipt.events.Result.returnValues.opponOrAfter);
+        console.log(receipt.events.Result.returnValues.opponOrAfter);
+        showDiffMon(Monstre,receipt.events.Result.returnValues.selfOrBefore);
+        console.log(receipt.events.Result.returnValues.opponOrAfter);
+      })
+      .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>Simulation Failed</li>");});
+    }
+  });
+});  
 }
 
 
