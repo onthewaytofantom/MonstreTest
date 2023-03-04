@@ -1,31 +1,5 @@
 var pvppveabi = [
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_ID",
-				"type": "uint256"
-			}
-		],
-		"name": "BattleEthermonstre",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address payable",
-				"name": "_address",
-				"type": "address"
-			}
-		],
-		"name": "setTreassuryContractAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
@@ -348,53 +322,14 @@ var pvppveabi = [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "_address",
-				"type": "address"
-			}
-		],
-		"name": "setfantomonstreContractAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "uint256",
 				"name": "_ID",
 				"type": "uint256"
 			}
 		],
-		"name": "startBattlePVPT1",
+		"name": "BattleEthermonstre",
 		"outputs": [],
 		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "numberOfPVE1TrainerList",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "Number",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "numberOfWinnerList",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "Number",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -738,32 +673,6 @@ var pvppveabi = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "remainPVE1RoundTime",
-		"outputs": [
-			{
-				"internalType": "int256",
-				"name": "RemainingTime",
-				"type": "int256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "remainRoundTime",
-		"outputs": [
-			{
-				"internalType": "int256",
-				"name": "RemainingTime",
-				"type": "int256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -776,51 +685,6 @@ var pvppveabi = [
 			{
 				"internalType": "uint256",
 				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "setfantomonstreContractAddressONCE",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "setTreassuryContractAddressONCE",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_Round",
-				"type": "uint256"
-			}
-		],
-		"name": "totalDamage",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "TotalDamage",
 				"type": "uint256"
 			}
 		],
@@ -894,130 +758,179 @@ var pvppveabi = [
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
-			}
-		],
-		"name": "UnknownEthermonstre",
-		"outputs": [
-			{
-				"internalType": "uint8",
-				"name": "species",
-				"type": "uint8"
 			},
 			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "WinnerTime",
+		"outputs": [
+			{
+				"internalType": "uint64",
+				"name": "",
+				"type": "uint64"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
-				"name": "gene",
+				"name": "",
 				"type": "uint256"
 			},
 			{
-				"components": [
-					{
-						"internalType": "uint8",
-						"name": "happiness",
-						"type": "uint8"
-					},
-					{
-						"internalType": "uint8",
-						"name": "discipline",
-						"type": "uint8"
-					},
-					{
-						"internalType": "uint16",
-						"name": "id",
-						"type": "uint16"
-					},
-					{
-						"internalType": "uint32",
-						"name": "weight",
-						"type": "uint32"
-					},
-					{
-						"internalType": "uint8",
-						"name": "stage",
-						"type": "uint8"
-					}
-				],
-				"internalType": "struct S.attributes",
-				"name": "attribute",
-				"type": "tuple"
-			},
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "WinnersList",
+		"outputs": [
 			{
-				"components": [
-					{
-						"internalType": "uint32",
-						"name": "hitpoints",
-						"type": "uint32"
-					},
-					{
-						"internalType": "uint16",
-						"name": "strength",
-						"type": "uint16"
-					},
-					{
-						"internalType": "uint16",
-						"name": "agility",
-						"type": "uint16"
-					},
-					{
-						"internalType": "uint16",
-						"name": "intellegence",
-						"type": "uint16"
-					}
-				],
-				"internalType": "struct S.powers",
-				"name": "power",
-				"type": "tuple"
-			},
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "numberOfPVE1TrainerList",
+		"outputs": [
 			{
-				"internalType": "uint32",
-				"name": "exp",
-				"type": "uint32"
-			},
+				"internalType": "uint256",
+				"name": "Number",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "numberOfWinnerList",
+		"outputs": [
 			{
-				"components": [
-					{
-						"internalType": "uint64",
-						"name": "deadtime",
-						"type": "uint64"
-					},
-					{
-						"internalType": "uint64",
-						"name": "endurance",
-						"type": "uint64"
-					},
-					{
-						"internalType": "uint64",
-						"name": "frozentime",
-						"type": "uint64"
-					},
-					{
-						"internalType": "uint64",
-						"name": "stamina",
-						"type": "uint64"
-					},
-					{
-						"internalType": "uint64",
-						"name": "evolutiontime",
-						"type": "uint64"
-					}
-				],
-				"internalType": "struct S.timings",
-				"name": "time",
-				"type": "tuple"
-			},
+				"internalType": "uint256",
+				"name": "Number",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "remainPVE1RoundTime",
+		"outputs": [
 			{
-				"internalType": "uint32",
-				"name": "status",
-				"type": "uint32"
-			},
+				"internalType": "int256",
+				"name": "RemainingTime",
+				"type": "int256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "remainRoundTime",
+		"outputs": [
 			{
-				"internalType": "uint16",
-				"name": "family",
-				"type": "uint16"
-			},
+				"internalType": "int256",
+				"name": "RemainingTime",
+				"type": "int256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address payable",
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "setTreassuryContractAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "setTreassuryContractAddressONCE",
+		"outputs": [
 			{
 				"internalType": "bool",
-				"name": "shinning",
+				"name": "",
 				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "setfantomonstreContractAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "setfantomonstreContractAddressONCE",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_ID",
+				"type": "uint256"
+			}
+		],
+		"name": "startBattlePVPT1",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_Round",
+				"type": "uint256"
+			}
+		],
+		"name": "totalDamage",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "TotalDamage",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -1401,6 +1314,158 @@ var pvppveabi = [
 				"type": "uint256"
 			}
 		],
+		"name": "viewUnknownEthermonstre",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint8",
+						"name": "species",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "gene",
+						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint8",
+								"name": "happiness",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint8",
+								"name": "discipline",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint16",
+								"name": "id",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint32",
+								"name": "weight",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint8",
+								"name": "stage",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct S.attributes",
+						"name": "attribute",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint32",
+								"name": "hitpoints",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint16",
+								"name": "strength",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "agility",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "intellegence",
+								"type": "uint16"
+							}
+						],
+						"internalType": "struct S.powers",
+						"name": "power",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint32",
+						"name": "exp",
+						"type": "uint32"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint64",
+								"name": "deadtime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "endurance",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "frozentime",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "stamina",
+								"type": "uint64"
+							},
+							{
+								"internalType": "uint64",
+								"name": "evolutiontime",
+								"type": "uint64"
+							}
+						],
+						"internalType": "struct S.timings",
+						"name": "time",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "trait",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint8[3]",
+						"name": "skill",
+						"type": "uint8[3]"
+					},
+					{
+						"internalType": "uint32",
+						"name": "status",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint16",
+						"name": "family",
+						"type": "uint16"
+					},
+					{
+						"internalType": "bool",
+						"name": "shinning",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct S.Monstres",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_Round",
+				"type": "uint256"
+			}
+		],
 		"name": "viewWinnerListPerRound",
 		"outputs": [
 			{
@@ -1426,54 +1491,6 @@ var pvppveabi = [
 				"internalType": "uint64[]",
 				"name": "",
 				"type": "uint64[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "WinnersList",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "WinnerTime",
-		"outputs": [
-			{
-				"internalType": "uint64",
-				"name": "",
-				"type": "uint64"
 			}
 		],
 		"stateMutability": "view",
