@@ -1,8 +1,95 @@
 var adsabi = [
 	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_newName",
+				"type": "string"
+			}
+		],
+		"name": "changePlayerName",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_slot",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_imageURL",
+				"type": "string"
+			}
+		],
+		"name": "postAdvertistment",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_room",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_message",
+				"type": "string"
+			}
+		],
+		"name": "postMessage",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "setPVPPVEContractAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "sponsor",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address payable",
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "withdrawReward",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -42,124 +129,6 @@ var adsabi = [
 			{
 				"internalType": "uint256",
 				"name": "cost",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_newName",
-				"type": "string"
-			}
-		],
-		"name": "ChangePlayerName",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "Messages",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "message",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "RewardWalletClaimed",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "SponsorsAddresses",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "UsedRooms",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "UsedSlot",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
 				"type": "uint256"
 			}
 		],
@@ -214,35 +183,6 @@ var adsabi = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "_room",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_index",
-				"type": "uint256"
-			}
-		],
-		"name": "getAMessage",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
 				"name": "_slot",
 				"type": "uint256"
 			}
@@ -267,33 +207,21 @@ var adsabi = [
 			},
 			{
 				"internalType": "uint256",
-				"name": "_indexstart",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_indexend",
+				"name": "_index",
 				"type": "uint256"
 			}
 		],
-		"name": "getBatchMessage",
+		"name": "getAMessage",
 		"outputs": [
 			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "sender",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "message",
-						"type": "string"
-					}
-				],
-				"internalType": "struct Fantomads.MessageType[]",
+				"internalType": "address",
 				"name": "",
-				"type": "tuple[]"
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -348,6 +276,47 @@ var adsabi = [
 					}
 				],
 				"internalType": "struct Fantomads.AdvertistmentType[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_room",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_indexstart",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_indexend",
+				"type": "uint256"
+			}
+		],
+		"name": "getBatchMessage",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "message",
+						"type": "string"
+					}
+				],
+				"internalType": "struct Fantomads.MessageType[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -481,6 +450,25 @@ var adsabi = [
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_owner",
+				"type": "address"
+			}
+		],
+		"name": "getSponsoredBalanceByOwner",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "balance",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "getSponsorLeaderboard",
 		"outputs": [
@@ -500,25 +488,6 @@ var adsabi = [
 				"internalType": "struct Fantomads.SponsorLeaderboardType[]",
 				"name": "",
 				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_owner",
-				"type": "address"
-			}
-		],
-		"name": "getSponsoredBalanceByOwner",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "balance",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -606,41 +575,29 @@ var adsabi = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "_slot",
+				"name": "",
 				"type": "uint256"
 			},
-			{
-				"internalType": "string",
-				"name": "_description",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_imageURL",
-				"type": "string"
-			}
-		],
-		"name": "postAdvertistment",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "_room",
+				"name": "",
 				"type": "uint256"
+			}
+		],
+		"name": "Messages",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
 			},
 			{
 				"internalType": "string",
-				"name": "_message",
+				"name": "message",
 				"type": "string"
 			}
 		],
-		"name": "postMessage",
-		"outputs": [],
-		"stateMutability": "payable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -666,13 +623,19 @@ var adsabi = [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_address",
+				"name": "",
 				"type": "address"
 			}
 		],
-		"name": "setPVPPVEContractAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"name": "RewardWalletClaimed",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -689,10 +652,60 @@ var adsabi = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "sponsor",
-		"outputs": [],
-		"stateMutability": "payable",
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "SponsorsAddresses",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "UsedRooms",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "UsedSlot",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -711,14 +724,20 @@ var adsabi = [
 	{
 		"inputs": [
 			{
-				"internalType": "address payable",
+				"internalType": "address",
 				"name": "_address",
 				"type": "address"
 			}
 		],
-		"name": "withdrawReward",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"name": "viewPlayerName",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "Name",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	}
 ]
