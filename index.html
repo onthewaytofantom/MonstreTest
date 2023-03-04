@@ -6,9 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>A FTMAN & FTMON (TESTNET)</title>
-	<div id="contract-balance"></div>
-	<div id="banner-ads"></div>
-	
+	<div style="display: flex; justify-content: space-between; font-size: small;">
+		<b id="area-ads" style="color: #04263d; background-color: #aaa8a8; width: 70%; border: 3px solid rgb(3, 50, 119);">ads</b>
+		<b id="contract-balance" style="text-align: right; width:30%;"><b>Treassury: #FTM</b></b>
+	</div>
+	<div style="display: flex; font-size: small;">
+		Overwrite Ads Cost:&nbsp <b id="overwritecostarea"></b>(offerx3 & decay everyday) ----- My Offer: <input type="text" id="Offer" size="2" value="0" >
+		FTM & My Ads: <input type="text" id="customadscontent" size="80" value="key in your content here" width="60%">
+		<button id="submitadsreplace">OverwriteAds</button><button id="btnsponsor">Sponsor only</button>
+	</div>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 	<style>
@@ -26,7 +32,7 @@
 			cursor: pointer;
 		}
 		.boxWaddress {
-		  width: 400px;
+		  width: auto;
 		  padding: 10px;
 		  border: 5px solid gray;
 		  margin: 0;
@@ -138,9 +144,9 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h2>
-				Fantoman & Fantomonstre (FTM TESTNET)
+				A Fantoman & Fantomonstre (FTM TESTNET) <button type="whitepaper" style="background-color: #f3ebeb; color:rgb(15, 129, 235)">	&#128212; WhitePaper</button>
 			</h2>
-			<p>This is mainly testing the backend (Smart Contracts), so bear with the graphics. Eventually will run wil Unity Gaming graphics.</p>
+			<p>This is mainly testing the backend (Smart Contracts), so bear with the graphics. Ultimately it will run with Unity Gaming graphics.</p>
 			<div class="boxwarning" id="boxwarn" style="color:red;"> </div>
 			<!-- 
 <p>This is just to test the contract. Definitely not the final product. Not even close! The UI, animation, and interface will run with Unity Engine. The core and processing of the lives are fully running in the FTM contracts. <True-Web3>.</p>
@@ -157,8 +163,8 @@
 -->
 			<p>
 				<button id="btn-connectwallet">Connect Wallet</button>
-				<b class="boxWaddress" id="walletaddr"> Connected Wallet: None</b>
-			</p><button id="btn-togglebattlemode" class="button">toggle PVP Display</button>
+				<b class="boxWaddress" id="walletaddr"> Connected Wallet: None</b><button id="btn-claimReward">Claim Reward</button>
+			</p><button id="btn-togglebattlemode" class="button">toggle Fantomonstres/PVP/PVE Display</button>
 			<div class="row">
 				<div class="col-md-4" id="column1">
 					Display Monstre:
@@ -179,9 +185,24 @@
 					<p>Choose Monstre No.:<input type="text" id="chosenno" value="0" size="2" ></p>
 					<div class="displayMonstre" id="Monstredisplay" 
 					style="height:630px;overflow:auto;background-color:rgb(40, 40, 40);color:rgb(220, 220, 220);scrollbar-base-color:rgb(83, 72, 8);
-					font-size:13px;font-family:sans-serif;padding:10px;"> <p></p>None, consider mint one?<p></p></div>
+					font-size:13px;font-family:sans-serif;padding:10px;"> <p></p>None, consider mint one? Go to Life &#128123;->Mint<p></p></div>
 					
 					
+				</div>
+				<div id="column4" class="col-md-4" style="display:none" >
+					PVP: <button id="btn-challengePVP" style="background-color: rgb(243, 133, 133);">ChallengePVP</button>
+					<p id="pvproundsremaining">Round: Remaining time:</p>
+					<div class="display1Monstre" id="winningMonstreDisplay" 
+					style="height:300px;overflow:auto;background-color:rgb(59, 57, 2);color:rgb(220, 220, 220);scrollbar-base-color:rgb(83, 72, 8);
+						font-size:13px;font-family:sans-serif;padding:10px;
+						background-image: url('image/PVPwinning.JPG'); background-size: cover;"> <p></p>Winning Monstre<p></p></div>
+					<div style="font-size: 12px;">Ethermonstre <input type="text" id="oppoid" value="0" size="3" ></div>
+					PVE: <button id="btn-challengePVE" style="background-color: rgb(243, 223, 133);">ChallengePVE</button>
+					<p id="pveroundsremaining">Round: Remaining time:</p>
+					<div class="display1Monstre" id="ethermonDisplay" 
+					style="height:200px;overflow:auto;background-color:rgb(59, 1, 1);color:rgb(220, 220, 220);scrollbar-base-color:rgb(83, 72, 8);
+					font-size:13px;font-family:sans-serif;padding:10px;
+					background-image: url('image/Ethermon.JPG'); background-size: cover;"> <p></p>World Boss<p></p></div>
 				</div>
 				<div class="col-md-4">
 					
@@ -245,32 +266,35 @@
 						  <a id="btn-mintegg1pc">Mint Egg 1pc &#129370;</a>
 						  <a id="btn-mintegg5pc">Mint Egg 5pc &#129370;&#129370;&#129370;&#129370;&#129370;</a>
 						  <div class="dropdown-divider"></div>
-						  <a id="btn-cheatstats">CHEAT STATS</a>
-						  <a id="btn-cheatkill">CHEAT KILL</a>
-						  <a id="btn-cheatgohungry">CHEAT GO HUNGRY</a>
-						  <a id="btn-cheatrevive">CHEAT REVIVE</a>
+						  <a id="btn-cheatstats">CHEAT STATS (BETA only)</a>
+						  <a id="btn-cheatkill">CHEAT KILL (BETA only)</a>
+						  <a id="btn-cheatgohungry">CHEAT GO HUNGRY (BETA only)</a>
+						  <a id="btn-cheatrevive">CHEAT REVIVE (disabled)</a>
 						</div>
 					  </div>
 					  <div class="dropdown">
 						<button onclick="myFunction4()" class="dropbtn" style="color:rgb(22, 22, 20)">Functions &#9881;</button>
 						<div id="myDropdown4" class="dropdown-content">
-						  <a id="btn-1">Change Player Name &#9881;</a>
-						  <a id="btn-1">transferOwnership &#9881;</a>
-						  <a id="btn-1">withdraw &#9881;</a>
-						  <a id="btn-1">Paintswap Marketplace &#9881;</a>
+						  <a id="btn-1">Change Player Name &#9881;<input id="nameinput"><button id="oknamechange">Update (1FTM)</button></a>
+						  <a id="btn-1">transferOwnership &#9881;(go to ftmscan temporary)</a>
+						  <a id="btn-1">withdraw &#9881;(go to ftmscan temporary)</a>
+						  <a id="btn-1">Paintswap Marketplace &#9881;(go to ftmscan temporary)</a>
 						  <div class="dropdown-divider"></div>
-						  <a id="btn-1">setApprovalForAll &#9881;</a>
-						  <a id="btn-1">safeTransferFrom &#9881;</a>
+						  <a id="btn-1">setApprovalForAll &#9881;(go to ftmscan temporary)</a>
+						  <a id="btn-1">safeTransferFrom &#9881;(go to ftmscan temporary)</a>
 						  <div class="dropdown-divider"></div>
-						  <a id="btn-1">SetImageURL &#9881;</a>
+						  <a id="btn-1">SetImageURL &#9881;(go to ftmscan temporary)</a>
 						  
 						</div>
 					  </div>
-					  <div style="font-size: 12px;">My ActiveMonstre ID.: <input type="text" id="chosenid" value="0" size="2" ></div><div id="activetrainer"></div>
+					  <div style="font-size: 12px;">My ActiveMonstre ID.: <input type="text" id="chosenid" value="0" size="2" ><button id="btn-refresh2">Refresh</button>
+						</div><div id="activetrainer">						
+					  </div>
 						
 					  <div class="display1Monstre" id="activeMonstreDisplay" 
-					style="height:315px;overflow:auto;background-color:rgb(22, 22, 22);color:rgb(220, 220, 220);scrollbar-base-color:rgb(83, 72, 8);
-					font-size:13px;font-family:sans-serif;padding:10px;"> <p></p>My Active Monstre<p></p></div>
+					style="height:335px;overflow:auto;background-color:rgb(0, 0, 0);color:rgb(220, 220, 220);scrollbar-base-color:rgb(83, 72, 8);
+						font-size:13px;font-family:sans-serif;padding:10px;
+						background-repeat: no-repeat;background-size: auto;background-position: right; "> <p></p>My Active Monstre<p></p></div>
 					<div style="font-size: 12px;">OpponentMonstre ID.: <input type="text" id="oppoid" value="0" size="3" ></div>
 					<div class="display1Monstre" id="opponentMonstreDisplay" 
 					style="height:315px;overflow:auto;background-color:rgb(22, 22, 22);color:rgb(220, 220, 220);scrollbar-base-color:rgb(83, 72, 8);
@@ -338,7 +362,7 @@
 						
 						// Close the dropdown if the user clicks outside of it
 						window.onclick = function(event) {
-						  if (!event.target.matches('.dropbtn')) {
+						  if (!event.target.matches('.dropbtn') && event.target.id !== 'nameinput') {
 							var dropdowns = document.getElementsByClassName("dropdown-content");
 							var i;
 							for (i = 0; i < dropdowns.length; i++) {
@@ -352,21 +376,17 @@
 						</script>
 					
 				</div>
-				<div id="column4" class="col-md-4" style="display:block;" >
-					PVP: <button id="btn-challengePVP" style="background-color: rgb(243, 133, 133);">ChallengePVP</button>
-					<div class="display1Monstre" id="winningMonstreDisplay" 
-					style="height:300px;overflow:auto;background-color:rgb(59, 57, 2);color:rgb(220, 220, 220);scrollbar-base-color:rgb(83, 72, 8);
-					font-size:13px;font-family:sans-serif;padding:10px;"> <p></p>Winning Monstre<p></p></div>
-					<div style="font-size: 12px;">Ethermon <input type="text" id="oppoid" value="0" size="3" ></div>
-					PVE:
-					<div class="display1Monstre" id="ethermonDisplay" 
-					style="height:315px;overflow:auto;background-color:rgb(59, 1, 1);color:rgb(220, 220, 220);scrollbar-base-color:rgb(83, 72, 8);
-					font-size:13px;font-family:sans-serif;padding:10px;"> <p></p>Opponent Monstre<p></p></div>
-				</div>
+				
 				<div id="column3" class="col-md-4"  >
-					<div id="Report" style="height:710px;overflow:auto;background-color:rgb(20, 20, 20);color:rgb(223, 222, 222) ;scrollbar-base-color:rgb(83, 72, 8);font-family:sans-serif;padding:10px;">
+					<div id="Report" style="height:410px;overflow:auto;background-color:rgb(20, 20, 20);color:rgb(223, 222, 222) ;scrollbar-base-color:rgb(83, 72, 8);font-family:sans-serif;padding:10px;">
 						<b><u style="color:rgb(250,175,40)">Report:</u></b>
 					</div>
+					<div id="Chatroom" style="height:240px;overflow:auto;background-color:rgb(1, 3, 22);color:rgb(57, 215, 243) ;scrollbar-base-color:rgb(83, 72, 8);font-family:sans-serif;
+						padding:10px; font-size: small; ">
+						<b><u style="color:rgb(40, 166, 250)">Chatroom</u></b>
+					</div>
+					<input type="text" id="chatboxmsg" size="45" value="" style="height:35px;overflow:auto;background-color:rgb(3, 36, 58);color:rgb(40, 166, 250); font-size: small;">
+					<button id="sendmessage" style="height:35px;overflow:auto;background-color:rgb(20, 106, 163);"><b>Send (0.1FTM)</b></button>
 				</div>
 				
 			</div>
