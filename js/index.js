@@ -56,11 +56,12 @@ const getWeb3 = async () => {
     //have an instance of web3.js.
     const web3 = new Web3(Web3.givenProvider) //web3() is from web3.js
     //i have included at header, the abi file. exported from SContract compiler.
-    
     var mycontractaddress = '0x4F1Ae8b19846533125019f8373452C3E681cB8a2';
-    var treassuryadscontractaddress = '0x4a95C7125F5f8FD5FB5F48a19Efe42dcbaAf5142';
-    //var pvppvecontractaddress = '0x51D6565e2Af79C5e4cFFbA7b6558Ea168D87a619'; 0xF738B9d9DD64dEd266C0e2F1143dB9C2901378bF
-    var pvppvecontractaddress = '0xd1C5b10542f755Ba2cd1155481FEaBF55BD27Ea1';
+    //var mycontractaddress = '0x632A612f03f7e5F269C414a18092E71351A8120C';
+    //var treassuryadscontractaddress = '0xf9564C6e38b03a6493E5a8C587b2F8d27bb5C8cd';
+    var treassuryadscontractaddress = '0xf9564C6e38b03a6493E5a8C587b2F8d27bb5C8cd';
+    //var pvppvecontractaddress = '0x51D6565e2Af79C5e4cFFbA7b6558Ea168D87a619'; 0xd1C5b10542f755Ba2cd1155481FEaBF55BD27Ea1
+    var pvppvecontractaddress = '0x987A061dECc002Baa7f17B4EbAb870e59A136177';
     FTMON = new web3.eth.Contract(ftmonabi, mycontractaddress);
     ADS = new web3.eth.Contract(adsabi, treassuryadscontractaddress);
     PVPPVE = new web3.eth.Contract(pvppveabi, pvppvecontractaddress);
@@ -104,14 +105,58 @@ const getWeb3 = async () => {
     
   });
 }
-
+//------------------------------------UPDATE INTERVAL ----------------------------
 function updateBalance() {
-  ADS.methods.viewFTM().call((error, result) => {
+  let Totalout=0;
+  PVPPVE.methods.TOTALOUT().call((error, result) => {
+    Totalout=result;
+    ADS.methods.viewFTM().call((error, result) => {
+      if (error) {
+        console.log('Error:', error);
+      } else {
+        const ftmBalance = (result-Totalout)/1000000000000000000;
+        document.getElementById('contract-balance').innerHTML = `<b>Treassury: ${ftmBalance} FTM  </b>`;
+      }
+    });
+  });
+}
+function updateOverwriteCost() {
+  let Totalout=0;
+  ADS.methods.getOverwrittenCost(0).call((error, result) => {
     if (error) {
       console.log('Error:', error);
     } else {
-      const ethBalance = result/1000000000000000000;
-      document.getElementById('contract-balance').innerHTML = `The contract balance is ${ethBalance} ETH`;
+      
+      document.getElementById('overwritecostarea').innerHTML = `${result/1000000000000000000} FTM  </b>`;
+    }
+  });
+ 
+}
+let PVE1Rounds = 0;
+let PVE1RemainingTime;
+let PVPT1Rounds = 0;
+let PVPT1RemainingTime;
+let PVPT1AllocateFund;
+let PVE1AllocateFund;
+function updateRoundsRemaining() {
+  PVPPVE.methods.PVE1RoundsCounter().call((error, result) => {
+    PVE1Rounds = result;
+    PVPPVE.methods.PVE1Fund(result).call((error, result) => {PVE1AllocateFund = result});});
+  PVPPVE.methods.remainPVE1RoundTime().call((error, result) => {PVE1RemainingTime = result});
+  PVPPVE.methods.PVPT1RoundsCounter().call((error, result) => {
+    PVPT1Rounds = result;
+    PVPPVE.methods.PVPTrack1Fund(PVPT1Rounds).call((error, result) => {PVPT1AllocateFund = result});
+  });
+  PVPPVE.methods.remainRoundTime().call((error, PVPT1RemainingTime) => {
+    if (error) {
+      console.log('Error:', error);
+    } else {
+      let PVP1time = formatTime(PVPT1RemainingTime);
+      let PVE1time = formatTime(PVE1RemainingTime);
+      PVPT1AllocateFund = PVPT1AllocateFund/1000000000000000000;
+      PVE1AllocateFund = PVE1AllocateFund/1000000000000000000;
+      document.getElementById('pvproundsremaining').innerHTML = `<i>Round: ${PVPT1Rounds} | Remaining Time:${PVP1time} | Fund: ${PVPT1AllocateFund}FTM</i>`;
+      document.getElementById('pveroundsremaining').innerHTML = `<i>Round: ${PVE1Rounds} | Remaining Time:${PVE1time} | Fund: ${PVE1AllocateFund}FTM</i>`;
     }
   });
 }
@@ -121,12 +166,27 @@ function updateAds() {
       console.log('Error:', error);
     } else {
       const description = result[0].description;
-      document.getElementById('banner-ads').innerHTML = `asASDASDASDd: ${description} asd`;
-      console.log(description);
+      document.getElementById('area-ads').innerHTML = `Ads: ${description}`;
+      //console.log(description);
     }
   });
 }
-
+function updateReward() {
+  let claimed =0;
+  ADS.methods.RewardWalletClaimed(userAccount[0]).call((error, result) => {
+    if (error) {
+      console.log('Error:', error);
+    } else {
+      claimed = result;
+      PVPPVE.methods.RewardWallet(userAccount[0]).call((error, result) => {
+        result-=claimed;
+        result= result/1000000000000000000;
+        document.getElementById('btn-claimReward').innerHTML = `Claim Reward: ${result}FTM`;
+        //console.log(result);btn-claimReward
+      });
+    }
+  });
+}
 function updateLatestWinnerPVP(){
   PVPPVE.methods.viewLastestPVPT1Records().call((error, RESULT)=>{
     if (error) {
@@ -139,9 +199,9 @@ function updateLatestWinnerPVP(){
       let expconverted = convertLevelTest(OpMonDis.exp);
       $("#winningMonstreDisplay").empty();
       $("#winningMonstreDisplay").append(`<div class="Monstredisplay">
-          <ul style="background-color:#101010;">
+          <ul style="background-color:transparent;">
             <n><b style="color:gray;">Latest Winning PVP Monstre </b></n>
-            <dt>  <b style="color:#AA9910;">  Winner</b> ${RESULT.winner} </dt>
+            <dt>  <b style="color:#AA9910;">  Winning Player:</b> ${RESULT.winner} </dt>
             <dt>  <b style="color:#AA9910;">  id: </b> ${OpMonDis.attribute.id} <b style="color:#AA9910;">  Species:</b> ${speciesList[OpMonDis.species]}</dt>
             <dt><b style="color:#F5AF32;" ">Level:</b> ${expconverted.level} <sub>(${expconverted.percent}%)</sub> <b style="color:#AA9910;">Stage:</b> ${stageList[OpMonDis.attribute.stage]} <b style="color:#AA9910;">  Status:</b> ${stat}</dt>
             <dt><b style="color:#2882D2;">Discipline:</b> ${OpMonDis.attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${OpMonDis.attribute.happiness}</dt>
@@ -157,11 +217,68 @@ function updateLatestWinnerPVP(){
     }});
   
 }
+function updateLatestEthermon(){
+  PVPPVE.methods.totalDamage(PVE1Rounds).call((error, RESULT)=>{PVETotalDamage=RESULT;});
+  PVPPVE.methods.viewUnknownEthermonstre(PVE1Rounds).call((error, RESULT)=>{
+    if (error) {
+      console.log('Error:', error);
+    } else {
+      var diffTIME = 0;
+      var OpMonDis = RESULT;
+      if (OpMonDis.status == 0) {var stat = "Normal";} else {var stat = "Frozen"; diffTIME = new Date().valueOf()/1000-OpMonDis.time.frozentime;}
+      
+      let expconverted = convertLevelTest(OpMonDis.exp);
+      $("#ethermonDisplay").empty();
+      $("#ethermonDisplay").append(`<div class="Monstredisplay">
+          <ul style="background-color:transparent">
+            <n><b style="color:gray;">World Boss: The Ether </b></n>
+            <dt><b style="color:#2882D2;">Discipline:</b> ${OpMonDis.attribute.discipline}  <b style="color:#DC5A96;"> Happiness: </b>${OpMonDis.attribute.happiness}</dt>
+            <dt><b style="color:#AA22BB;">Combat Power:</b> ${getCombatPower(OpMonDis)}   </dt>
+            <dt><b style="color:#B432FF;">Hitpoints:</b> ${Math.ceil((OpMonDis.power.hitpoints-PVETotalDamage)/100)} / ${Math.ceil(OpMonDis.power.hitpoints/100)}  </dt>
+            <dt><b style="color:#B432FF;">Strength: </b>${OpMonDis.power.strength} <b style="color:#B432FF;">  Agility: </b>${OpMonDis.power.agility}  <b style="color:#B432FF;">  Intellegence:</b> ${OpMonDis.power.intellegence}</dt>
+            <dt><b style="color:#811BCD;">Skills:</b> ${skillList[OpMonDis.skill[0]]+", "+skillList[OpMonDis.skill[1]]+", "+skillList[OpMonDis.skill[2]]} </dt>
+            <dt><b style="color:#711BA0;">Buff/Debuff:</b> ${buffList[OpMonDis.trait[0]]+", "+debuffList[OpMonDis.trait[1]]}</dt>
+            <dt><b style="color:#4B5988;">Family: </b>${familyList[OpMonDis.family]}  </dt>
+          </ul>
+        </div>`);
+    }});
+  
+}
+var refreshnamebool = true;
+async function updateChatroom(){
+  try {
+    const CHAT = await ADS.methods.getLatestMessage(0,10).call();
+    let length = CHAT.length;
+    let Chatroomfull ="";
+    for (let i = 0; i < length; i++) {
+      const NAME = await ADS.methods.viewPlayerName(CHAT[i].sender).call();
+      let leftFour = CHAT[i].sender.substr(0, 4);
+      let rightFour = CHAT[i].sender.substr(-4);
+      let concatenated = NAME+ "<sub>["+ leftFour +"..."+ rightFour+ "]</sub>";
+      Chatroomfull = Chatroomfull + "<li>" +concatenated+" :</li> <dt>> "+CHAT[i].message +"</dt>";
+    }
+    //console.log(Chatroomfull);
+    $("#Chatroom").empty();
+    $("#Chatroom").append(`<b><u>Chatroom</b></u>${Chatroomfull}`);
+  } catch (error) {
+    console.log('Error:', error);
+  }
+}
+
+
+var refreshnamebool = true;
 // call the updateBalance function every 4 seconds
 setInterval(updateBalance, 4000);
 setInterval(updateAds, 5000);
 setInterval(updateLatestWinnerPVP, 2530);
-//getWeb3();
+setInterval(updateRoundsRemaining, 4440);
+setInterval(updateReward, 3740);
+setInterval(updateLatestEthermon, 6740);
+//updateOverwriteCost();
+setInterval(updateOverwriteCost, 5000);
+setInterval(updateChatroom, 3100);
+
+//------------------------------------------------------------------------
 
 async function showWallet(){
     $("#walletaddr").text(userAccount[0]);
@@ -230,7 +347,7 @@ const speciesList = {
     48: "Beezoka", 49: "Elemental", 50: "Farie Guardian", 51: "Ascendant",
     52: "Lady Naga", 53: "Chukita Hound", 54: "Mechindragon", 55: "Ashmon",
     56: "Fantom King", 57: "Feroth", 58: "Shadowpaw", 59: "Serene Uman",
-    60: "Drake", 61: "Dreamoth", 62: "Kandan", 63: "Ancient Dragon"
+    60: "Drake", 61: "Dreamoth", 62: "Kandan", 63: "Ancient Dragon", 101: "The Ether"
 }
 const stageList = {
   0: "Egg",
@@ -337,6 +454,21 @@ const traitList = {
   30: "Lax",
   31: "Careful"
   }
+const buffList = { //trait[0]
+    0: "Frenzy",
+    1: "Manace",
+    2: "Last Stand",
+    3: "Complex Tactic",
+    4: "4",
+    5: "5"
+}
+const debuffList = {//trait[1]
+  0: "Cripple",
+  1: "Disarm",
+  2: "Confused",
+  3: "Poison",
+  4: "Timehack"
+}
 const PowerLimit = [
   [100,10,10,10],
   [100,10,10,10],
@@ -610,7 +742,7 @@ const FULL_STAMINA = 40*3600; //in seconds.
           var evolutiontime = (allMonstress[ii].time.evolutiontime - new Date().valueOf()/1000)+diffTIME;
           
           if (deadtime<0 ||  endurance <0 ){
-          var status = "DEAD - An Egg now - Hatch it";
+          var status = "Dead/Egg - Hatch/Rebirth it";
           } else {
             status ="ALIVE";
           }
@@ -655,17 +787,33 @@ const FULL_STAMINA = 40*3600; //in seconds.
           var stamina = new Date().valueOf()/1000 -MonDis.time.stamina -diffTIME ;
           var evolutiontime = (MonDis.time.evolutiontime - new Date().valueOf()/1000)+diffTIME;
           
-          if (deadtime<0 ||  endurance <0 ){
-          var status = "DEAD - An Egg now - Hatch it";
+          if (deadtime<0 ){
+          var status = "Egg/Dead- Go to Life->Hatch/Rebirth it";
+          } else if(endurance <0 ){
+            status ="Too Hungry- Feed->Salmon or Life->Rebirth";
           } else {
-            status ="ALIVE";
+            status ="Alive";
           }
+          if (MonDis.attribute.stage == 0){
+            document.getElementById("activeMonstreDisplay").style.backgroundImage = "url('image/Egg.JPG')";
+          } else if (deadtime<0 ){
+            document.getElementById("activeMonstreDisplay").style.backgroundImage = "url('image/Dead.JPG')";
+          } else if(MonDis.attribute.stage == 1){
+            document.getElementById("activeMonstreDisplay").style.backgroundImage = "url('image/Stage1.JPG')";
+          }else if(MonDis.attribute.stage == 2){
+            document.getElementById("activeMonstreDisplay").style.backgroundImage = "url('image/Stage2.JPG')";
+          }else if(MonDis.attribute.stage == 3){
+            document.getElementById("activeMonstreDisplay").style.backgroundImage = "url('image/Stage3.JPG')";
+          }else if(MonDis.attribute.stage == 4){
+            document.getElementById("activeMonstreDisplay").style.backgroundImage = "url('image/Stage4.JPG')";
+          }
+          
           //console.log(allMonstress);
           
           FTMON.methods.Trainer(document.getElementById("chosenid").value).call((error, RESULT)=>{
-            console.log(RESULT);
-            $("#activetrainer").empty();
-            $("#activetrainer").append(`${RESULT}`)
+           // console.log(RESULT);
+            //$("#activetrainer").empty();
+           // $("#activetrainer").append(`Trainer: ${RESULT}`)
             if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
             if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
             if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
@@ -673,8 +821,9 @@ const FULL_STAMINA = 40*3600; //in seconds.
             let expconverted = convertLevelTest(MonDis.exp);
             $("#activeMonstreDisplay").empty();
             $("#activeMonstreDisplay").append(`<div class="Monstredisplay">
-                <ul style="background-color:#101010; margin-bottom:2px;">
+                <ul style="background-color:rgba(0,0,0,0.4); margin-bottom:2px;">
                   <n><b style="color:gray;">${status} </b></n>
+                  <dt>  <b style="color:#AA9910;font-size:11px">  Trainer: </b> <i style="font-size:11px">${RESULT} </i></dt>
                   <dt>  <b style="color:#AA9910;">  id: </b> ${MonDis.attribute.id} <b style="color:#AA9910;">  Species:</b> ${speciesList[_species]}</dt>
                   <dt><b style="color:#F5AF32;" ">Level:</b> ${expconverted.level} <sub>(${expconverted.percent}%)</sub> <b style="color:#AA9910;">Stage:</b> ${stageList[MonDis.attribute.stage]} <b style="color:#AA9910;">  Status:</b> ${stat}</dt>
                   <dt><b style="color:#4B5988;">Family: </b>${familyList[MonDis.family]}  <b style="color:#F5AF32;">  Weight (g): </b>${MonDis.attribute.weight}</dt>
@@ -729,7 +878,7 @@ const FULL_STAMINA = 40*3600; //in seconds.
           let expconverted = convertLevelTest(OpMonDis.exp);
           $("#opponentMonstreDisplay").empty();
           $("#opponentMonstreDisplay").append(`<div class="Monstredisplay">
-              <ul style="background-color:#101010;">
+              <ul style="background-color:transparent;">
                 <n><b style="color:gray;">${status} </b></n>
                 <dt>  <b style="color:#AA9910;">  id: </b> ${OpMonDis.attribute.id} <b style="color:#AA9910;">  Species:</b> ${speciesList[OpMonDis.species]}</dt>
                 <dt><b style="color:#F5AF32;" ">Level:</b> ${expconverted.level} <sub>(${expconverted.percent}%)</sub> <b style="color:#AA9910;">Stage:</b> ${stageList[OpMonDis.attribute.stage]} <b style="color:#AA9910;">  Status:</b> ${stat}</dt>
@@ -751,7 +900,7 @@ const FULL_STAMINA = 40*3600; //in seconds.
       });
     } else { //means showing opponenets per rank
       console.log("getting battling");
-      getBattlingMonstresByBatch().then(function(allMonstress) {
+      /*getBattlingMonstresByBatch().then(function(allMonstress) {
         for (let ii =((checkdisplay-3)*10); ii< ((checkdisplay-3)*10+10); ii++) {
           console.log("here 2d");
      
@@ -770,7 +919,7 @@ const FULL_STAMINA = 40*3600; //in seconds.
             </div>`);
           }
         
-      });
+      });*/
 
 
     }
@@ -837,6 +986,9 @@ const FULL_STAMINA = 40*3600; //in seconds.
   document.getElementById("btn-refresh").addEventListener("click", function(event) {
     displayMonstreAll(userAccount[0]);
   }, {once: false});
+  document.getElementById("btn-refresh2").addEventListener("click", function(event) {
+    displayMonstreAll(userAccount[0]);
+  }, {once: false});
 
   document.getElementById('btn-connectwallet').addEventListener("click", function(event) {
     getWeb3();
@@ -847,7 +999,7 @@ const FULL_STAMINA = 40*3600; //in seconds.
   //always run
   var intervalId = setInterval(function() {
        displayMonstreAll(userAccount[0]);
-        console.log("interval");
+     //   console.log("interval");
   }, 300000); //300s
 /// ---------------actions --------------------
   function HatchEgg(uint256_tokenId) {
@@ -858,6 +1010,11 @@ const FULL_STAMINA = 40*3600; //in seconds.
     .on("error", function(error) {$("#Report").append(error).append("<li>Hatching Failed</li>");});
   }
   document.getElementById('btn-hatchegg').addEventListener("click",async function(event) {
+    await HatchEgg(document.getElementById("chosenid").value);
+    displayMonstreAll(userAccount[0]);
+    console.log("hatchingegg");
+  }, {once: false});
+  document.getElementById('btn-rebirth').addEventListener("click",async function(event) {
     await HatchEgg(document.getElementById("chosenid").value);
     displayMonstreAll(userAccount[0]);
     console.log("hatchingegg");
@@ -1106,6 +1263,21 @@ function feedsMonstre1(uint256_tokenId,uint8_foodtype) {
       }
     });
   }
+  function claimReward() {
+    $("#Report").append("<li>Claiming Reward...</li>");
+    ADS.methods.withdrawReward(userAccount[0]).estimateGas({ from: userAccount[0]}, function(error, estimateGas) {
+      if (error) {
+        console.log(error);
+        $("#Report").append(error + "\n");
+      }
+      else {
+        ADS.methods.withdrawReward(userAccount[0])
+        .send({ from: userAccount[0], gas: Math.round(estimateGas)})
+        .on("receipt", function(receipt) {$("#Report").append("<li>Successfully claim reward.</li>");})
+        .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>Claim Failed</li>"); console.log(error);});
+      }
+    });
+  }
   //------click
   document.getElementById('btn-cheatstats').addEventListener("click", async function(event) {
     await cheatstats(document.getElementById("chosenid").value);
@@ -1140,6 +1312,21 @@ function feedsMonstre1(uint256_tokenId,uint8_foodtype) {
     console.log("Defroze");
   }, {once: false});
   //-----------------
+  //ads chatroom
+  document.getElementById('submitadsreplace').addEventListener("click", async function(event) {
+    await submitADS(document.getElementById("Offer").value,document.getElementById("customadscontent").value);
+    displayMonstreAll(userAccount[0]);
+    console.log("submit ads");
+  }, {once: false});
+  document.getElementById('sendmessage').addEventListener("click", async function(event) {
+    await updateChatroom();
+    await sendMessage(document.getElementById("chatboxmsg").value);
+    console.log("send msg");
+  }, {once: false});
+  document.getElementById('btn-claimReward').addEventListener("click", async function(event) {
+    await claimReward();
+    console.log("claim Reward");
+  }, {once: false});
 
   function showDiffMon(mon1,mon2){
     
@@ -1415,6 +1602,21 @@ document.getElementById('btn-trainhps').addEventListener("click", async function
     displayMonstreAll(userAccount[0]);
     console.log("challengepvp");
   }, {once: false});
+  document.getElementById('btn-challengePVE').addEventListener("click", async function(event) {
+    await challengePVE(document.getElementById("chosenid").value);
+   //await BattleMonstre(document.getElementById("chosenid").value ,document.getElementById("rank").value);
+   //await BattleMonstre(2 ,3);
+    displayMonstreAll(userAccount[0]);
+    console.log("challengepvE");
+  }, {once: false});
+  document.getElementById('oknamechange').addEventListener("click", async function(event) {
+    await updateName(document.getElementById("nameinput").value);
+    console.log("update name");
+  }, {once: false});
+  document.getElementById('btnsponsor').addEventListener("click", async function(event) {
+    await sponsorOnly(document.getElementById("Offer").value);
+    console.log("sponsor");
+  }, {once: false});
   
   
   /*function BattleSimulation(uint256_tokenId,opponentID) {
@@ -1517,7 +1719,7 @@ function challengePVP(uint256_tokenId) {
     else {
       console.log(estimateGas);
       PVPPVE.methods.startBattlePVPT1(uint256_tokenId)
-      .send({ from: userAccount[0], gas: Math.round(3000000)})
+      .send({ from: userAccount[0],gas: Math.round(3000000)})
       .on("receipt", function(receipt) {$("#Report").append("<li>successfully TX</li>");
         console.log(receipt.events.Result.returnValues);
         //const bigInt = require("big-integer");
@@ -1533,5 +1735,123 @@ function challengePVP(uint256_tokenId) {
 });  
 }
 
+var PVETotalDamage=0;
+function challengePVE(uint256_tokenId) {
+  $("#Report").append("<li>Start Challenge World Boss...</li>");
+  PVPPVE.methods.viewUnknownEthermonstre(PVE1Rounds).call((error, RESULT)=>{
+    if (error) {
+      console.log('Error:', error);
+    } else {
+      var OpMonDis = RESULT;
+      $("#Report").append(`<li>Expected Opponent...</li>
+            <dt>  <b style="color:#AA9910;">  id: </b> World Boss<b style="color:#AA9910;">  Species:</b> The Ether</dt>
+            <dt>Battling Animation</dt>`);
+    }}); 
+  viewNFT(uint256_tokenId).then((Monstre)=>{
+    PVPPVE.methods.BattleEthermonstre(uint256_tokenId).estimateGas({from: userAccount[0]}, function(error, estimateGas) {
+    if (error) {
+      console.log(error);
+      $("#Report").append(error + "\n");
+    }
+    else {
+      console.log(estimateGas);
+      console.log("here d");
+      PVPPVE.methods.BattleEthermonstre(uint256_tokenId)
+      .send({ from: userAccount[0], gas: Math.round(estimateGas*1.5)})
+      .on("receipt", function(receipt) {$("#Report").append("<li>successfully TX</li>");
+        //const bigInt = require("big-integer");
+        console.log("rythmbigint");
+        console.log("rythmbigint" + receipt.events.Result.returnValues.hash);
+        console.log("rythmbigint" + bigInt(receipt.events.Result.returnValues.hash));
+        decodeRythm(receipt.events.Result.returnValues.won, receipt.events.Result.returnValues.hash, receipt.events.Result.returnValues.bit,receipt.events.Result.returnValues.selfOrBefore, receipt.events.Result.returnValues.opponOrAfter);
+        console.log(receipt.events.Result.returnValues.opponOrAfter);
+     })
+      .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>Challenge Failed</li>");});
+    }
+  });
+});  
+}
 
+function submitADS(offer, content){
+  $("#Report").append("<li>Submitting Replacing Ads request...</li>");
   
+  ADS.methods.postAdvertistment(0,content,"url").estimateGas({ from: userAccount[0], value: offer*1000000000000000000 }, function(error, estimateGas) {
+    if (error) {
+      console.log(error);
+      $("#Report").append(error + "\n");
+    }
+    else {
+      
+      ADS.methods.postAdvertistment(0,content,"url")
+      .send({ from: userAccount[0], value: offer*1000000000000000000, gas: Math.round(estimateGas)})
+      .on("receipt", function(receipt) {$("#Report").append("<li>Successfully replace Ads</li>");
+      })
+      .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>Replace Failed. Check Offer >= Overwrite Cost</li>"); console.log(error);});
+    
+    }
+  });
+
+}
+function sponsorOnly(sponsorvalue){
+  $("#Report").append("<li>Sponsoring...</li>");
+  
+  ADS.methods.sponsor().estimateGas({ from: userAccount[0], value: sponsorvalue*1000000000000000000 }, function(error, estimateGas) {
+    if (error) {
+      console.log(error);
+      $("#Report").append(error + "\n");
+    }
+    else {
+      
+      ADS.methods.sponsor()
+      .send({ from: userAccount[0], value: sponsorvalue*1000000000000000000, gas: Math.round(estimateGas)})
+      .on("receipt", function(receipt) {$("#Report").append("<li>Successfully sponsored.</li>");
+      })
+      .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>Sponsor Failed.</li>"); console.log(error);});
+    
+    }
+  });
+
+}
+
+function sendMessage(message){
+  $("#Report").append("<li>Sending Message...</li>");
+  
+  ADS.methods.postMessage(0,message).estimateGas({ from: userAccount[0], value: 100000000000000000 }, function(error, estimateGas) {
+    if (error) {
+      console.log(error);
+      $("#Report").append(error + "\n");
+    }
+    else {
+      
+      ADS.methods.postMessage(0,message)
+      .send({ from: userAccount[0], value: 100000000000000000, gas: Math.round(estimateGas)})
+      .on("receipt", function(receipt) {$("#Report").append("<li>Successfully sent.</li>"); updateChatroom();document.getElementById('chatboxmsg').value ="";
+      })
+      .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>Sent Failed.</li>"); console.log(error);});
+    
+    }
+  });
+
+}
+
+
+function updateName(name){
+  $("#Report").append("<li>Updating Trainer Name...</li>");
+  
+  ADS.methods.changePlayerName(name).estimateGas({ from: userAccount[0], value: 1000000000000000000 }, function(error, estimateGas) {
+    if (error) {
+      console.log(error);
+      $("#Report").append(error + "\n");
+    }
+    else {
+      
+      ADS.methods.changePlayerName(name)
+      .send({ from: userAccount[0], value: 1000000000000000000, gas: Math.round(estimateGas)})
+      .on("receipt", function(receipt) {$("#Report").append("<li>Successfully update name.</li>"); updateChatroom();document.getElementById('chatboxmsg').value ="";
+      })
+      .on("error", function(error) {$("#Report").append(error + "\n"); $("#Report").append("<li>Update Failed.</li>"); console.log(error);});
+    
+    }
+  });
+
+}
