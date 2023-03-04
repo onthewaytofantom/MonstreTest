@@ -5,7 +5,8 @@ document.getElementById("display-list").value = localStorage.getItem("selectedOp
 document.getElementById("chosenno").value = localStorage.getItem("chosenNO");
 document.getElementById("chosenid").value = localStorage.getItem("chosenID");
 document.getElementById("oppoid").value = localStorage.getItem("oppoID");
-
+//https://forms.gle/EgB5rkxTPzssckUQ9 feedback form
+//https://medium.com/@ontheway.to.fantom/a-fantoman-fantomonstre-first-article-2ef15f285d27 whitepaper
 
 //https://github.com/Web3Modal/web3modal/releases
 
@@ -1327,7 +1328,13 @@ function feedsMonstre1(uint256_tokenId,uint8_foodtype) {
     await claimReward();
     console.log("claim Reward");
   }, {once: false});
-
+  //-----------------window on
+  document.getElementById('whitepaper').addEventListener("click", async function(event) {
+    window.open("https://medium.com/@ontheway.to.fantom/a-fantoman-fantomonstre-first-article-2ef15f285d27");
+  }, {once: false});
+  document.getElementById('feedback').addEventListener("click", async function(event) {
+    window.open("https://forms.gle/EgB5rkxTPzssckUQ9");
+  }, {once: false});
   function showDiffMon(mon1,mon2){
     
     var STA = mon1.time.stamina - mon2.time.stamina; //stamina reverse sign
