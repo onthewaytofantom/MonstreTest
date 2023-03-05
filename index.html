@@ -11,8 +11,8 @@
 		<b id="contract-balance" style="text-align: right; width:30%;"><b>Treassury: #FTM</b></b>
 	</div>
 	<div style="display: flex; font-size: small;">
-		Overwrite Ads Cost:&nbsp <b id="overwritecostarea"></b>(offerx3 & decay everyday) ----- My Offer: <input type="text" id="Offer" size="2" value="0" >
-		FTM & My Ads: <input type="text" id="customadscontent" size="80" value="key in your content here" width="60%">
+		Overwrite Ads Cost:&nbsp <b id="overwritecostarea"></b>(offerx3 & decay everyday) ----- My Offer: <input type="text" id="Offer" value="0" style="max-width: 5ch;">
+		FTM & My Ads: <input type="text" id="customadscontent" placeholder="key in your content here" style="width: 50%">
 		<button id="submitadsreplace">OverwriteAds</button><button id="btnsponsor">Sponsor only</button>
 	</div>
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -173,7 +173,7 @@
 					<button id="btn-displaychosen">Show Chosen</button> -->
 					
 					<select id="display-list">
-						<option value="displayall">All my Monstres</option>
+						<option value="displayall" selected>All my Monstres</option>
 						<option value="displayalive">Only Alives</option>
 						<option value="displaychosen">Chosen only</option>
 						<div class="dropdown-divider"></div>
