@@ -5,6 +5,12 @@ document.getElementById("display-list").value = localStorage.getItem("selectedOp
 document.getElementById("chosenno").value = localStorage.getItem("chosenNO");
 document.getElementById("chosenid").value = localStorage.getItem("chosenID");
 document.getElementById("oppoid").value = localStorage.getItem("oppoID");
+
+if (document.getElementById("display-list").value !== "displayall" && 
+    document.getElementById("display-list").value !== "displayalive" && 
+    document.getElementById("display-list").value !== "displaychosen") {
+    document.getElementById("display-list").value = "displayall";
+}
 //https://forms.gle/EgB5rkxTPzssckUQ9 feedback form
 //https://medium.com/@ontheway.to.fantom/a-fantoman-fantomonstre-first-article-2ef15f285d27 whitepaper
 
@@ -265,7 +271,16 @@ async function updateChatroom(){
     console.log('Error:', error);
   }
 }
-
+function updateGuide(){
+  if ($('#Monstredisplay').text().length === 0) {
+    $('#Monstredisplay').append(`If you failed to connect, you might need to swtich to FTM Testnet.
+    <dt> https://www.ankr.com/rpc/fantom/fantom_testnet/ </dt>
+    <dt>get free FTM(testnet) here https://faucet.fantom.network/</dt>
+    <dt>----------</dt>
+    <dt>If you connected and do not know what to do? Consider Mint one Fantomonstre to get started.</dt>
+    <dt>Go to Life &#128123; button-> Mint</dt>`);
+  }
+}
 
 var refreshnamebool = true;
 // call the updateBalance function every 4 seconds
@@ -278,6 +293,7 @@ setInterval(updateLatestEthermon, 6740);
 //updateOverwriteCost();
 setInterval(updateOverwriteCost, 5000);
 setInterval(updateChatroom, 3100);
+setInterval(updateGuide, 1900);
 
 //------------------------------------------------------------------------
 
