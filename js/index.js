@@ -271,14 +271,18 @@ async function updateChatroom(){
     console.log('Error:', error);
   }
 }
+var GUIDECOUNTER =0;
 function updateGuide(){
-  if ($('#Monstredisplay').text().length === 0) {
-    $('#Monstredisplay').append(`If you failed to connect, you might need to swtich to FTM Testnet.
-    <dt> https://www.ankr.com/rpc/fantom/fantom_testnet/ </dt>
-    <dt>get free FTM(testnet) here https://faucet.fantom.network/</dt>
-    <dt>----------</dt>
-    <dt>If you connected and do not know what to do? Consider Mint one Fantomonstre to get started.</dt>
-    <dt>Go to Life &#128123; button-> Mint</dt>`);
+  if (GUIDECOUNTER <= 7){
+    if ($('#Monstredisplay').text().length === 0) {
+      $('#Monstredisplay').append(`If you failed to connect, you might need to swtich to FTM Testnet.
+      <dt> https://www.ankr.com/rpc/fantom/fantom_testnet/ </dt>
+      <dt>get free FTM(testnet) here https://faucet.fantom.network/</dt>
+      <dt>----------</dt>
+      <dt>If you connected and do not know what to do? Consider Mint one Fantomonstre to get started.</dt>
+      <dt>Go to Life &#128123; button-> Mint</dt>`);
+    }
+    GUIDECOUNTER++;
   }
 }
 
