@@ -1352,6 +1352,9 @@ function feedsMonstre1(uint256_tokenId,uint8_foodtype) {
   document.getElementById('whitepaper').addEventListener("click", async function(event) {
     window.open("https://medium.com/@ontheway.to.fantom/a-fantoman-fantomonstre-first-article-2ef15f285d27");
   }, {once: false});
+  document.getElementById('wikiwiki').addEventListener("click", async function(event) {
+    window.open("https://medium.com/@ontheway.to.fantom/wiki-fantomonstre-a174e7a46ab2");
+  }, {once: false});
   document.getElementById('feedback').addEventListener("click", async function(event) {
     window.open("https://forms.gle/EgB5rkxTPzssckUQ9");
   }, {once: false});
