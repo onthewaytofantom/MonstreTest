@@ -1474,9 +1474,14 @@ function feedsMonstre1(uint256_tokenId,uint8_foodtype) {
     $("#Report").append("<li>start training...</li>");
     
     return viewNFT(uint256_tokenId).then(function(Monstre){
+      if(Monstre.time.deadtime <= new Date().valueOf()/1000) {
+        $("#Report").append("<li>Reverted, your Monstre is dead... Try Rebirth.</li>");
+        return;
+      }
+      
         let enduranceleft = (Monstre.time.endurance - new Date().valueOf()/1000);
      if (enduranceleft <= 0) { 
-      $("#Report").append("The Monstre is dead.");
+      $("#Report").append("Reverted, your Monstre is too hungry and dying... Try feeding Salmon, or Rebirth.");
         return;};
       
     return FTMON.methods.trainsMonstre(uint256_tokenId,uint8_traintype)
@@ -1490,9 +1495,13 @@ function feedsMonstre1(uint256_tokenId,uint8_foodtype) {
     $("#Report").append("<li>start feeding...</li>");
     
     return viewNFT(uint256_tokenId).then(function(Monstre){
+      if(Monstre.time.deadtime <= new Date().valueOf()/1000) {
+        $("#Report").append("<li>Reverted, your Monstre is dead... Try Rebirth.</li>");
+        return;
+      }
         let enduranceleft = (Monstre.time.endurance - new Date().valueOf()/1000);
     if (enduranceleft <= 0 && uint8_feedtype != 6) { 
-      $("#Report").append("The Monstre is dead.");
+      $("#Report").append("TReverted, your Monstre is too hungry and dying... Try feeding Salmon, or Rebirth.");
         return;}; 
       
     return FTMON.methods.feedsMonstre(uint256_tokenId,uint8_feedtype)
@@ -1702,6 +1711,14 @@ document.getElementById('btn-trainhps').addEventListener("click", async function
   function BattleMonstre(uint256_tokenId,rank) {
     $("#Report").append("<li>start battle...</li>");
     viewNFT(uint256_tokenId).then((Monstre)=>{
+      if(Monstre.time.deadtime <= new Date().valueOf()/1000) {
+        $("#Report").append("<li>Reverted, your Monstre is dead... Try Rebirth.</li>");
+        return;
+      }
+      if(Monstre.time.endurance <= new Date().valueOf()/1000) {
+        $("#Report").append("<li>Reverted, your Monstre is too hungry and dying... Try feeding Salmon, or Rebirth.</li>");
+        return;
+      }
       FTMON.methods.BattleMonstre(uint256_tokenId,rank).estimateGas({from: userAccount[0]}, function(error, estimateGas) {
       if (error) {
         console.log(error);
