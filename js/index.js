@@ -1355,6 +1355,9 @@ function feedsMonstre1(uint256_tokenId,uint8_foodtype) {
   document.getElementById('wikiwiki').addEventListener("click", async function(event) {
     window.open("https://medium.com/@ontheway.to.fantom/wiki-fantomonstre-a174e7a46ab2");
   }, {once: false});
+  document.getElementById('gotounity').addEventListener("click", async function(event) {
+    window.open("https://onthewaytofantom.github.io/MonstreAlpha/");
+  }, {once: false});
   document.getElementById('feedback').addEventListener("click", async function(event) {
     window.open("https://forms.gle/EgB5rkxTPzssckUQ9");
   }, {once: false});
