@@ -637,7 +637,7 @@ function getCombatPower(mon) {
 //--------------------------------------------
 
 function decodeRythm(won, Rythm, bitset, mon1, mon2) {
-
+  console.log(String(won)+"+"+String(Rythm)+"+"+String(bitset)+"+"+String(mon1)+"+"+String(mon2));
   const numBits = 3; // number of bits per set
   let loop = bitset/3; // bitset number of sets in the uint256 number
   console.log(loop);
