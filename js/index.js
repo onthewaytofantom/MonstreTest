@@ -64,6 +64,7 @@ const getWeb3 = async () => {
     const web3 = new Web3(Web3.givenProvider) //web3() is from web3.js
     //i have included at header, the abi file. exported from SContract compiler.
     var mycontractaddress = '0x4F1Ae8b19846533125019f8373452C3E681cB8a2';
+    //https://testnet.ftmscan.com/address/0x4F1Ae8b19846533125019f8373452C3E681cB8a2#writeContract
     //var mycontractaddress = '0x632A612f03f7e5F269C414a18092E71351A8120C';
     //var treassuryadscontractaddress = '0xf9564C6e38b03a6493E5a8C587b2F8d27bb5C8cd';
     var treassuryadscontractaddress = '0xf9564C6e38b03a6493E5a8C587b2F8d27bb5C8cd';
@@ -1361,6 +1362,18 @@ function feedsMonstre1(uint256_tokenId,uint8_foodtype) {
   document.getElementById('feedback').addEventListener("click", async function(event) {
     window.open("https://forms.gle/EgB5rkxTPzssckUQ9");
   }, {once: false});
+  document.getElementById('btn-con1').addEventListener("click", async function(event) {
+    window.open("https://testnet.ftmscan.com/address/0x4F1Ae8b19846533125019f8373452C3E681cB8a2#writeContract");
+  }, {once: false});
+  document.getElementById('btn-con2').addEventListener("click", async function(event) {
+    window.open("https://testnet.ftmscan.com/address/0xf9564C6e38b03a6493E5a8C587b2F8d27bb5C8cd#writeContract");
+  }, {once: false});
+  document.getElementById('btn-con3').addEventListener("click", async function(event) {
+    window.open("https://testnet.ftmscan.com/address/0x987A061dECc002Baa7f17B4EbAb870e59A136177#writeContract");
+  }, {once: false});
+
+
+
   function showDiffMon(mon1,mon2){
     
     var STA = mon1.time.stamina - mon2.time.stamina; //stamina reverse sign
