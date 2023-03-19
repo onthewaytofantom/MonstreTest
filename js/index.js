@@ -161,6 +161,27 @@ function updateRoundsRemaining() {
     } else {
       let PVP1time = formatTime(PVPT1RemainingTime);
       let PVE1time = formatTime(PVE1RemainingTime);
+      if (PVPT1RemainingTime < 0) {
+        document.getElementById("btn-challengePVP").innerHTML = "ConcludePVP to next Round";
+      } else {
+        document.getElementById("btn-challengePVP").innerHTML = "Challenge PVP";
+        console.log("hehe");
+      }
+      //
+        PVPPVE.methods.PVE1STARTINGTIME().call((error, PVE1STARTINGT) => {            
+          if (PVE1STARTINGT > new Date().valueOf()/1000) { //concluded, but next round timer not start yet
+            document.getElementById("btn-challengePVE").innerHTML = "Next Round started in..";
+            document.getElementById("btn-challengePVE").disabled = true;
+          } else if (PVE1RemainingTime < 0 || THEETHERHP <= 0) { //expired or boss dead
+            document.getElementById("btn-challengePVE").innerHTML = "ConcludePVE to next Round";
+            document.getElementById("btn-challengePVE").disabled = false;
+          } else {//normal
+            document.getElementById("btn-challengePVE").innerHTML = "Challenge PVE";
+            document.getElementById("btn-challengePVE").disabled = false;
+            console.log("hehe");
+          }
+        });
+      
       PVPT1AllocateFund = PVPT1AllocateFund/1000000000000000000;
       PVE1AllocateFund = PVE1AllocateFund/1000000000000000000;
       document.getElementById('pvproundsremaining').innerHTML = `<i>Round: ${PVPT1Rounds} | Remaining Time:${PVP1time} | Fund: ${PVPT1AllocateFund}FTM</i>`;
@@ -168,6 +189,7 @@ function updateRoundsRemaining() {
     }
   });
 }
+
 function updateAds() {
   ADS.methods.getLatestAds(0,1).call((error, result) => {
     if (error) {
@@ -225,6 +247,7 @@ function updateLatestWinnerPVP(){
     }});
   
 }
+var THEETHERHP = 1;
 function updateLatestEthermon(){
   PVPPVE.methods.totalDamage(PVE1Rounds).call((error, RESULT)=>{PVETotalDamage=RESULT;});
   PVPPVE.methods.viewUnknownEthermonstre(PVE1Rounds).call((error, RESULT)=>{
@@ -234,7 +257,8 @@ function updateLatestEthermon(){
       var diffTIME = 0;
       var OpMonDis = RESULT;
       if (OpMonDis.status == 0) {var stat = "Normal";} else {var stat = "Frozen"; diffTIME = new Date().valueOf()/1000-OpMonDis.time.frozentime;}
-      
+      //global
+      THEETHERHP = Math.ceil((OpMonDis.power.hitpoints-PVETotalDamage)/100);
       let expconverted = convertLevelTest(OpMonDis.exp);
       $("#ethermonDisplay").empty();
       $("#ethermonDisplay").append(`<div class="Monstredisplay">
@@ -838,7 +862,7 @@ const FULL_STAMINA = 40*3600; //in seconds.
            // $("#activetrainer").append(`Trainer: ${RESULT}`)
             if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
             if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
-            if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
+            if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > FULL_STAMINA){stamina = FULL_STAMINA;} else {stamina = stamina.toFixed(1);}}
             let _species = MonDis.species;
             let expconverted = convertLevelTest(MonDis.exp);
             $("#activeMonstreDisplay").empty();
@@ -895,7 +919,7 @@ const FULL_STAMINA = 40*3600; //in seconds.
           
           if (deadtime <0) {deadtime = 0;} else {deadtime = deadtime.toFixed(1);}
           if (endurance <0) {endurance = 0;} else {endurance = endurance.toFixed(1);}
-          if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > 48*3600){stamina = 48*3600;} else {stamina = stamina.toFixed(1);}}
+          if (stamina <0) {stamina = stamina.toFixed(1);} else {if (stamina > FULL_STAMINA){stamina = FULL_STAMINA;} else {stamina = stamina.toFixed(1);}}
           
           let expconverted = convertLevelTest(OpMonDis.exp);
           $("#opponentMonstreDisplay").empty();
